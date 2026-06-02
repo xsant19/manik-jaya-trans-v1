@@ -21,8 +21,10 @@
                         <div class="group w-full h-full overflow-hidden rounded-xl border border-soft-divider bg-canvas-white text-carbon-black shadow-sm transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1 flex flex-col">
                             {{-- Image Section --}}
                             <div class="overflow-hidden bg-pale-drift shrink-0">
-                                @if($package->image)
-                                    <img src="{{ asset('storage/' . $package->image) }}" alt="{{ $package->name }}" class="h-60 w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" />
+                                @if($package->imageUrls)
+                                    <img src="{{ asset($package->imageUrls[0]) }}"
+                                         alt="{{ $package->name }}"
+                                         class="tour-card-image aspect-video w-full object-cover" />
                                 @else
                                     <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=800&auto=format&fit=crop" alt="Bali Tour" class="h-60 w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" />
                                 @endif
@@ -39,7 +41,7 @@
                                         <span class="text-xs font-medium uppercase tracking-wider text-dust-bunny block mt-0.5">/ Orang</span>
                                     </p>
                                 </div>
-                                
+
                                 <p class="text-sm text-storm-gray line-clamp-2 flex-grow">
                                     {{ Str::limit($package->description, 100) }}
                                 </p>

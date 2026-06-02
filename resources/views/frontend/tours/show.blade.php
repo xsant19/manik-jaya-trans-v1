@@ -22,27 +22,24 @@
 <div class="bg-canvas-white">
     <x-page-container>
         <div class="py-6">
-            @if($tour->image)
-                {{-- Has image: single large image --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 overflow-hidden rounded-card">
-                    {{-- Main image --}}
-                    <div class="col-span-1 overflow-hidden bg-pale-drift">
-                        <img src="{{ asset('storage/' . $tour->image) }}"
-                             alt="{{ $tour->name }}"
-                             class="h-80 w-full object-cover transition-transform duration-500 hover:scale-105 md:h-[480px]" />
+            @if($tour->imageUrls)
+                <div class="grid grid-cols-1 gap-2 overflow-hidden rounded-card md:grid-cols-4 md:grid-rows-2">
+                    {{-- Large left cell --}}
+                    <div class="flex items-center justify-center bg-pale-drift md:col-span-2 md:row-span-2">
+                        <div class="flex h-80 w-full items-center justify-center md:h-[480px]">
+                            <img src="{{ asset($tour->imageUrls[0]) }}"
+                                 alt="{{ $tour->name }}"
+                                 class="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+                        </div>
                     </div>
-                    {{-- Right grid: 4 placeholder tiles --}}
-                    <div class="hidden grid-cols-2 gap-2 md:grid">
-                        @for($i = 1; $i <= 4; $i++)
-                            <div class="flex items-center justify-center overflow-hidden bg-pale-drift">
-                                <svg class="size-10 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                                    <circle cx="12" cy="10" r="3"/>
-                                </svg>
-                            </div>
-                        @endfor
-                    </div>
+                    {{-- 4 small right cells --}}
+                    @for($i = 1; $i <= count($tour->imageUrls) - 1; $i++)
+                        <div class="hidden h-[235px] items-center justify-center bg-faint-gray md:flex">
+                           <img src="{{ asset($tour->imageUrls[$i]) }}"
+                                 alt="{{ $tour->name }} - Image {{ $i+1 }}"
+                                 class="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+                        </div>
+                    @endfor
                 </div>
             @else
                 {{-- No image: Airbnb-style 5-cell placeholder grid --}}
@@ -342,7 +339,7 @@
                                 <p class="mt-1 text-xs leading-relaxed text-storm-gray mb-3">
                                     Hubungi kami via WhatsApp untuk pertanyaan seputar paket wisata ini.
                                 </p>
-                                <a href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20bertanya%20tentang%20{{ urlencode($tour->name) }}" 
+                                <a href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20bertanya%20tentang%20{{ urlencode($tour->name) }}"
                                    target="_blank"
                                    class="inline-flex items-center gap-2 text-xs font-medium text-carbon-black hover:underline">
                                     <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">

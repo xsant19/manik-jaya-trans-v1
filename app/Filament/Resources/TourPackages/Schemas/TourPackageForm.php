@@ -28,8 +28,8 @@ class TourPackageForm
                     ->numeric()
                     ->prefix('Rp'),
                 FileUpload::make('image')
-                    ->image()
-                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp']),
+                    ->multiple()
+                    ->image(),
                 Select::make('status')
                     ->options(['active' => 'Active', 'inactive' => 'Inactive'])
                     ->default('active')

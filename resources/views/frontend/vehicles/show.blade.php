@@ -22,33 +22,49 @@
 <div class="bg-canvas-white">
     <x-page-container>
         <div class="py-6">
-            @if($vehicle->image)
+            @if($vehicle->imageUrls && count($vehicle->imageUrls) > 0)
                 {{-- Has image from DB --}}
                 <div class="space-y-2">
                     {{-- Main image --}}
                     <div class="overflow-hidden rounded-t-card border border-b-0 border-soft-divider bg-pale-drift">
-                        <img src="{{ asset('storage/' . $vehicle->image) }}"
+                        <img src="{{ asset($vehicle->imageUrls[0]) }}"
                              alt="{{ $vehicle->name }}"
                              class="h-80 w-full object-cover transition-transform duration-500 hover:scale-105 md:h-[420px]" />
                     </div>
                     {{-- 2 thumbnails below --}}
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="overflow-hidden rounded-bl-card border border-soft-divider bg-faint-gray">
-                            <img src="{{ asset('storage/' . $vehicle->image) }}"
-                                 alt="{{ $vehicle->name }}"
-                                 class="h-32 w-full object-cover opacity-70 md:h-44" />
-                        </div>
-                        <div class="flex items-center justify-center overflow-hidden rounded-br-card border border-soft-divider bg-faint-gray">
-                            <div class="text-center">
-                                <svg class="mx-auto size-10 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                        @if(isset($vehicle->imageUrls[1]))
+                            <div class="overflow-hidden rounded-bl-card border border-soft-divider bg-faint-gray">
+                                <img src="{{ asset($vehicle->imageUrls[1]) }}"
+                                     alt="{{ $vehicle->name }}"
+                                     class="h-32 w-full object-cover md:h-44" />
+                            </div>
+                        @else
+                            <div class="flex h-32 items-center justify-center overflow-hidden rounded-bl-card border border-soft-divider bg-faint-gray md:h-44">
+                                <svg class="size-8 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                     <rect width="18" height="18" x="3" y="3" rx="2"/>
                                     <circle cx="9" cy="9" r="2"/>
                                     <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
                                 </svg>
-                                <p class="mt-2 text-xs text-dust-bunny">Foto dari database</p>
                             </div>
-                        </div>
+                        @endif
+                        @if(isset($vehicle->imageUrls[2]))
+                            <div class="overflow-hidden rounded-br-card border border-soft-divider bg-faint-gray">
+                                <img src="{{ asset($vehicle->imageUrls[2]) }}"
+                                     alt="{{ $vehicle->name }}"
+                                     class="h-32 w-full object-cover md:h-44" />
+                            </div>
+                        @else
+                            <div class="flex h-32 items-center justify-center overflow-hidden rounded-br-card border border-soft-divider bg-faint-gray md:h-44">
+                                <svg class="size-8 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                     fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="18" x="3" y="3" rx="2"/>
+                                    <circle cx="9" cy="9" r="2"/>
+                                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                                </svg>
+                            </div>
+                        @endif
                     </div>
                 </div>
             @else
@@ -407,7 +423,7 @@
                                 <p class="mt-1 text-xs leading-relaxed text-storm-gray mb-3">
                                     Hubungi kami via WhatsApp untuk pertanyaan seputar kendaraan ini.
                                 </p>
-                                <a href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20bertanya%20tentang%20{{ urlencode($vehicle->name) }}" 
+                                <a href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20bertanya%20tentang%20{{ urlencode($vehicle->name) }}"
                                    target="_blank"
                                    class="inline-flex items-center gap-2 text-xs font-medium text-carbon-black hover:underline">
                                     <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">

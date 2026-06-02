@@ -149,7 +149,7 @@
                             {{-- Image --}}
                             <div class="relative overflow-hidden">
                                 @if($vehicle->image)
-                                    <img src="{{ asset('storage/' . $vehicle->image) }}"
+                                    <img src="{{ asset($vehicle->imageUrls[0]) }}"
                                          alt="{{ $vehicle->name }}"
                                          class="vehicle-card-image aspect-video w-full object-cover" />
                                 @else
@@ -266,8 +266,8 @@
                         <div class="overflow-hidden rounded-card border border-soft-divider bg-canvas-white transition-shadow hover:shadow-md">
                             {{-- Image --}}
                             <div class="relative overflow-hidden">
-                                @if($package->image)
-                                    <img src="{{ asset('storage/' . $package->image) }}"
+                                @if($package->imageUrls)
+                                    <img src="{{ asset($package->imageUrls[0]) }}"
                                          alt="{{ $package->name }}"
                                          class="tour-card-image aspect-video w-full object-cover" />
                                 @else

@@ -30,8 +30,12 @@ class VehicleForm
                 Textarea::make('description')
                     ->columnSpanFull(),
                 FileUpload::make('image')
+                    ->multiple()
                     ->image()
-                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp']),
+                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                    ->maxFiles(5)
+                    ->reorderable()
+                    ->helperText('Upload hingga 5 gambar kendaraan. Gambar pertama akan menjadi gambar utama.'),
                 Select::make('status')
                     ->options(['available' => 'Available', 'maintenance' => 'Maintenance', 'inactive' => 'Inactive'])
                     ->default('available')
