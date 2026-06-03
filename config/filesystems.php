@@ -60,7 +60,7 @@ return [
             'report' => false,
         ],
 
-        'ftp_deploy' => [
+        'ftp' => [
             'driver'   => 'ftp',
             'host'     => env('FTP_HOST'),
             'username' => env('DEPLOY_FTP_USERNAME'),
