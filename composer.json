@@ -47,7 +47,7 @@
             "\"php artisan serve\" \"php artisan queue:listen --tries=1 --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
         ],
         "start": [
-            "@php artisan serve && npm run dev"
+            "@php artisan serve"
         ],
         "test": [
             "@php artisan config:clear --ansi @no_additional_args",

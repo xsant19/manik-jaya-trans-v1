@@ -48,6 +48,8 @@ class PaymentService
         $transactionId = 'TRX-' . time() . '-' . strtoupper(Str::random(5));
         $grossAmount = (int) $booking->total_price;
 
+        $appUrl = config('app.url');
+
         $params = [
             'transaction_details' => [
                 'order_id' => $transactionId,
@@ -57,6 +59,9 @@ class PaymentService
                 'first_name' => auth()->user()->name,
                 'email' => auth()->user()->email,
                 'phone' => auth()->user()->phone ?? '',
+            ],
+            'callbacks' => [
+                'finish' => $appUrl . '/customer/dashboard'
             ]
         ];
 
@@ -65,9 +70,9 @@ class PaymentService
             // Midtrans PHP library actually doesn't return redirect_url from getSnapToken by default,
             // we should use createTransaction() to get redirect_url
             $snapTransaction = \Midtrans\Snap::createTransaction($params);
-            
+
             $redirectUrl = $snapTransaction->redirect_url;
-            
+
             // Create new payment record
             Payment::create([
                 'user_id' => $booking->user_id,

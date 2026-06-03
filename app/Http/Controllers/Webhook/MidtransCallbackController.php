@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\Webhook;
 
 use App\Http\Controllers\Controller;
+use Error;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class MidtransCallbackController extends Controller
 {
     public function handle(Request $request)
     {
+        Log::info($request->all());
         try {
             $payload = $request->all();
             $serverKey = config('midtrans.server_key');
-            
+
             $orderId = $payload['order_id'] ?? '';
             $statusCode = $payload['status_code'] ?? '';
             $grossAmount = $payload['gross_amount'] ?? '';
@@ -22,21 +25,21 @@ class MidtransCallbackController extends Controller
             $mySignatureKey = hash("sha512", $orderId . $statusCode . $grossAmount . $serverKey);
 
             if ($signatureKey !== $mySignatureKey) {
-                return response()->json(['message' => 'Invalid signature'], 400);
+                throw new Error('Invalid signature');
             }
 
             $payment = \App\Models\Payment::where('transaction_id', $orderId)->first();
             if (!$payment) {
-                return response()->json(['message' => 'Payment not found'], 404);
+                throw new Error('Payment not found');
             }
 
             // Validate gross_amount match
             if ((float) $grossAmount !== (float) $payment->gross_amount) {
-                return response()->json(['message' => 'Invalid amount'], 400);
+                throw new Error('Invalid amount');
             }
 
             $transactionStatus = $payload['transaction_status'] ?? '';
-            
+
             $statusMap = [
                 'settlement' => 'paid',
                 'capture' => 'paid',
@@ -78,9 +81,11 @@ class MidtransCallbackController extends Controller
             }
 
             return response()->json(['message' => 'Success']);
-            
+
         } catch (\Exception $e) {
             // Don't expose error details
+            Log::error($e);
+
             return response()->json(['message' => 'Server error'], 500);
         }
     }
