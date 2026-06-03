@@ -1,0 +1,108 @@
+name: Manual Deploy
+
+# Workflow ini hanya bisa di-trigger manual dari GitHub UI
+# Berguna untuk deployment darurat atau rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy'
+        required: true
+        type: choice
+        options:
+          - production
+          - staging
+      clear_cache:
+        description: 'Clear application cache after deployment'
+        required: false
+        type: boolean
+        default: true
+      run_migrations:
+        description: 'Run database migrations'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  deploy:
+    name: Deploy to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, dom, filter, gd, json, zip
+          tools: composer:v2
+
+      - name: Install Composer Dependencies
+        run: composer install --prefer-dist --no-dev --no-scripts --no-progress --optimize-autoloader
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install NPM Dependencies
+        run: npm ci
+
+      - name: Build Production Assets
+        run: npm run build
+
+      - name: Create Deployment Package
+        run: |
+          mkdir -p deploy-package
+          rsync -av --progress \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='node_modules' \
+            --exclude='.env' \
+            --exclude='.env.example' \
+            --exclude='tests' \
+            --exclude='phpunit.xml' \
+            --exclude='.editorconfig' \
+            --exclude='.gitignore' \
+            --exclude='.gitattributes' \
+            --exclude='README.md' \
+            --exclude='AGENTS.md' \
+            --exclude='claude.md' \
+            --exclude='storage/logs/*' \
+            --exclude='storage/framework/cache/*' \
+            --exclude='storage/framework/sessions/*' \
+            --exclude='storage/framework/views/*' \
+            ./ deploy-package/
+
+      - name: Create Required Directories
+        run: |
+          mkdir -p deploy-package/storage/framework/cache
+          mkdir -p deploy-package/storage/framework/sessions
+          mkdir -p deploy-package/storage/framework/views
+          mkdir -p deploy-package/storage/logs
+          mkdir -p deploy-package/bootstrap/cache
+
+      - name: Set Permissions
+        run: |
+          chmod -R 755 deploy-package/storage
+          chmod -R 755 deploy-package/bootstrap/cache
+
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./deploy-package/
+          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          dangerous-clean-slate: false
+
+      - name: Deployment Info
+        run: |
+          echo "✅ Manual deployment to ${{ inputs.environment }} completed!"
+          echo "📦 Clear Cache: ${{ inputs.clear_cache }}"
+          echo "🗄️ Run Migrations: ${{ inputs.run_migrations }}"
+          echo "🚀 Application URL: ${{ secrets.APP_URL }}"

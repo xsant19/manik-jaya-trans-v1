@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DISK', 'local'),
+    'default' => env('FILESYSTEM_DISK', 'public'),
 
     /*
     |--------------------------------------------------------------------------
@@ -60,6 +60,37 @@ return [
             'report' => false,
         ],
 
+        'ftp_deploy' => [
+            'driver'   => 'ftp',
+            'host'     => env('FTP_HOST'),
+            'username' => env('DEPLOY_FTP_USERNAME'),
+            'password' => env('DEPLOY_FTP_PASSWORD'),
+            'port'     => (int) env('FTP_PORT', 21),
+            'root'     => env('DEPLOY_ROOT', '/'),
+            'passive'  => (bool) env('FTP_PASSIVE', true),
+            'ssl'      => (bool) env('FTP_SSL', false),
+            'timeout'  => (int) env('FTP_TIMEOUT', 30),
+            'url'      => env('APP_URL'),
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ],
+
+        'ftp_public' => [
+            'driver'   => 'ftp',
+            'host'     => env('FTP_HOST'),
+            'username' => env('FTP_USERNAME'),
+            'password' => env('FTP_PASSWORD'),
+            'port'     => (int) env('FTP_PORT', 21),
+            'root'     => env('FTP_PUBLIC_ROOT', '/public_html/manikjayatrans.com/image'),
+            'passive'  => (bool) env('FTP_PASSIVE', true),
+            'ssl'      => (bool) env('FTP_SSL', false),
+            'timeout'  => (int) env('FTP_TIMEOUT', 30),
+            'url'      => rtrim(env('APP_URL'), '/').'/image',
+            'visibility' => 'public',
+            'throw' => false,
+            'report' => false,
+        ]
     ],
 
     /*
