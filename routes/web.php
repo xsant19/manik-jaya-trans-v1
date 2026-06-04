@@ -9,6 +9,7 @@ use App\Http\Controllers\Frontend\HotelShuttleController;
 use App\Http\Controllers\Frontend\TourPackageController;
 use App\Http\Controllers\Frontend\VehicleController;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,9 +103,17 @@ Route::get('/system/maintenance/{action}', function ($action) {
                 'message' => 'Database fresh reset and seeded with properly hashed passwords!'
             ]);
 
+        case 'key-generate':
+            Artisan::call('key:generate');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Key generated'
+            ]);
+
         case 'fix-admin-password':
             // Automatically searches for an admin account to fix the Bcrypt error
             $user = User::where('email', 'admin@manikjaya.test')->first();
+
             if ($user) {
                 $user->password = Hash::make('password'); // Properly hashed!
                 $user->save();
