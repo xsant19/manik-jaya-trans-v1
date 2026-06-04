@@ -117,31 +117,64 @@ jobs:
             storage/logs/**
             .env
 
-      # 13. Run post-deployment commands via SSH (Optional - jika hosting support SSH)
-      # Uncomment jika Rumahweb Anda support SSH
-      # - name: Run Post-Deployment Commands
-      #   uses: appleboy/ssh-action@v1.0.0
-      #   with:
-      #     host: ${{ secrets.SSH_HOST }}
-      #     username: ${{ secrets.SSH_USERNAME }}
-      #     password: ${{ secrets.SSH_PASSWORD }}
-      #     port: ${{ secrets.SSH_PORT }}
-      #     script: |
-      #       cd ${{ secrets.FTP_SERVER_DIR }}
-      #       php artisan config:cache
-      #       php artisan route:cache
-      #       php artisan view:cache
-      #       php artisan migrate --force
-
-      # 14. Deployment Success Notification
+      # 13. Deployment Success Notification
       - name: Deployment Success
         if: success()
         run: |
-          echo "✅ Deployment to Rumahweb completed successfully!"
+          echo "╔══════════════════════════════════════════════════════════╗"
+          echo "║   ✅ Deployment Completed Successfully!                  ║"
+          echo "╚══════════════════════════════════════════════════════════╝"
+          echo ""
           echo "🚀 Application URL: ${{ secrets.APP_URL }}"
+          echo ""
+          echo "📋 Post-Deployment Manual Steps (No SSH Access):"
+          echo "──────────────────────────────────────────────────────────"
+          echo ""
+          echo "Please complete these steps via cPanel File Manager:"
+          echo ""
+          echo "1️⃣  Verify .env file:"
+          echo "   - Check .env exists in application root"
+          echo "   - Ensure APP_ENV=production, APP_DEBUG=false"
+          echo ""
+          echo "2️⃣  Check folder permissions (755 required):"
+          echo "   - storage/"
+          echo "   - storage/framework/"
+          echo "   - storage/logs/"
+          echo "   - bootstrap/cache/"
+          echo ""
+          echo "3️⃣  Clear cache files manually:"
+          echo "   - Delete: bootstrap/cache/config.php"
+          echo "   - Delete: bootstrap/cache/routes-*.php"
+          echo "   - Delete all files in: storage/framework/views/"
+          echo ""
+          echo "4️⃣  First deployment only:"
+          echo "   - Import database via phpMyAdmin"
+          echo "   - Run migrations via cPanel Terminal (if available)"
+          echo "   - Or import SQL dump manually"
+          echo ""
+          echo "5️⃣  Test the application:"
+          echo "   - Open: ${{ secrets.APP_URL }}"
+          echo "   - Check: ${{ secrets.APP_URL }}/admin"
+          echo "   - Monitor: storage/logs/laravel.log for errors"
+          echo ""
+          echo "📝 Note: Since server doesn't support SSH, cache clearing"
+          echo "   and migrations must be done manually via cPanel."
+          echo ""
 
-      # 15. Deployment Failed Notification
+      # 14. Deployment Failed Notification
       - name: Deployment Failed
         if: failure()
         run: |
-          echo "❌ Deployment failed! Please check the logs above."
+          echo "╔══════════════════════════════════════════════════════════╗"
+          echo "║   ❌ Deployment Failed!                                  ║"
+          echo "╚══════════════════════════════════════════════════════════╝"
+          echo ""
+          echo "Please check the error logs above and verify:"
+          echo ""
+          echo "1. FTP credentials are correct in GitHub Secrets"
+          echo "2. FTP_SERVER_DIR path exists on server"
+          echo "3. Server has enough disk space"
+          echo "4. FTP connection is not blocked by firewall"
+          echo ""
+          echo "For detailed troubleshooting, see: DEPLOYMENT.md"
+          echo ""
