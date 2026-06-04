@@ -1,6 +1,21 @@
 # 🚀 Deployment Guide - Rumahweb Shared Hosting
 
-Panduan lengkap untuk mendeploy aplikasi Laravel Manik Jaya Trans ke Rumahweb Shared Hosting menggunakan GitHub Actions CI/CD.
+Panduan lengkap untuk mendeploy aplikasi Laravel Manik Jaya Trans ke Rumahweb Shared Hosting menggunakan GitHub Actions CI/CD dengan **Incremental FTP Upload**.
+
+---
+
+## 🎯 Key Features
+
+- ✅ **Automated deployment** via GitHub Actions
+- ✅ **Incremental FTP upload** — hanya upload file yang berubah
+- ✅ **60-90% faster** deployment setelah initial deploy
+- ✅ **Automatic asset building** (Vite)
+- ✅ **Composer optimization** untuk production
+- ✅ **Optional remote database import**
+
+**⚡ Speed:** First deploy ~8 minutes, subsequent deploys ~30-90 seconds
+
+See: `INCREMENTAL_DEPLOYMENT.md` untuk detail teknis tentang incremental upload.
 
 ---
 

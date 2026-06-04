@@ -13,6 +13,10 @@ Karena server shared hosting Rumahweb Anda **tidak support SSH**, beberapa task 
 - ✅ Database migrations
 - ✅ Configuration caching
 
+**⚡ Good News:** GitHub Actions menggunakan **Incremental FTP Upload** — hanya file yang berubah yang diupload, membuat deployment 60-90% lebih cepat setelah deployment pertama!
+
+See: `INCREMENTAL_DEPLOYMENT.md` untuk detail.
+
 ---
 
 ## 📝 Checklist Post-Deployment

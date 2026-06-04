@@ -16,6 +16,8 @@ jobs:
       # 1. Checkout code dari repository
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Untuk git diff dengan commit sebelumnya
 
       # 2. Setup PHP
       - name: Setup PHP
@@ -78,7 +80,10 @@ jobs:
             --exclude='.gitattributes' \
             --exclude='README.md' \
             --exclude='AGENTS.md' \
-            --exclude='claude.md' \
+            --exclude='agents.md' \
+            --exclude='*.md' \
+            --exclude='deploy-local.sh' \
+            --exclude='deploy-local.ps1' \
             --exclude='storage/logs/*' \
             --exclude='storage/framework/cache/*' \
             --exclude='storage/framework/sessions/*' \
@@ -100,7 +105,7 @@ jobs:
           chmod -R 755 deploy-package/storage
           chmod -R 755 deploy-package/bootstrap/cache
 
-      # 12. Deploy to Shared Hosting via FTP
+      # 14. Deploy to Shared Hosting via FTP (Incremental Upload)
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -109,15 +114,52 @@ jobs:
           password: ${{ secrets.DEPLOY_FTP_PASSWORD }}
           local-dir: ./deploy-package/
           server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          # Incremental upload - only changed files
           dangerous-clean-slate: false
+          # FTP-Deploy-Action automatically tracks changes using .ftp-deploy-sync-state.json
+          state-name: .ftp-deploy-sync-state.json
+          # Files to exclude from upload
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
             storage/logs/**
+            storage/framework/cache/**
+            storage/framework/sessions/**
+            storage/framework/views/**
             .env
+          # Dry run for testing (set to true to test without uploading)
+          dry-run: false
+          # Log level: minimal, standard, verbose
+          log-level: standard
 
-      # 13. Deployment Success Notification
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Run migrations
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: 3306
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: php artisan migrate --force
+
+      - name: Copy .env
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+
+      - name: Run migrations
+        env:
+          DB_CONNECTION: mysql
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: 3306
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: php artisan migrate --force --seed
+
+      # 15. Deployment Success Notification
       - name: Deployment Success
         if: success()
         run: |
@@ -126,6 +168,9 @@ jobs:
           echo "╚══════════════════════════════════════════════════════════╝"
           echo ""
           echo "🚀 Application URL: ${{ secrets.APP_URL }}"
+          echo ""
+          echo "📊 Deployment Method: Incremental FTP Upload"
+          echo "   (Only changed files were uploaded)"
           echo ""
           echo "📋 Post-Deployment Manual Steps (No SSH Access):"
           echo "──────────────────────────────────────────────────────────"
@@ -147,21 +192,20 @@ jobs:
           echo "   - Delete: bootstrap/cache/routes-*.php"
           echo "   - Delete all files in: storage/framework/views/"
           echo ""
-          echo "4️⃣  First deployment only:"
-          echo "   - Import database via phpMyAdmin"
-          echo "   - Run migrations via cPanel Terminal (if available)"
-          echo "   - Or import SQL dump manually"
+          echo "5️⃣  First deployment only:"
+          echo "   - Verify database tables created"
+          echo "   - Run seeders if needed (manually via phpMyAdmin)"
           echo ""
-          echo "5️⃣  Test the application:"
+          echo "6️⃣  Test the application:"
           echo "   - Open: ${{ secrets.APP_URL }}"
           echo "   - Check: ${{ secrets.APP_URL }}/admin"
           echo "   - Monitor: storage/logs/laravel.log for errors"
           echo ""
-          echo "📝 Note: Since server doesn't support SSH, cache clearing"
-          echo "   and migrations must be done manually via cPanel."
+          echo "📝 Note: FTP-Deploy-Action tracks file changes automatically."
+          echo "   Next deployments will be faster (only changed files)."
           echo ""
 
-      # 14. Deployment Failed Notification
+      # 16. Deployment Failed Notification
       - name: Deployment Failed
         if: failure()
         run: |
