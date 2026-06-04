@@ -53,7 +53,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     // Booking Routes
     Route::get('/booking/vehicles/{vehicle}', [RentalBookingController::class, 'create'])->name('booking.rental.create');
     Route::post('/booking/vehicles/{vehicle}', [RentalBookingController::class, 'store'])->name('booking.rental.store');
-    
+
     Route::get('/booking/tours/{tour}', [TourBookingController::class, 'create'])->name('booking.tours.create');
     Route::post('/booking/tours/{tour}', [TourBookingController::class, 'store'])->name('booking.tours.store');
 
@@ -67,7 +67,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::prefix('customer')->name('customer.')->group(function () {
         Route::get('/dashboard', [CustomerDashboardController::class, 'index'])->name('dashboard');
         Route::get('/my-bookings', [BookingHistoryController::class, 'index'])->name('bookings.index');
-        
+
         // Custom route binding with booking_code
         Route::get('/my-bookings/rental/{rental:booking_code}', [RentalBookingController::class, 'show'])->name('rental.show');
         Route::get('/my-bookings/tours/{tourBooking:booking_code}', [TourBookingController::class, 'show'])->name('tours.show');
@@ -81,3 +81,38 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
 
 // Webhook Route
 Route::post('/payments/midtrans/callback', [\App\Http\Controllers\Webhook\MidtransCallbackController::class, 'handle'])->name('midtrans.callback');
+
+Route::get('/system/maintenance/{action}', function ($action) {
+    if (request()->query('secret') !== env('SECRET_ENDPOINT')) {
+        abort(403, 'Unauthorized action.');
+    }
+
+    switch ($action) {
+        case 'migrate-fresh':
+            Artisan::call('migrate:fresh --force');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Database tables dropped and recreated!'
+            ]);
+
+        case 'migrate-seed':
+            Artisan::call('migrate:fresh --seed --force');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Database fresh reset and seeded with properly hashed passwords!'
+            ]);
+
+        case 'fix-admin-password':
+            // Automatically searches for an admin account to fix the Bcrypt error
+            $user = User::where('email', 'admin@manikjaya.test')->first();
+            if ($user) {
+                $user->password = Hash::make('password'); // Properly hashed!
+                $user->save();
+                return response()->json(['status' => 'success', 'message' => 'Admin password encrypted using Bcrypt.']);
+            }
+            return response()->json(['status' => 'error', 'message' => 'User not found.'], 404);
+
+        default:
+            return response()->json(['status' => 'error', 'message' => 'Action not recognized.'], 400);
+    }
+});
