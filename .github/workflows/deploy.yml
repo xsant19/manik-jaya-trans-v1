@@ -113,11 +113,9 @@ jobs:
           username: ${{ secrets.DEPLOY_FTP_USERNAME }}
           password: ${{ secrets.DEPLOY_FTP_PASSWORD }}
           local-dir: ./deploy-package/
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
+          server-dir: /
           # Incremental upload - only changed files
           dangerous-clean-slate: false
-          # FTP-Deploy-Action automatically tracks changes using .ftp-deploy-sync-state.json
-          state-name: .ftp-deploy-sync-state.json
           # Files to exclude from upload
           exclude: |
             **/.git*
