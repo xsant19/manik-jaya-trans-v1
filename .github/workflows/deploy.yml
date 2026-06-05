@@ -13,149 +13,44 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout code dari repository
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 2  # Untuk git diff dengan commit sebelumnya
-
-      # 2. Setup PHP
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.3'
-          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, dom, filter, gd, json, zip
-          tools: composer:v2
-
-      # 3. Cache Composer dependencies
-      - name: Cache Composer Dependencies
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
-      # 4. Install Composer Dependencies (production only)
-      - name: Install Composer Dependencies
-        run: composer install --prefer-dist --no-dev --no-scripts --no-progress --optimize-autoloader
-
-      # 5. Setup Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      # 6. Cache Node modules
-      - name: Cache Node Modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      # 7. Install NPM Dependencies
-      - name: Install NPM Dependencies
-        run: npm ci
-
-      # 8. Build Assets
-      - name: Build Production Assets
-        run: npm run build
-
-      # 9. Create deployment package (exclude unnecessary files)
-      - name: Create Deployment Package
+      - name: Setup SSH Key
         run: |
-          mkdir -p deploy-package
-          rsync -av --progress \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='node_modules' \
-            --exclude='.env' \
-            --exclude='.env.example' \
-            --exclude='tests' \
-            --exclude='phpunit.xml' \
-            --exclude='.editorconfig' \
-            --exclude='.gitignore' \
-            --exclude='.gitattributes' \
-            --exclude='README.md' \
-            --exclude='AGENTS.md' \
-            --exclude='agents.md' \
-            --exclude='*.md' \
-            --exclude='deploy-local.sh' \
-            --exclude='deploy-local.ps1' \
-            --exclude='storage/logs/*' \
-            --exclude='storage/framework/cache/*' \
-            --exclude='storage/framework/sessions/*' \
-            --exclude='storage/framework/views/*' \
-            ./ deploy-package/
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          # Scan the remote host keys to avoid strict host key checking errors
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      # 10. Create required directories in package
-      - name: Create Required Directories
+      - name: Deploy files via RSYNC
         run: |
-          mkdir -p deploy-package/storage/framework/cache
-          mkdir -p deploy-package/storage/framework/sessions
-          mkdir -p deploy-package/storage/framework/views
-          mkdir -p deploy-package/storage/logs
-          mkdir -p deploy-package/bootstrap/cache
+          rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa" \
+            --exclude='.git*' \
+            --exclude='/node_modules' \
+            --exclude='/storage/*.key' \
+            --exclude='/vendor' \
+            ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html/
 
-      # 11. Set proper permissions
-      - name: Set Permissions
-        run: |
-          chmod -R 755 deploy-package/storage
-          chmod -R 755 deploy-package/bootstrap/cache
+            # Note: Adjust "/home/${{ secrets.SSH_USER }}/public_html/" above
+            # to match the absolute path of your target directory on the server
 
-      # 14. Deploy to Shared Hosting via FTP (Incremental Upload)
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Execute Remote SSH Commands (Post-Deployment)
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.DEPLOY_FTP_USERNAME }}
-          password: ${{ secrets.DEPLOY_FTP_PASSWORD }}
-          local-dir: ./deploy-package/
-          server-dir: /
-          # Incremental upload - only changed files
-          dangerous-clean-slate: false
-          # Files to exclude from upload
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            storage/logs/**
-            storage/framework/cache/**
-            storage/framework/sessions/**
-            storage/framework/views/**
-            .env
-          # Dry run for testing (set to true to test without uploading)
-          dry-run: false
-          # Log level: minimal, standard, verbose
-          log-level: standard
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /home/${{ secrets.SSH_USER }}/public_html/
 
-      - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+            # Run composer on the server to ensure production-ready autoload maps
+            composer install --no-dev --optimize-autoloader
 
-      - name: Run migrations
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: 3306
-          DB_DATABASE: ${{ secrets.DB_DATABASE }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: php artisan migrate --force
-
-      - name: Copy .env
-        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-      - name: Run migrations
-        env:
-          DB_CONNECTION: mysql
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: 3306
-          DB_DATABASE: ${{ secrets.DB_DATABASE }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: php artisan migrate --force --seed
+            # Run Laravel optimization commands
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
 
       # 15. Deployment Success Notification
       - name: Deployment Success
