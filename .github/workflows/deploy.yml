@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main      # Deploy saat push ke branch main
-      - master    # Atau master (sesuaikan dengan branch utama Anda)
   workflow_dispatch:  # Memungkinkan manual trigger dari GitHub UI
 
 jobs:
@@ -21,20 +20,10 @@ jobs:
           # Scan the remote host keys to avoid strict host key checking errors
           ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Install rsync on runner
-        run: sudo apt-get update && sudo apt-get install -y rsync
-
-      - name: Deploy files via RSYNC
+      - name: Deploy files via SCP
         run: |
-          rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa" \
-            --exclude='.git*' \
-            --exclude='/node_modules' \
-            --exclude='/storage/*.key' \
-            --exclude='/vendor' \
-            ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html/
-
-            # Note: Adjust "/home/${{ secrets.SSH_USER }}/public_html/" above
-            # to match the absolute path of your target directory on the server
+          scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa -r \
+            . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html/
 
       - name: Execute Remote SSH Commands (Post-Deployment)
         uses: appleboy/ssh-action@v1.0.3
@@ -65,41 +54,6 @@ jobs:
           echo ""
           echo "🚀 Application URL: ${{ secrets.APP_URL }}"
           echo ""
-          echo "📊 Deployment Method: Incremental FTP Upload"
-          echo "   (Only changed files were uploaded)"
-          echo ""
-          echo "📋 Post-Deployment Manual Steps (No SSH Access):"
-          echo "──────────────────────────────────────────────────────────"
-          echo ""
-          echo "Please complete these steps via cPanel File Manager:"
-          echo ""
-          echo "1️⃣  Verify .env file:"
-          echo "   - Check .env exists in application root"
-          echo "   - Ensure APP_ENV=production, APP_DEBUG=false"
-          echo ""
-          echo "2️⃣  Check folder permissions (755 required):"
-          echo "   - storage/"
-          echo "   - storage/framework/"
-          echo "   - storage/logs/"
-          echo "   - bootstrap/cache/"
-          echo ""
-          echo "3️⃣  Clear cache files manually:"
-          echo "   - Delete: bootstrap/cache/config.php"
-          echo "   - Delete: bootstrap/cache/routes-*.php"
-          echo "   - Delete all files in: storage/framework/views/"
-          echo ""
-          echo "5️⃣  First deployment only:"
-          echo "   - Verify database tables created"
-          echo "   - Run seeders if needed (manually via phpMyAdmin)"
-          echo ""
-          echo "6️⃣  Test the application:"
-          echo "   - Open: ${{ secrets.APP_URL }}"
-          echo "   - Check: ${{ secrets.APP_URL }}/admin"
-          echo "   - Monitor: storage/logs/laravel.log for errors"
-          echo ""
-          echo "📝 Note: FTP-Deploy-Action tracks file changes automatically."
-          echo "   Next deployments will be faster (only changed files)."
-          echo ""
 
       # 16. Deployment Failed Notification
       - name: Deployment Failed
@@ -108,13 +62,4 @@ jobs:
           echo "╔══════════════════════════════════════════════════════════╗"
           echo "║   ❌ Deployment Failed!                                  ║"
           echo "╚══════════════════════════════════════════════════════════╝"
-          echo ""
-          echo "Please check the error logs above and verify:"
-          echo ""
-          echo "1. FTP credentials are correct in GitHub Secrets"
-          echo "2. FTP_SERVER_DIR path exists on server"
-          echo "3. Server has enough disk space"
-          echo "4. FTP connection is not blocked by firewall"
-          echo ""
-          echo "For detailed troubleshooting, see: DEPLOYMENT.md"
           echo ""
