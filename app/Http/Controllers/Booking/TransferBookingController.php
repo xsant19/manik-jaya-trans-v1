@@ -22,7 +22,7 @@ class TransferBookingController extends Controller
     public function create(AirportTransfer $transfer)
     {
         abort_if($transfer->status !== 'active', 404);
-        
+
         return view('frontend.booking.transfers.create', compact('transfer'));
     }
 
@@ -31,7 +31,7 @@ class TransferBookingController extends Controller
         abort_if($transfer->status !== 'active', 404);
 
         $validated = $request->validated();
-        
+
         $totalPrice = $transfer->price;
         $bookingCode = $this->bookingCodeService->generate('TRF', TransferBooking::class);
 
@@ -60,8 +60,8 @@ class TransferBookingController extends Controller
 
     public function show(TransferBooking $transferBooking)
     {
-        abort_if($transferBooking->user_id !== auth()->id(), 403, 'Unauthorized access to this booking.');
-        
+        abort_if($transferBooking->user_id != auth()->id(), 403, 'Unauthorized access to this booking.');
+
         return view('frontend.booking.transfers.show', compact('transferBooking'));
     }
 }

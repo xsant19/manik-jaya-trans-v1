@@ -22,7 +22,7 @@ class TourBookingController extends Controller
     public function create(TourPackage $tour)
     {
         abort_if($tour->status !== 'active', 404);
-        
+
         return view('frontend.booking.tours.create', compact('tour'));
     }
 
@@ -31,7 +31,7 @@ class TourBookingController extends Controller
         abort_if($tour->status !== 'active', 404);
 
         $validated = $request->validated();
-        
+
         $totalPrice = $tour->price * $validated['participant_count'];
         $bookingCode = $this->bookingCodeService->generate('TOUR', TourBooking::class);
 
@@ -58,8 +58,8 @@ class TourBookingController extends Controller
 
     public function show(TourBooking $tourBooking)
     {
-        abort_if($tourBooking->user_id !== auth()->id(), 403, 'Unauthorized access to this booking.');
-        
+        abort_if($tourBooking->user_id != auth()->id(), 403, 'Unauthorized access to this booking.');
+
         return view('frontend.booking.tours.show', compact('tourBooking'));
     }
 }

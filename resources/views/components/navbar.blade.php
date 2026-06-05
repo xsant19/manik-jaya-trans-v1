@@ -62,7 +62,7 @@
                                     </a>
                                 @endif
                                 <div class="border-t border-soft-divider mt-1 pt-1">
-                                    <form method="POST" action="{{ route('logout') }}" role="none">
+                                    <form method="POST" action="{{ auth()->user()->role == 'admin' ? route('filament.admin.auth.logout') : route('logout') }}" role="none">
                                         @csrf
                                         <button type="submit" class="text-carbon-black block w-full text-left px-4 py-2 text-sm hover:bg-faint-gray transition-colors" role="menuitem" tabindex="-1">
                                             <div class="flex items-center">
@@ -84,7 +84,7 @@
                     </a>
                 @endauth
             </div>
-            
+
             <!-- Mobile menu button -->
             <div class="flex items-center md:hidden">
                 <button type="button" id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-carbon-black hover:bg-faint-gray focus:outline-none transition-colors">
@@ -95,7 +95,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Mobile menu -->
     <div id="mobile-menu" class="hidden md:hidden border-t border-soft-divider">
         <div class="px-2 pt-2 pb-3 space-y-1 bg-canvas-white">
@@ -104,7 +104,7 @@
             <a href="{{ route('vehicles.index') }}" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Sewa Kendaraan</a>
             <a href="{{ route('transfers.index') }}" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Airport Transfer</a>
             <a href="{{ route('shuttles.index') }}" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Hotel Shuttle</a>
-            
+
             @auth
                 <div class="border-t border-soft-divider mt-2 pt-2">
                     <div class="px-3 py-2">
@@ -117,7 +117,7 @@
                     @else
                         <a href="/admin" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Admin Panel</a>
                     @endif
-                    
+
                     <form method="POST" action="{{ route('logout') }}" class="mt-1">
                         @csrf
                         <button type="submit" class="block w-full text-left px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Logout</button>
@@ -138,7 +138,7 @@
         // Mobile Menu Toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
-        
+
         if (mobileMenuButton && mobileMenu) {
             mobileMenuButton.addEventListener('click', function() {
                 mobileMenu.classList.toggle('hidden');

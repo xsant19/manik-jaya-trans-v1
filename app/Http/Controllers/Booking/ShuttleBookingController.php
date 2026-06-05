@@ -22,7 +22,7 @@ class ShuttleBookingController extends Controller
     public function create(HotelShuttle $shuttle)
     {
         abort_if($shuttle->status !== 'active', 404);
-        
+
         return view('frontend.booking.shuttles.create', compact('shuttle'));
     }
 
@@ -31,7 +31,7 @@ class ShuttleBookingController extends Controller
         abort_if($shuttle->status !== 'active', 404);
 
         $validated = $request->validated();
-        
+
         $totalPrice = $shuttle->price * $validated['passenger_count'];
         $bookingCode = $this->bookingCodeService->generate('SHT', ShuttleBooking::class);
 
@@ -59,8 +59,8 @@ class ShuttleBookingController extends Controller
 
     public function show(ShuttleBooking $shuttleBooking)
     {
-        abort_if($shuttleBooking->user_id !== auth()->id(), 403, 'Unauthorized access to this booking.');
-        
+        abort_if($shuttleBooking->user_id != auth()->id(), 403, 'Unauthorized access to this booking.');
+
         return view('frontend.booking.shuttles.show', compact('shuttleBooking'));
     }
 }

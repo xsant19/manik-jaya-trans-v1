@@ -15,7 +15,7 @@ class PaymentService
     public function createPaymentForBooking(Model $booking)
     {
         // 1. Check if booking belongs to current user
-        if ($booking->user_id !== auth()->id()) {
+        if ($booking->user_id != auth()->id()) {
             throw new Exception("Unauthorized access to booking.");
         }
 

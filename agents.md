@@ -12,10 +12,10 @@
 | Nama             | Sistem Informasi Travel Manik Jaya Trans                 |
 | Jenis            | Monolithic Web Application                               |
 | Framework        | Laravel 13, PHP 8.3+                                     |
-| Admin Panel      | Filament 4                                               |
-| Frontend         | Blade Template + Tailwind CSS v4 + Vite                  |
-| Database         | MySQL                                                    |
-| Payment Gateway  | Midtrans Sandbox                                         |
+| Admin Panel      | Filament 5.6.6                                           |
+| Frontend         | Blade Template + Tailwind CSS v4.3 + Vite 8.0           |
+| Database         | MySQL 5.7+ / 8.0+                                        |
+| Payment Gateway  | Midtrans Sandbox 2.6                                     |
 | Status           | In Development — Phase 1–8 selesai, Phase 9–10 pending   |
 
 ---

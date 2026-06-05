@@ -14,7 +14,7 @@
             <div class="flex-grow">
                 <form action="{{ route('booking.rental.store', $vehicle) }}" method="POST" class="bg-canvas-white p-6 md:p-8 rounded-btn-card border border-soft-divider shadow-sm">
                     @csrf
-                    
+
                     <h3 class="text-xl font-bold text-carbon-black mb-6">Detail Layanan</h3>
 
                     <div class="mb-6">
@@ -64,14 +64,14 @@
             <div class="w-full md:w-96 flex-shrink-0">
                 <div class="bg-faint-gray p-6 rounded-btn-card border border-soft-divider sticky top-24">
                     <h3 class="text-lg font-bold text-carbon-black mb-4">Ringkasan Pesanan</h3>
-                    
+
                     <div class="flex items-center space-x-4 mb-6 pb-6 border-b border-soft-divider">
                         <div>
                             <div class="font-bold text-carbon-black">{{ $vehicle->name }}</div>
                             <div class="text-sm text-storm-gray">{{ $vehicle->type }} &bull; Kapasitas {{ $vehicle->capacity }}</div>
                         </div>
                     </div>
-                    
+
                     <ul class="space-y-3 text-sm text-carbon-black mb-6">
                         <li class="flex justify-between">
                             <span class="text-storm-gray">Penyewa</span>

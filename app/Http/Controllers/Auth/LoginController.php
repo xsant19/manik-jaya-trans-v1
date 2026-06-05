@@ -22,9 +22,14 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+            $intendedUrl = session()->get('url.intended');
 
             if (Auth::user()->role === 'admin') {
-                return redirect()->intended('/admin');
+                return redirect()->intended(route('filament.admin.pages.dashboard'));
+            }
+
+            if (str_contains($intendedUrl, '/admin')) {
+                session()->forget('url.intended');
             }
 
             return redirect()->intended(route('customer.dashboard'));
