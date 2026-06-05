@@ -21,6 +21,9 @@ jobs:
           # Scan the remote host keys to avoid strict host key checking errors
           ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Install rsync on runner
+        run: sudo apt-get update && sudo apt-get install -y rsync
+
       - name: Deploy files via RSYNC
         run: |
           rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa" \
