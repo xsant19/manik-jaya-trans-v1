@@ -3,18 +3,21 @@
         <div class="flex justify-between h-16">
             <div class="flex items-center">
                 <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center">
-                    <span class="font-bold text-xl text-carbon-black tracking-tight">MANIK JAYA.</span>
+                    <span class="font-bold text-xl text-carbon-black tracking-tight notranslate">MANIK JAYA.</span>
                 </a>
-                <div class="hidden md:ml-10 md:flex md:space-x-8">
+                <div class="hidden xl:ml-10 xl:flex xl:space-x-8">
                     <!-- Guest Links -->
-                    <a href="{{ route('home') }}" class="text-carbon-black font-medium hover:text-storm-gray px-3 py-2 rounded-md">Beranda</a>
-                    <a href="{{ route('tours.index') }}" class="text-carbon-black font-medium hover:text-storm-gray px-3 py-2 rounded-md">Paket Wisata</a>
-                    <a href="{{ route('vehicles.index') }}" class="text-carbon-black font-medium hover:text-storm-gray px-3 py-2 rounded-md">Sewa Kendaraan</a>
-                    <a href="{{ route('transfers.index') }}" class="text-carbon-black font-medium hover:text-storm-gray px-3 py-2 rounded-md">Airport Transfer</a>
-                    <a href="{{ route('shuttles.index') }}" class="text-carbon-black font-medium hover:text-storm-gray px-3 py-2 rounded-md">Hotel Shuttle</a>
+                    <a href="{{ route('home') }}" class="text-carbon-black font-medium hover:text-storm-gray px-3 py-2 rounded-md whitespace-nowrap">Beranda</a>
+                    <a href="{{ route('tours.index') }}" class="text-carbon-black font-medium hover:text-storm-gray px-3 py-2 rounded-md whitespace-nowrap">Paket Wisata</a>
+                    <a href="{{ route('vehicles.index') }}" class="text-carbon-black font-medium hover:text-storm-gray px-3 py-2 rounded-md whitespace-nowrap">Sewa Kendaraan</a>
+                    <a href="{{ route('transfers.index') }}" class="notranslate text-carbon-black font-medium hover:text-storm-gray px-3 py-2 rounded-md whitespace-nowrap">Airport Transfer</a>
+                    <a href="{{ route('shuttles.index') }}" class="notranslate text-carbon-black font-medium hover:text-storm-gray px-3 py-2 rounded-md whitespace-nowrap">Hotel Shuttle</a>
                 </div>
             </div>
-            <div class="hidden md:flex items-center space-x-4">
+            <div class="hidden xl:flex items-center space-x-4">
+                {{-- Language Toggle Switch (Desktop) --}}
+                <x-language-switcher />
+
                 @auth
                     <!-- User Dropdown -->
                     <div class="relative inline-block text-left" id="user-menu-container">
@@ -86,7 +89,10 @@
             </div>
 
             <!-- Mobile menu button -->
-            <div class="flex items-center md:hidden">
+            <div class="flex items-center gap-3 xl:hidden">
+                {{-- Language Toggle Switch (Mobile - visible in header bar) --}}
+                <x-language-switcher />
+
                 <button type="button" id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-carbon-black hover:bg-faint-gray focus:outline-none transition-colors">
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -97,13 +103,13 @@
     </div>
 
     <!-- Mobile menu -->
-    <div id="mobile-menu" class="hidden md:hidden border-t border-soft-divider">
+    <div id="mobile-menu" class="hidden xl:hidden border-t border-soft-divider">
         <div class="px-2 pt-2 pb-3 space-y-1 bg-canvas-white">
             <a href="{{ route('home') }}" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Beranda</a>
             <a href="{{ route('tours.index') }}" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Paket Wisata</a>
             <a href="{{ route('vehicles.index') }}" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Sewa Kendaraan</a>
-            <a href="{{ route('transfers.index') }}" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Airport Transfer</a>
-            <a href="{{ route('shuttles.index') }}" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Hotel Shuttle</a>
+            <a href="{{ route('transfers.index') }}" class="notranslate block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Airport Transfer</a>
+            <a href="{{ route('shuttles.index') }}" class="notranslate block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Hotel Shuttle</a>
 
             @auth
                 <div class="border-t border-soft-divider mt-2 pt-2">
@@ -168,5 +174,61 @@
                 }
             });
         }
+
+        // ─── Language Toggle Switch Logic ───
+        initLanguageSwitches();
     });
+
+    function initLanguageSwitches() {
+        var savedLang = localStorage.getItem('mjt-lang') || 'id';
+
+        // Set initial state for all toggle switches
+        document.querySelectorAll('[data-lang-toggle]').forEach(function(toggle) {
+            var isEn = savedLang === 'en';
+            toggle.setAttribute('aria-checked', isEn ? 'true' : 'false');
+
+            var flag = toggle.querySelector('[data-lang-thumb-flag]');
+            if (flag) flag.textContent = isEn ? 'EN' : 'ID';
+
+            // Click handler
+            toggle.addEventListener('click', function() {
+                var currentlyEn = this.getAttribute('aria-checked') === 'true';
+                var newLang = currentlyEn ? 'id' : 'en';
+
+                // Update ALL switches on the page (desktop + mobile)
+                syncAllSwitches(newLang);
+
+                // Save & trigger translation
+                localStorage.setItem('mjt-lang', newLang);
+                triggerGoogleTranslate(newLang);
+            });
+        });
+    }
+
+    function syncAllSwitches(langCode) {
+        var isEn = langCode === 'en';
+
+        document.querySelectorAll('[data-lang-toggle]').forEach(function(toggle) {
+            toggle.setAttribute('aria-checked', isEn ? 'true' : 'false');
+
+            var flag = toggle.querySelector('[data-lang-thumb-flag]');
+            if (flag) flag.textContent = isEn ? 'EN' : 'ID';
+        });
+    }
+
+    function triggerGoogleTranslate(langCode) {
+        var gtCombo = document.querySelector('.goog-te-combo');
+        if (gtCombo) {
+            gtCombo.value = langCode;
+            gtCombo.dispatchEvent(new Event('change'));
+        } else {
+            setTimeout(function() {
+                var combo = document.querySelector('.goog-te-combo');
+                if (combo) {
+                    combo.value = langCode;
+                    combo.dispatchEvent(new Event('change'));
+                }
+            }, 1000);
+        }
+    }
 </script>

@@ -178,3 +178,149 @@
 .hero-nav-btn:hover {
     background: rgba(255, 255, 255, 0.28);
 }
+
+/* ─── Language Toggle Switch ─── */
+.lang-switch-wrapper {
+    display: inline-flex;
+    align-items: center;
+}
+
+.lang-switch-track {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 54px;
+    height: 28px;
+    border-radius: 9999px;
+    background: #ebebeb;
+    border: 1px solid #dddddd;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.25s ease, border-color 0.25s ease;
+    outline: none;
+    flex-shrink: 0;
+}
+
+.lang-switch-track:hover {
+    background: #e0e0e0;
+}
+
+.lang-switch-track:focus-visible {
+    box-shadow: 0 0 0 2px #dddddd;
+}
+
+/* Track when toggled to English */
+.lang-switch-track[aria-checked="true"] {
+    background: #222222;
+    border-color: #222222;
+}
+
+.lang-switch-track[aria-checked="true"]:hover {
+    background: #333333;
+}
+
+/* Static text labels on the track */
+.lang-switch-label {
+    position: absolute;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    user-select: none;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    line-height: 1;
+}
+
+.lang-switch-label--left {
+    left: 6px;
+    color: #ffffff;
+    opacity: 0;
+}
+
+.lang-switch-label--right {
+    right: 6px;
+    color: #6a6a6a;
+    opacity: 1;
+}
+
+/* When checked (EN active) — show ID label, hide EN label */
+.lang-switch-track[aria-checked="true"] .lang-switch-label--left {
+    opacity: 1;
+}
+
+.lang-switch-track[aria-checked="true"] .lang-switch-label--right {
+    opacity: 0;
+}
+
+/* Sliding thumb */
+.lang-switch-thumb {
+    position: absolute;
+    left: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 9999px;
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.lang-switch-track[aria-checked="true"] .lang-switch-thumb {
+    transform: translateX(26px);
+}
+
+/* Language code text inside the thumb */
+.lang-switch-flag {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #222222;
+    letter-spacing: 0.02em;
+    user-select: none;
+}
+
+/* Hide Google Translate injected elements */
+.skiptranslate,
+.goog-te-banner-frame {
+    display: none !important;
+}
+
+body {
+    top: 0 !important;
+}
+
+/* ─── About Page — Stat Cards ─── */
+.about-stat-card {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.about-stat-card--visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.about-stat-card:nth-child(1) { transition-delay: 0ms; }
+.about-stat-card:nth-child(2) { transition-delay: 100ms; }
+.about-stat-card:nth-child(3) { transition-delay: 200ms; }
+.about-stat-card:nth-child(4) { transition-delay: 300ms; }
+
+/* ─── FAQ Accordion ─── */
+.faq-content {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
+}
+
+.faq-item[data-faq-open="true"] .faq-content {
+    opacity: 1;
+}

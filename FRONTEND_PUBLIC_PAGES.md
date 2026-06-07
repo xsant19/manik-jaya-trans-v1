@@ -110,6 +110,28 @@ Semua halaman public frontend telah dibuat sesuai dengan spesifikasi DESIGN.md d
   - List layanan yang termasuk
   - Sticky booking card
 
+### 6. Halaman Statis & Informasi
+
+#### Tentang Kami (`/about`)
+- **Route**: `GET /about`
+- **Fitur**: Overview perusahaan, 4 card statistik dengan animasi CSS delay, nilai inti perusahaan, dan call-to-action.
+
+#### Hubungi Kami & FAQ (`/contact`)
+- **Route**: `GET /contact`
+- **Fitur**:
+  - Contact information cards
+  - Contact form
+  - Embed Google Maps lokasi kantor
+  - FAQ Accordion (dibangun dengan vanilla JS, tanpa dependensi eksternal)
+
+#### Syarat & Ketentuan (`/terms`)
+- **Route**: `GET /terms`
+- **Fitur**: Ketentuan layanan, aturan refund, dan kebijakan force majeure.
+
+#### Kebijakan Privasi (`/privacy`)
+- **Route**: `GET /privacy`
+- **Fitur**: Kebijakan privasi data pengguna dan penggunaan cookies.
+
 ## Komponen yang Digunakan
 
 ### Layout Components
@@ -124,6 +146,7 @@ Semua halaman public frontend telah dibuat sesuai dengan spesifikasi DESIGN.md d
 - `components/primary-button.blade.php` - Button utama (hitam)
 - `components/ghost-button.blade.php` - Button transparan
 - `components/status-badge.blade.php` - Badge untuk status
+- `components/floating-wa.blade.php` - Tombol melayang WhatsApp global
 
 ## Desain System
 
@@ -160,15 +183,18 @@ Semua halaman mengikuti DESIGN.md dengan:
 3. **404 Protection**: Redirect 404 jika data tidak active
 4. **CSRF Protection**: Semua form menggunakan @csrf
 
-## Responsive Design
+## Responsive Design & UI Khusus
 
 - **Desktop**: Grid multi-kolom, sticky sidebar
-- **Tablet**: Grid 2 kolom, adjusted spacing
-- **Mobile**: 
+- **Tablet & Mobile (Navbar)**: 
+  - Breakpoint mobile menu dinaikkan ke `xl` (1280px) untuk mengakomodasi Language Switcher dan panjang menu navigasi, memastikan tidak ada elemen yang bertumpuk (overlap) di ukuran menengah.
+- **Mobile (General)**: 
   - Grid 1 kolom
   - Hamburger menu
   - Full-width buttons
   - Stacked layout
+- **Mobile (Detail Paket Wisata)**:
+  - Menggunakan **Mobile Carousel** (scroll-snap berbasis CSS murni) untuk galeri gambar di layar kecil, meniru antarmuka Airbnb mobile tanpa melanggar batasan performa/animasi kompleks JS.
 
 ## Navigation
 

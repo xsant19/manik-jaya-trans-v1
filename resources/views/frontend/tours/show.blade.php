@@ -23,47 +23,58 @@
     <x-page-container>
         <div class="py-6">
             @if($tour->imageUrls)
-                <div class="grid grid-cols-1 gap-2 overflow-hidden rounded-card md:grid-cols-4 md:grid-rows-2">
+                {{-- Desktop Grid (Hidden on Mobile) --}}
+                <div class="hidden md:grid grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-card h-[480px]">
                     {{-- Large left cell --}}
-                    <div class="flex items-center justify-center bg-pale-drift md:col-span-2 md:row-span-2">
-                        <div class="flex h-80 w-full items-center justify-center md:h-[480px]">
-                            <img src="{{ asset($tour->imageUrls[0]) }}"
-                                 alt="{{ $tour->name }}"
-                                 class="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
-                        </div>
+                    <div class="relative bg-pale-drift col-span-2 row-span-2 overflow-hidden">
+                        <img src="{{ asset($tour->imageUrls[0]) }}"
+                             alt="{{ $tour->name }}"
+                             class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
                     </div>
                     {{-- 4 small right cells --}}
-                    @for($i = 1; $i <= count($tour->imageUrls) - 1; $i++)
-                        <div class="hidden h-[235px] items-center justify-center bg-faint-gray md:flex">
+                    @for($i = 1; $i <= min(4, count($tour->imageUrls) - 1); $i++)
+                        <div class="relative bg-faint-gray overflow-hidden">
                            <img src="{{ asset($tour->imageUrls[$i]) }}"
                                  alt="{{ $tour->name }} - Image {{ $i+1 }}"
-                                 class="h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+                                 class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
                         </div>
                     @endfor
                 </div>
-            @else
-                {{-- No image: Airbnb-style 5-cell placeholder grid --}}
-                <div class="grid grid-cols-1 gap-2 overflow-hidden rounded-card md:grid-cols-4 md:grid-rows-2">
-                    {{-- Large left cell --}}
-                    <div class="flex items-center justify-center bg-pale-drift md:col-span-2 md:row-span-2">
-                        <div class="flex h-80 w-full items-center justify-center md:h-[480px]">
-                            <svg class="size-16 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                                <circle cx="12" cy="10" r="3"/>
-                            </svg>
+
+                {{-- Mobile Carousel (Hidden on Desktop) --}}
+                <div class="md:hidden flex overflow-x-auto snap-x snap-mandatory rounded-card h-[300px]" style="scrollbar-width: none; -ms-overflow-style: none;">
+                    <style>
+                        .md\:hidden::-webkit-scrollbar { display: none; }
+                    </style>
+                    @foreach($tour->imageUrls as $index => $url)
+                        <div class="min-w-full shrink-0 snap-center relative bg-pale-drift">
+                            <img src="{{ asset($url) }}" 
+                                 alt="{{ $tour->name }} - Slide {{ $index + 1 }}" 
+                                 class="absolute inset-0 h-full w-full object-cover" />
+                            
+                            {{-- Image Counter Badge --}}
+                            <div class="absolute bottom-3 right-3 bg-carbon-black/70 text-canvas-white text-xs font-medium px-2 py-1 rounded-md backdrop-blur-sm">
+                                {{ $index + 1 }} / {{ count($tour->imageUrls) }}
+                            </div>
                         </div>
+                    @endforeach
+                </div>
+            @else
+                {{-- No image: Desktop Placeholder --}}
+                <div class="hidden md:grid grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-card h-[480px]">
+                    <div class="flex items-center justify-center bg-pale-drift col-span-2 row-span-2">
+                        <svg class="size-16 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                     </div>
-                    {{-- 4 small right cells --}}
                     @for($i = 1; $i <= 4; $i++)
-                        <div class="hidden h-[235px] items-center justify-center bg-faint-gray md:flex">
-                            <svg class="size-8 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                                <circle cx="12" cy="10" r="3"/>
-                            </svg>
+                        <div class="flex items-center justify-center bg-faint-gray">
+                            <svg class="size-8 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                         </div>
                     @endfor
+                </div>
+
+                {{-- No image: Mobile Placeholder --}}
+                <div class="md:hidden flex h-[300px] items-center justify-center bg-pale-drift rounded-card overflow-hidden">
+                    <svg class="size-12 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                 </div>
             @endif
         </div>

@@ -85,6 +85,8 @@ Sistem ini dibangun dengan fokus pada:
 - 💳 **Payment** - Midtrans integration (multiple payment methods)
 - 📊 **Dashboard** - Booking history, status tracking
 - ✉️ **Email Notifications** - Booking confirmations, status updates
+- ℹ️ **Informational Pages** - About, Contact + FAQ, Terms, Privacy
+- 💬 **Interactive Support** - Floating WhatsApp Button for direct CS contact
 
 ### Admin Features (Filament Panel)
 - 👥 **User Management** - Manage customers and admins

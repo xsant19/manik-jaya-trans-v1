@@ -284,10 +284,14 @@ resources/
 
 ### Public Routes (Guest)
 ```
-GET  /                          Home page
-GET  /vehicles                  List kendaraan
-GET  /vehicles/{vehicle}        Detail kendaraan
-GET  /tours                     List paket wisata
+GET  /                              # Home
+GET  /about                         # Tentang Kami
+GET  /contact                       # Hubungi Kami & FAQ
+GET  /terms                         # Syarat dan Ketentuan
+GET  /privacy                       # Kebijakan Privasi
+GET  /vehicles                      # List kendaraan
+GET  /vehicles/{vehicle}            # Detail kendaraan
+GET  /tours                         # List paket wisata
 GET  /tours/{tour}              Detail paket wisata
 GET  /transfers                 List airport transfer
 GET  /transfers/{transfer}      Detail airport transfer

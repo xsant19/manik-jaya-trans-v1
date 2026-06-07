@@ -27,4 +27,28 @@ class HomeController extends Controller
     {
         return view('frontend.about');
     }
+
+    /**
+     * Menampilkan halaman hubungi kami.
+     */
+    public function contact()
+    {
+        return view('frontend.contact');
+    }
+
+    /**
+     * Menampilkan halaman syarat dan ketentuan.
+     */
+    public function terms()
+    {
+        return view('frontend.terms');
+    }
+
+    /**
+     * Menampilkan halaman kebijakan privasi.
+     */
+    public function privacy()
+    {
+        return view('frontend.privacy');
+    }
 }

@@ -33,9 +33,9 @@ class VehicleForm
                     ->multiple()
                     ->image()
                     ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                    ->maxFiles(5)
+                    ->maxFiles(3)
                     ->reorderable()
-                    ->helperText('Upload hingga 5 gambar kendaraan. Gambar pertama akan menjadi gambar utama.'),
+                    ->helperText('Upload hingga 3 gambar kendaraan. Gambar pertama akan menjadi gambar utama.'),
                 Select::make('status')
                     ->options(['available' => 'Available', 'maintenance' => 'Maintenance', 'inactive' => 'Inactive'])
                     ->default('available')
