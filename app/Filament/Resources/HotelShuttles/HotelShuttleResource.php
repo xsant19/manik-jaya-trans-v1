@@ -18,7 +18,13 @@ class HotelShuttleResource extends Resource
 {
     protected static ?string $model = HotelShuttle::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Data Layanan';
+
+    protected static ?string $navigationLabel = 'Hotel Shuttle';
+
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $recordTitleAttribute = 'hotel_name';
 

@@ -20,9 +20,26 @@ class TransferBookingResource extends Resource
 {
     protected static ?string $model = TransferBooking::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedPaperAirplane;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Manajemen Booking';
+
+    protected static ?string $navigationLabel = 'Booking Transfer';
+
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $recordTitleAttribute = 'booking_code';
+
+    public static function getNavigationBadge(): ?string
+    {
+        $count = static::getModel()::where('booking_status', 'pending')->count();
+        return $count > 0 ? (string) $count : null;
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
+    }
 
     public static function form(Schema $schema): Schema
     {

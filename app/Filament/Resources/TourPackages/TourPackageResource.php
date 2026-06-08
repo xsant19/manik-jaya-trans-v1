@@ -18,7 +18,13 @@ class TourPackageResource extends Resource
 {
     protected static ?string $model = TourPackage::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedGlobeAlt;
+
+    protected static string|\UnitEnum|null $navigationGroup = 'Data Layanan';
+
+    protected static ?string $navigationLabel = 'Paket Wisata';
+
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $recordTitleAttribute = 'name';
 

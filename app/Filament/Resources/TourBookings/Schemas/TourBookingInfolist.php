@@ -24,7 +24,7 @@ class TourBookingInfolist
                     ->placeholder('-')
                     ->columnSpanFull(),
                 TextEntry::make('total_price')
-                    ->money(),
+                    ->money('IDR'),
                 TextEntry::make('booking_status')
                     ->badge(),
                 TextEntry::make('payment_status')

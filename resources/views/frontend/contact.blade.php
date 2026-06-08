@@ -36,7 +36,7 @@
                     </svg>
                 </div>
                 <h3 class="font-bold text-carbon-black mb-1">Email</h3>
-                <p class="text-sm text-storm-gray">info@manikjaya.test</p>
+                <a href="mailto:{{ config('company.email') }}" class="text-sm text-storm-gray hover:text-carbon-black transition-colors notranslate">{{ config('company.email') }}</a>
             </div>
 
             <!-- Telepon -->
@@ -47,7 +47,7 @@
                     </svg>
                 </div>
                 <h3 class="font-bold text-carbon-black mb-1">Telepon</h3>
-                <p class="text-sm text-storm-gray">+62 812-3456-7890</p>
+                <a href="{{ config('company.wa_link') }}" target="_blank" rel="noopener" class="text-sm text-storm-gray hover:text-carbon-black transition-colors notranslate">{{ config('company.phone') }}</a>
             </div>
 
             <!-- Alamat -->
@@ -59,7 +59,7 @@
                     </svg>
                 </div>
                 <h3 class="font-bold text-carbon-black mb-1">Alamat</h3>
-                <p class="text-sm text-storm-gray">Jl. Manik Jaya No. 1, Denpasar, Bali</p>
+                <p class="text-sm text-storm-gray">{{ config('company.address') }}</p>
             </div>
         </div>
     </x-page-container>
@@ -141,20 +141,37 @@
                     Kunjungi kantor kami di Denpasar, Bali.
                 </p>
 
+                {{-- Google Maps Embed — responsif --}}
                 <div class="rounded-card overflow-hidden border border-soft-divider bg-canvas-white">
-                    <iframe
-                        id="contact-map"
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63116.95402052!2d115.17660865!3d-8.670458!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd2408f0789a7a1%3A0xf0306050ee832a0!2sDenpasar%2C%20Bali!5e0!3m2!1sid!2sid!4v1700000000000!5m2!1sid!2sid"
-                        width="100%"
-                        height="400"
-                        style="border:0;"
-                        allowfullscreen=""
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        title="Lokasi Manik Jaya Trans di Denpasar, Bali"
-                        class="w-full"
-                    ></iframe>
+                    <div class="relative w-full" style="padding-top: 60%;">
+                        <iframe
+                            id="contact-map"
+                            src="{{ config('company.maps_embed_url') }}"
+                            class="absolute inset-0 w-full h-full"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Lokasi {{ config('company.name') }} — {{ config('company.address') }}"
+                        ></iframe>
+                    </div>
                 </div>
+
+                {{-- Tombol buka di Google Maps --}}
+                <a
+                    href="{{ config('company.maps_share_url') }}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="mt-3 inline-flex items-center gap-2 text-sm text-storm-gray hover:text-carbon-black transition-colors"
+                    id="btn-open-gmaps"
+                >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    Buka di Google Maps
+                </a>
 
                 <!-- Address detail below map -->
                 <div class="mt-6 flex items-start gap-4 p-5 bg-canvas-white rounded-card border border-soft-divider">
@@ -165,9 +182,22 @@
                         </svg>
                     </div>
                     <div>
-                        <h4 class="font-bold text-carbon-black text-sm notranslate">Manik Jaya Trans</h4>
-                        <p class="text-sm text-storm-gray mt-0.5">Jl. Manik Jaya No. 1, Denpasar, Bali 80234</p>
-                        <p class="text-sm text-storm-gray">Senin – Minggu, 07:00 – 22:00 WITA</p>
+                        <h4 class="font-bold text-carbon-black text-sm notranslate">{{ config('company.name') }}</h4>
+                        <p class="text-sm text-storm-gray mt-0.5">{{ config('company.address') }}</p>
+                        <p class="text-sm text-storm-gray">{{ config('company.hours') }}</p>
+                        {{-- Tombol WhatsApp --}}
+                        <a
+                            href="{{ config('company.wa_link') }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            id="btn-whatsapp-contact"
+                            class="mt-3 inline-flex items-center gap-2 rounded-btn bg-[#25D366] px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                            </svg>
+                            Hubungi via WhatsApp
+                        </a>
                     </div>
                 </div>
             </div>

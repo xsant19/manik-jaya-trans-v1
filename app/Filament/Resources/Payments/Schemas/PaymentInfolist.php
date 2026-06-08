@@ -24,7 +24,7 @@ class PaymentInfolist
                 TextEntry::make('transaction_id')
                     ->placeholder('-'),
                 TextEntry::make('gross_amount')
-                    ->numeric(),
+                    ->money('IDR'),
                 TextEntry::make('status')
                     ->badge(),
                 TextEntry::make('paid_at')
