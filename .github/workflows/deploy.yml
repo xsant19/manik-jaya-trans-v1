@@ -24,6 +24,8 @@ jobs:
         run: |
           scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa -r \
             . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html/
+        with:
+          debug: true
 
       - name: Execute Remote SSH Commands (Post-Deployment)
         uses: appleboy/ssh-action@v1.0.3
