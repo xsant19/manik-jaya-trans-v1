@@ -3,33 +3,83 @@ name: Deploy to Rumahweb Shared Hosting
 on:
   push:
     branches:
-      - main      # Deploy saat push ke branch main
-  workflow_dispatch:  # Memungkinkan manual trigger dari GitHub UI
+      - main
+  workflow_dispatch:
 
 jobs:
-  deploy:
-    name: Deploy Laravel Application
+  # ========================================================
+  # JOB 1: BUILD ALL ASSETS (Runs entirely on GitHub)
+  # ========================================================
+  build:
+    name: Build PHP & Node Assets
     runs-on: ubuntu-latest
-
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, ctype, iconv, json
+
+      - name: Install Composer Dependencies
+        run: |
+          composer install --no-dev --optimize-autoloader --no-interaction
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install NPM and Build Assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: Package Application into ZIP
+        run: |
+          sudo apt-get update && sudo apt-get install -y zip
+          shopt -s dotglob
+          zip -r deploy.zip * -x ".git/*" "node_modules/*"
+
+      # Save the zip archive so the deployment job can access it
+      - name: Upload Zip as Workflow Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: laravel-deploy-package
+          path: deploy.zip
+          retention-days: 1 # Automatically deletes the temp file after 1 day
+
+  # ========================================================
+  # JOB 2: DEPLOY TO SERVER (Can be retried if it fails!)
+  # ========================================================
+  deploy:
+    name: Upload and Extract to Rumahweb
+    needs: build # Ensures this job only runs if the build finishes successfully
+    runs-on: ubuntu-latest
+    steps:
+      # Download the pre-built zip archive from the Build job
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: laravel-deploy-package
+          path: .
+
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          # Scan the remote host keys to avoid strict host key checking errors
           ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy Laravel via SCP with Debug Logs
-        shell: bash # <--- This forces GitHub to use Bash so it understands the syntax
+      - name: Upload Zip via SCP
         run: |
-          shopt -s dotglob
-          shopt -s extglob
+          scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa \
+            deploy.zip ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html/
 
-          scp -v -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa -r \
-            ./!(.git) ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html/
-
-      - name: Execute Remote SSH Commands (Post-Deployment)
+      - name: Extract and Optimize on Rumahweb
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -39,32 +89,12 @@ jobs:
           script: |
             cd /home/${{ secrets.SSH_USER }}/public_html/
 
-            # Run composer on the server to ensure production-ready autoload maps
-            composer install --no-dev --optimize-autoloader
+            # Unzip overwriting old files
+            unzip -o deploy.zip
+            rm deploy.zip
 
-            # Run Laravel optimization commands
-            php artisan migrate
-            php artisan db:seed
+            # Optimize Laravel
+            php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
-
-      # 15. Deployment Success Notification
-      - name: Deployment Success
-        if: success()
-        run: |
-          echo "╔══════════════════════════════════════════════════════════╗"
-          echo "║   ✅ Deployment Completed Successfully!                  ║"
-          echo "╚══════════════════════════════════════════════════════════╝"
-          echo ""
-          echo "🚀 Application URL: ${{ secrets.APP_URL }}"
-          echo ""
-
-      # 16. Deployment Failed Notification
-      - name: Deployment Failed
-        if: failure()
-        run: |
-          echo "╔══════════════════════════════════════════════════════════╗"
-          echo "║   ❌ Deployment Failed!                                  ║"
-          echo "╚══════════════════════════════════════════════════════════╝"
-          echo ""
