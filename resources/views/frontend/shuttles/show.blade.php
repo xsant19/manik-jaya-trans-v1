@@ -10,8 +10,7 @@
         <div class="flex flex-col md:flex-row gap-12">
             <!-- Details -->
             <div class="flex-grow">
-                <h1 class="text-4xl font-bold text-carbon-black mb-2">{{ $shuttle->hotel_name }}</h1>
-                <p class="text-storm-gray mb-8">Layanan shuttle hotel terjadwal</p>
+                <h1 class="text-4xl font-bold text-carbon-black mb-8">{{ $shuttle->route_name }}</h1>
                 
                 <h3 class="text-xl font-bold text-carbon-black mb-4">Detail Rute</h3>
                 
@@ -41,12 +40,12 @@
                     </div>
                 </div>
                 
-                @if($shuttle->schedule)
+                @if($shuttle->estimated_duration)
                     <div class="mb-8">
-                        <h3 class="text-xl font-bold text-carbon-black mb-4">Jadwal Shuttle</h3>
+                        <h3 class="text-xl font-bold text-carbon-black mb-4">Estimasi Waktu</h3>
                         <div class="flex items-center text-storm-gray">
-                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            <span class="text-lg">{{ $shuttle->schedule }}</span>
+                            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-lg">{{ $shuttle->estimated_duration }}</span>
                         </div>
                     </div>
                 @endif
@@ -62,19 +61,19 @@
                     <ul class="space-y-2 text-sm text-storm-gray">
                         <li class="flex items-start">
                             <svg class="w-5 h-5 mr-2 text-carbon-black flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Driver profesional dan ramah
+                            Driver profesional dan berpengalaman
                         </li>
                         <li class="flex items-start">
                             <svg class="w-5 h-5 mr-2 text-carbon-black flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Kendaraan ber-AC dan bersih
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 mr-2 text-carbon-black flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                            Jadwal teratur dan tepat waktu
+                            Kendaraan ber-AC dan nyaman
                         </li>
                         <li class="flex items-start">
                             <svg class="w-5 h-5 mr-2 text-carbon-black flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                             Bantuan dengan bagasi
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-5 h-5 mr-2 text-carbon-black flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Tepat waktu dan dapat diandalkan
                         </li>
                     </ul>
                 </div>
@@ -97,10 +96,6 @@
                         {{-- Shuttle Info Summary --}}
                         <div class="divide-y divide-soft-divider px-6">
                             <div class="flex items-center justify-between py-3.5 text-sm">
-                                <span class="text-storm-gray">Hotel</span>
-                                <span class="font-medium text-carbon-black text-right">{{ Str::limit($shuttle->hotel_name, 20) }}</span>
-                            </div>
-                            <div class="flex items-center justify-between py-3.5 text-sm">
                                 <span class="text-storm-gray">Dari</span>
                                 <span class="font-medium text-carbon-black text-right">{{ Str::limit($shuttle->pickup_location, 20) }}</span>
                             </div>
@@ -108,12 +103,16 @@
                                 <span class="text-storm-gray">Ke</span>
                                 <span class="font-medium text-carbon-black text-right">{{ Str::limit($shuttle->dropoff_location, 20) }}</span>
                             </div>
-                            @if($shuttle->schedule)
+                            @if($shuttle->estimated_duration)
                             <div class="flex items-center justify-between py-3.5 text-sm">
-                                <span class="text-storm-gray">Jadwal</span>
-                                <span class="font-medium text-carbon-black">{{ $shuttle->schedule }}</span>
+                                <span class="text-storm-gray">Estimasi Waktu</span>
+                                <span class="font-medium text-carbon-black">{{ $shuttle->estimated_duration }}</span>
                             </div>
                             @endif
+                            <div class="flex items-center justify-between py-3.5 text-sm">
+                                <span class="text-storm-gray">Driver & Kendaraan</span>
+                                <span class="font-medium text-carbon-black">Termasuk</span>
+                            </div>
                         </div>
 
                         {{-- CTA --}}
@@ -153,7 +152,7 @@
                                 <p class="mt-1 text-xs leading-relaxed text-storm-gray mb-3">
                                     Hubungi kami via WhatsApp untuk pertanyaan seputar hotel shuttle ini.
                                 </p>
-                                <a href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20bertanya%20tentang%20{{ urlencode($shuttle->hotel_name) }}" 
+                                <a href="https://wa.me/{{ config('company.phone_intl') }}?text=Halo,%20saya%20ingin%20bertanya%20tentang%20{{ urlencode($shuttle->route_name) }}" 
                                    target="_blank"
                                    class="inline-flex items-center gap-2 text-xs font-medium text-carbon-black hover:underline">
                                     <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">

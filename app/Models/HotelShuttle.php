@@ -10,11 +10,11 @@ class HotelShuttle extends Model
     use HasFactory;
 
     protected $fillable = [
-        'hotel_name',
-        'pickup_location',
-        'dropoff_location',
+        'route_name',           // UBAH: dari hotel_name
+        'pickup_location',      // Area daerah (Kuta, Seminyak, dll)
+        'dropoff_location',     // Bandara tujuan
         'price',
-        'schedule',
+        'estimated_duration',   // UBAH: dari schedule
         'status',
     ];
 

@@ -19,7 +19,8 @@ class ShuttleBookingForm
                     ->relationship('user', 'name')
                     ->required(),
                 Select::make('hotel_shuttle_id')
-                    ->relationship('hotelShuttle', 'hotel_name')
+                    ->relationship('hotelShuttle', 'route_name')  // UBAH: dari hotel_name
+                    ->label('Rute Hotel Shuttle')
                     ->required(),
                 TextInput::make('booking_code')
                     ->required()

@@ -32,8 +32,8 @@
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         <div class="sm:col-span-2">
-                            <div class="text-sm text-storm-gray mb-1">Nama Hotel & Rute</div>
-                            <div class="font-medium text-carbon-black">{{ $shuttleBooking->hotelShuttle->hotel_name }}</div>
+                            <div class="text-sm text-storm-gray mb-1">Rute Shuttle</div>
+                            <div class="font-medium text-carbon-black">{{ $shuttleBooking->hotelShuttle->route_name }}</div>
                             <div class="text-xs text-storm-gray mt-1">{{ $shuttleBooking->hotelShuttle->pickup_location }} &rarr; {{ $shuttleBooking->hotelShuttle->dropoff_location }}</div>
                         </div>
                         <div>
@@ -42,7 +42,7 @@
                         </div>
                         <div>
                             <div class="text-sm text-storm-gray mb-1">Waktu Penjemputan</div>
-                            <div class="font-medium text-carbon-black">{{ $shuttleBooking->pickup_time ? \Carbon\Carbon::parse($shuttleBooking->pickup_time)->format('H:i') : 'Sesuai Jadwal (' . $shuttleBooking->hotelShuttle->schedule . ')' }}</div>
+                            <div class="font-medium text-carbon-black">{{ $shuttleBooking->pickup_time ? \Carbon\Carbon::parse($shuttleBooking->pickup_time)->format('H:i') : 'Estimasi ' . $shuttleBooking->hotelShuttle->estimated_duration }}</div>
                         </div>
                         <div>
                             <div class="text-sm text-storm-gray mb-1">Jumlah Penumpang</div>

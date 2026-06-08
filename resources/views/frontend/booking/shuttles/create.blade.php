@@ -24,7 +24,7 @@
                             <x-form-error :messages="$errors->get('booking_date')" />
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-carbon-black mb-2">Waktu Penjemputan (Opsional)</label>
+                            <label class="block text-sm font-medium text-carbon-black mb-2">Waktu Penjemputan di Area Hotel (Opsional)</label>
                             <input type="time" name="pickup_time" value="{{ old('pickup_time') }}" class="w-full border border-soft-divider rounded-btn p-3 focus:outline-none focus:border-carbon-black">
                             <x-form-error :messages="$errors->get('pickup_time')" />
                         </div>
@@ -38,7 +38,7 @@
 
                     <div class="mb-8">
                         <label class="block text-sm font-medium text-carbon-black mb-2">Catatan Khusus</label>
-                        <textarea name="note" rows="3" placeholder="Contoh: Kami menunggu di lobby bagian timur" class="w-full border border-soft-divider rounded-btn p-3 focus:outline-none focus:border-carbon-black">{{ old('note') }}</textarea>
+                        <textarea name="note" rows="3" placeholder="Contoh: Penjemputan di depan hotel XXX, Jl. Pantai Kuta No. 1" class="w-full border border-soft-divider rounded-btn p-3 focus:outline-none focus:border-carbon-black">{{ old('note') }}</textarea>
                         <x-form-error :messages="$errors->get('note')" />
                     </div>
 
@@ -55,8 +55,8 @@
                     
                     <div class="flex items-center space-x-4 mb-6 pb-6 border-b border-soft-divider">
                         <div>
-                            <div class="font-bold text-carbon-black">{{ $shuttle->hotel_name }}</div>
-                            <div class="text-sm text-storm-gray">Jadwal: {{ $shuttle->schedule }}</div>
+                            <div class="font-bold text-carbon-black">{{ $shuttle->route_name }}</div>
+                            <div class="text-sm text-storm-gray">Estimasi: {{ $shuttle->estimated_duration ?? '-' }}</div>
                         </div>
                     </div>
                     

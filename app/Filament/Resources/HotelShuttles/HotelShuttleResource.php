@@ -26,7 +26,7 @@ class HotelShuttleResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
-    protected static ?string $recordTitleAttribute = 'hotel_name';
+    protected static ?string $recordTitleAttribute = 'route_name';
 
     public static function form(Schema $schema): Schema
     {

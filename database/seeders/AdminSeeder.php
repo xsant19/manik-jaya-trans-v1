@@ -27,34 +27,34 @@ class AdminSeeder extends Seeder
         );
 
         // Create 3 Customers
-        // User::create([
-        //     'name' => 'Budi Santoso',
-        //     'email' => 'budi@example.com',
-        //     'password' => Hash::make('password'),
-        //     'role' => 'customer',
-        //     'phone' => '081112223334',
-        //     'address' => 'Jl. Sudirman, Jakarta',
-        //     'email_verified_at' => now(),
-        // ]);
+        User::create([
+            'name' => 'Budi Santoso',
+            'email' => 'budi@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'customer',
+            'phone' => '081112223334',
+            'address' => 'Jl. Sudirman, Jakarta',
+            'email_verified_at' => now(),
+        ]);
 
-        // User::create([
-        //     'name' => 'Siti Aminah',
-        //     'email' => 'siti@example.com',
-        //     'password' => Hash::make('password'),
-        //     'role' => 'customer',
-        //     'phone' => '085556667778',
-        //     'address' => 'Jl. Malioboro, Yogyakarta',
-        //     'email_verified_at' => now(),
-        // ]);
+        User::create([
+            'name' => 'Siti Aminah',
+            'email' => 'siti@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'customer',
+            'phone' => '085556667778',
+            'address' => 'Jl. Malioboro, Yogyakarta',
+            'email_verified_at' => now(),
+        ]);
 
-        // User::create([
-        //     'name' => 'Andi Wijaya',
-        //     'email' => 'andi@example.com',
-        //     'password' => Hash::make('password'),
-        //     'role' => 'customer',
-        //     'phone' => '089998887776',
-        //     'address' => 'Jl. Pemuda, Surabaya',
-        //     'email_verified_at' => now(),
-        // ]);
+        User::create([
+            'name' => 'Andi Wijaya',
+            'email' => 'andi@example.com',
+            'password' => Hash::make('password'),
+            'role' => 'customer',
+            'phone' => '089998887776',
+            'address' => 'Jl. Pemuda, Surabaya',
+            'email_verified_at' => now(),
+        ]);
     }
 }

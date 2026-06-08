@@ -152,7 +152,7 @@
                                 <p class="mt-1 text-xs leading-relaxed text-storm-gray mb-3">
                                     Hubungi kami via WhatsApp untuk pertanyaan seputar airport transfer ini.
                                 </p>
-                                <a href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20bertanya%20tentang%20{{ urlencode($transfer->route_name) }}" 
+                                <a href="https://wa.me/{{ config('company.phone_intl') }}?text=Halo,%20saya%20ingin%20bertanya%20tentang%20{{ urlencode($transfer->route_name) }}" 
                                    target="_blank"
                                    class="inline-flex items-center gap-2 text-xs font-medium text-carbon-black hover:underline">
                                     <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">

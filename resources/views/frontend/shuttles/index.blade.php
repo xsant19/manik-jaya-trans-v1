@@ -4,7 +4,7 @@
 <div class="py-12 bg-faint-gray border-b border-soft-divider">
     <x-page-container>
         <h1 class="text-4xl font-bold text-carbon-black mb-4">Hotel Shuttle</h1>
-        <p class="text-storm-gray text-lg max-w-2xl">Layanan shuttle hotel yang nyaman dan terjadwal. Perjalanan aman dari dan ke hotel pilihan Anda.</p>
+        <p class="text-storm-gray text-lg max-w-2xl">Layanan antar dari area hotel ke bandara yang nyaman dan tepat waktu. Nikmati perjalanan tanpa khawatir dengan driver profesional kami.</p>
     </x-page-container>
 </div>
 
@@ -20,7 +20,7 @@
                     <a href="{{ route('shuttles.show', $shuttle) }}" class="block group">
                         <x-service-card>
                             <div class="mb-4">
-                                <h3 class="text-xl font-bold text-carbon-black group-hover:underline mb-3">{{ $shuttle->hotel_name }}</h3>
+                                <h3 class="text-xl font-bold text-carbon-black group-hover:underline mb-3">{{ $shuttle->route_name }}</h3>
                                 
                                 <div class="space-y-2 text-sm">
                                     <div class="flex items-start">
@@ -40,10 +40,10 @@
                                     </div>
                                 </div>
                                 
-                                @if($shuttle->schedule)
+                                @if($shuttle->estimated_duration)
                                     <div class="mt-3 text-xs text-storm-gray flex items-center">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                        {{ $shuttle->schedule }}
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        Estimasi {{ $shuttle->estimated_duration }}
                                     </div>
                                 @endif
                             </div>

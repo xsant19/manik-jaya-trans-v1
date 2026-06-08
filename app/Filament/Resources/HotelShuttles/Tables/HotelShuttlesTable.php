@@ -14,16 +14,21 @@ class HotelShuttlesTable
     {
         return $table
             ->columns([
-                TextColumn::make('hotel_name')
+                TextColumn::make('route_name')          // UBAH: dari hotel_name
+                    ->label('Nama Rute')
                     ->searchable(),
                 TextColumn::make('pickup_location')
+                    ->label('Dari (Area)')
                     ->searchable(),
                 TextColumn::make('dropoff_location')
+                    ->label('Ke (Bandara)')
                     ->searchable(),
                 TextColumn::make('price')
+                    ->label('Harga')
                     ->money('IDR')
                     ->sortable(),
-                TextColumn::make('schedule')
+                TextColumn::make('estimated_duration')  // UBAH: dari schedule
+                    ->label('Estimasi Durasi')
                     ->searchable(),
                 TextColumn::make('status')
                     ->badge()
