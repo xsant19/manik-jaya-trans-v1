@@ -339,6 +339,7 @@ Aturan:
 - end_date tidak boleh sebelum start_date.
 - pickup_location wajib.
 - note maksimal 500 karakter.
+- driver_id TIDAK DITAMPILKAN di form customer (otomatis null).
 
 Behavior:
 - total_price dihitung backend.
@@ -350,6 +351,8 @@ Behavior:
 - driver_id default null (supir akan ditugaskan oleh admin).
 - Customer hanya melihat booking miliknya.
 - Sewa kendaraan include supir yang akan ditugaskan via admin panel.
+- Form booking customer TIDAK memiliki field pemilihan supir.
+- Supir ditugaskan oleh admin melalui Filament admin panel setelah booking approved.
 
 ### 5.10 Validasi Booking Paket Wisata
 
@@ -487,9 +490,12 @@ Behavior:
 
 - Menampilkan informasi layanan.
 - Menampilkan harga.
-- Menampilkan tombol booking.
+- Menampilkan ringkasan layanan pada booking card (tanpa form interaktif).
+- Menampilkan tombol booking direct CTA.
+- Menampilkan WhatsApp help card untuk kontak customer service.
 - Jika guest klik booking, redirect ke login.
 - Jika customer klik booking, masuk form booking.
+- Card booking hanya menampilkan summary info, bukan form input (untuk konsistensi UI).
 
 ### 6.5 Behavior Dashboard Customer
 
@@ -566,6 +572,9 @@ Transisi:
 - Card padding 24px.
 - Section gap 48-64px.
 - Layout harus responsif.
+- Booking card pada detail layanan hanya menampilkan summary (bukan form interaktif).
+- Setiap halaman detail layanan menyediakan WhatsApp help card untuk kontak customer service.
+- WhatsApp number: placeholder `6281234567890` (perlu update untuk production).
 
 ## 9. Security Requirement
 

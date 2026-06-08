@@ -16,7 +16,17 @@
 | Frontend         | Blade Template + Tailwind CSS v4.3 + Vite 8.0           |
 | Database         | MySQL 5.7+ / 8.0+                                        |
 | Payment Gateway  | Midtrans Sandbox 2.6                                     |
-| Status           | In Development — Phase 1–8 selesai, Phase 9–10 pending   |
+| Status           | In Development — Phase 1–8 selesai, Phase 9 ongoing      |
+| Version          | 1.1.0                                                    |
+| Last Update      | 8 Juni 2026                                              |
+
+**🆕 Recent Updates (v1.1.0)**:
+- ✅ Driver assignment by admin only (customer tidak pilih supir)
+- ✅ Simplified booking card UI (summary only, bukan form interaktif)
+- ✅ WhatsApp integration pada semua halaman detail layanan
+- ✅ Email notification system 100% complete dan production ready
+- 📄 Documentation updates across all project files
+- 📝 Lihat `CHANGELOG_RECENT_UPDATES.md` untuk detail lengkap
 
 ---
 
@@ -77,7 +87,7 @@ app/
 └── Services/                    # BookingCodeService, BookingService, PaymentService
 ```
 
-### 3.4 Struktur Folder Frontend
+### 3.3 Struktur Folder Frontend
 
 ```
 resources/
@@ -87,10 +97,16 @@ resources/
     ├── auth/                    # login, register
     ├── components/              # navbar, footer, primary-button, ghost-button, service-card, status-badge, section-heading, page-container, form-error
     ├── customer/                # dashboard
-    ├── emails/                  # email templates
+    ├── emails/                  # email templates (booking/created, payment/success, booking/status-updated)
     ├── frontend/                # home, vehicles/, tours/, transfers/, shuttles/, booking/
     └── layouts/                 # app (authenticated), guest
 ```
+
+**Catatan Update Terbaru**:
+- Semua halaman detail layanan (vehicles, tours, transfers, shuttles) memiliki WhatsApp help card
+- Booking card di halaman detail hanya menampilkan summary info (bukan form interaktif)
+- WhatsApp number: `6281234567890` (placeholder, perlu update untuk production)
+- Email notification system 100% complete dengan 3 jenis email
 
 ---
 
@@ -320,6 +336,16 @@ rounded-md (4px) | rounded-lg (8px) | rounded-xl (12px)
 | PaymentSuccessMail       | Payment status → paid             | Customer  |
 | BookingStatusUpdatedMail | Admin mengubah booking status     | Customer  |
 
+**Status**: ✅ 100% Complete dan Production Ready
+
+**File terkait**:
+- Mail classes: `app/Mail/`
+- Email templates: `resources/views/emails/`
+- Observer: `app/Observers/BookingObserver.php`
+- Controllers yang trigger email: `RentalBookingController`, `TourBookingController`, `TransferBookingController`, `ShuttleBookingController`, `MidtransCallbackController`
+
+**Konfigurasi**: Lihat `EMAIL_NOTIFICATION_SETUP.md` untuk panduan lengkap setup email (development dan production).
+
 Konfigurasi email menggunakan Mailtrap/SMTP di `.env`.
 
 ---
@@ -446,6 +472,8 @@ Sebelum menganggap pekerjaan selesai, pastikan:
 4. Card selalu `rounded-xl` (12px), button selalu `rounded-lg` (8px).
 5. Section gap harus 48-64px (`py-12` sampai `py-16`).
 6. Tidak boleh ada warna di luar palet design token.
+7. **UPDATE**: Booking card pada halaman detail layanan hanya menampilkan summary info (bukan form interaktif).
+8. **UPDATE**: Semua halaman detail layanan harus memiliki WhatsApp help card untuk kontak customer service.
 
 ### Saat Mengerjakan Backend
 
@@ -456,6 +484,8 @@ Sebelum menganggap pekerjaan selesai, pastikan:
 5. Payment menggunakan polymorphic relation (`payable_type` + `payable_id`).
 6. Jangan buat route untuk endpoint yang sudah ditangani Filament.
 7. **PENTING**: Untuk rental booking, customer tidak memilih supir. Field `driver_id` diset `null` dan akan ditugaskan oleh admin via Filament.
+8. **PENTING**: Form booking kendaraan TIDAK menampilkan field pemilihan supir sama sekali.
+9. **UPDATE**: Email notification system sudah 100% complete. Lihat `EMAIL_NOTIFICATION_SETUP.md` untuk dokumentasi lengkap.
 
 ### Saat Mengerjakan Admin Panel
 
@@ -463,6 +493,7 @@ Sebelum menganggap pekerjaan selesai, pastikan:
 2. Dashboard widget maksimal 4 — jangan tambah tanpa izin.
 3. Admin tidak boleh mengubah `total_price` booking tanpa alasan teknis.
 4. Jangan hapus data master yang sudah terkait booking.
+5. **UPDATE**: Admin menugaskan supir melalui field `driver_id` pada rental booking setelah booking diapprove.
 
 ### Saat Menambah Fitur Baru
 
@@ -472,6 +503,7 @@ Sebelum menganggap pekerjaan selesai, pastikan:
 4. Buat migration, model, controller, request, service, view sesuai konvensi.
 5. Update seeder jika perlu.
 6. Test manual sebelum commit.
+7. **UPDATE**: Jika menambahkan halaman detail layanan baru, pastikan ada WhatsApp help card.
 
 ---
 

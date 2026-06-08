@@ -126,6 +126,7 @@ Kebutuhan customer:
 - Melihat status pembayaran.
 - Melakukan pembayaran.
 - Menerima email notifikasi.
+- Kontak customer service via WhatsApp dari halaman detail layanan.
 
 Batasan customer:
 - Tidak dapat mengakses Filament admin panel.
@@ -134,6 +135,7 @@ Batasan customer:
 - Tidak dapat mengubah status booking secara manual.
 - Tidak dapat mengubah harga booking.
 - Tidak dapat memilih supir (supir ditugaskan oleh admin).
+- Form booking kendaraan TIDAK menampilkan pilihan supir.
 
 ### 5.3 Admin
 
@@ -345,6 +347,11 @@ Aturan desain:
 - Tanpa shadow berat.
 - Tidak terlalu banyak teks.
 
+Catatan:
+- Pada halaman detail layanan, booking card menampilkan summary info (bukan form interaktif).
+- Desain card booking konsisten di semua jenis layanan (vehicle, tour, transfer, shuttle).
+- CTA tombol booking mengarah langsung ke form booking (bukan di dalam card).
+
 ### 8.5 Form Booking
 
 Form menampilkan:
@@ -352,6 +359,7 @@ Form menampilkan:
 - Ringkasan layanan.
 - Total harga.
 - Tombol submit.
+- WhatsApp help card untuk kontak customer service.
 
 Aturan desain:
 - Desktop dua kolom.
@@ -359,6 +367,11 @@ Aturan desain:
 - Error dekat field.
 - Tombol utama hitam.
 - Summary memakai background Faint Gray atau border Soft Divider.
+
+Catatan Penting untuk Booking Kendaraan:
+- Form booking kendaraan TIDAK memiliki field pemilihan supir.
+- Customer hanya mengisi: rental_type, start_date, end_date, pickup_location, note.
+- Supir akan ditugaskan oleh admin setelah booking diapprove.
 
 ## 9. Database Overview
 

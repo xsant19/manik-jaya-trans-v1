@@ -122,6 +122,7 @@ Prioritas: SRS → SDD → PRD → UI_UX_FLOW → DESIGN → TASK_BREAKDOWN
 - Melihat detail booking
 - Melakukan pembayaran
 - Menerima email notifikasi
+- Kontak customer service via WhatsApp dari halaman detail layanan
 
 **Tidak Dapat**:
 - Mengakses Filament admin panel
@@ -130,6 +131,7 @@ Prioritas: SRS → SDD → PRD → UI_UX_FLOW → DESIGN → TASK_BREAKDOWN
 - Melihat booking user lain
 - Mengubah total harga
 - Memilih supir (supir ditugaskan oleh admin)
+- Form booking kendaraan TIDAK menampilkan field pemilihan supir
 
 ### 3. Admin
 **Dapat**:
@@ -436,7 +438,11 @@ if (rental_type == 'full_day') {
     total_price = vehicle->price_half_day
 }
 ```
-**Catatan**: Sewa kendaraan include supir. Driver akan ditugaskan oleh admin melalui Filament panel.
+**Catatan Penting**: 
+- Sewa kendaraan include supir. 
+- Driver akan ditugaskan oleh admin melalui Filament panel setelah booking approved.
+- Customer TIDAK memilih supir saat booking (field tidak ada di form).
+- Form booking hanya berisi: rental_type, start_date, end_date, pickup_location, note.
 
 **Tour Booking**:
 ```php
@@ -682,6 +688,8 @@ php artisan optimize:clear
 - [x] Hotel shuttle list & detail pages
 - [x] Responsive design
 - [x] Mobile menu
+- [x] **UPDATE**: Simplified booking cards (summary only, no interactive forms)
+- [x] **UPDATE**: WhatsApp help cards on all service detail pages
 
 #### Phase 5: Booking System
 - [x] Booking code generator service
@@ -692,6 +700,7 @@ php artisan optimize:clear
 - [x] Customer dashboard
 - [x] Booking history
 - [x] Booking detail pages
+- [x] **UPDATE**: Driver assignment by admin only (customer cannot select driver)
 
 #### Phase 6: Admin Panel Filament
 - [x] User resource
@@ -706,6 +715,7 @@ php artisan optimize:clear
 - [x] Shuttle booking resource
 - [x] Payment resource
 - [x] Dashboard widgets
+- [x] **UPDATE**: Driver assignment functionality for rental bookings
 
 #### Phase 7: Payment Integration
 - [x] Payment model & logic
@@ -715,8 +725,17 @@ php artisan optimize:clear
 
 #### Phase 8: Notification System
 - [x] Mail configuration
-- [x] Booking notification emails
-- [x] Payment notification emails
+- [x] Booking notification emails (BookingCreatedMail)
+- [x] Payment notification emails (PaymentSuccessMail)
+- [x] Status update notification emails (BookingStatusUpdatedMail)
+- [x] **UPDATE**: Email notification system 100% complete and production ready
+- [x] **UPDATE**: Comprehensive email setup documentation (EMAIL_NOTIFICATION_SETUP.md)
+
+#### Phase 9: UI/UX Improvements (Recent Updates)
+- [x] Simplified booking card UI across all services
+- [x] WhatsApp integration on service detail pages
+- [x] Consistent card design system
+- [x] Enhanced customer support accessibility
 
 ---
 
@@ -870,6 +889,7 @@ php artisan migrate:fresh --seed
 1. Check mail configuration in `.env`
 2. Use Mailtrap for testing
 3. Check queue is running: `php artisan queue:work`
+4. See comprehensive guide: `EMAIL_NOTIFICATION_SETUP.md`
 
 ### Issue: Images not displaying
 **Solution**:
@@ -882,6 +902,47 @@ php artisan storage:link
 ```bash
 chmod -R 775 storage bootstrap/cache
 ```
+
+### Issue: Driver field showing on booking form
+**Solution**:
+- Check `resources/views/frontend/booking/rental/create.blade.php`
+- Driver field should NOT be present in customer form
+- Driver is assigned by admin via Filament panel
+
+### Issue: WhatsApp link not working
+**Solution**:
+1. Verify WhatsApp number format (62xxx without +)
+2. Check URL encoding in href
+3. Update placeholder number to production CS number before deployment
+
+---
+
+## 📋 Recent Updates (June 2026)
+
+### Version 1.1.0 - Latest Changes
+
+#### ✅ Driver Assignment System
+- Customer can no longer select driver during booking
+- Driver automatically assigned by admin after booking approval
+- Improved operational efficiency and driver availability management
+
+#### ✅ Simplified Booking Card UI
+- Booking cards now show summary info only (no interactive forms)
+- Consistent design across all service detail pages
+- Clearer call-to-action with direct booking button
+
+#### ✅ WhatsApp Integration
+- WhatsApp help cards added to all service detail pages
+- One-click contact to customer service
+- Pre-filled context messages for better support
+
+#### ✅ Email Notification System (100% Complete)
+- 3 email types fully implemented and tested
+- Production-ready with comprehensive documentation
+- Error handling with try-catch and logging
+- See: `EMAIL_NOTIFICATION_SETUP.md` for complete guide
+
+**For detailed changelog**: See `CHANGELOG_RECENT_UPDATES.md`
 
 ---
 

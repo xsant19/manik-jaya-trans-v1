@@ -403,10 +403,12 @@ RentalBooking belongsTo Driver nullable
 RentalBooking morphOne Payment as payable
 ```
 
-Catatan:
+Catatan Penting:
 - driver_id default null saat booking dibuat oleh customer
-- Admin menugaskan supir melalui Filament admin panel
+- Customer TIDAK memilih supir saat booking (field tidak ada di form)
+- Admin menugaskan supir melalui Filament admin panel setelah booking approved
 - Sewa kendaraan include supir (tidak ada opsi lepas kunci)
+- Form booking customer hanya berisi: vehicle, rental_type, dates, pickup_location, note
 
 ### 5.8 tour_bookings
 

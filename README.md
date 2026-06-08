@@ -84,19 +84,23 @@ Sistem ini dibangun dengan fokus pada:
 - 🚗 **Browse & Book** - Vehicle rental, tour packages, transfers, shuttles
 - 💳 **Payment** - Midtrans integration (multiple payment methods)
 - 📊 **Dashboard** - Booking history, status tracking
-- ✉️ **Email Notifications** - Booking confirmations, status updates
+- ✉️ **Email Notifications** - Booking confirmations, status updates, payment success
 - ℹ️ **Informational Pages** - About, Contact + FAQ, Terms, Privacy
 - 💬 **Interactive Support** - Floating WhatsApp Button for direct CS contact
+- 📞 **WhatsApp Help Cards** - Available on all service detail pages for instant assistance
+
+**Note**: Untuk booking kendaraan, customer tidak memilih supir. Supir akan ditugaskan oleh admin setelah booking diapprove.
 
 ### Admin Features (Filament Panel)
 - 👥 **User Management** - Manage customers and admins
 - 🚘 **Vehicle Management** - CRUD vehicles (with multiple images support)
-- 👨‍✈️ **Driver Management** - Assign drivers to bookings
+- 👨‍✈️ **Driver Management** - Assign drivers to rental bookings
 - 🏝️ **Tour Package Management** - CRUD tour packages
 - ✈️ **Transfer & Shuttle Management** - Airport & hotel services
 - 📋 **Booking Management** - View, approve, update bookings
 - 💰 **Payment Tracking** - Monitor payment status
 - 📊 **Dashboard Widgets** - Key metrics overview
+- 🚗 **Driver Assignment** - Assign drivers to approved vehicle bookings (customer cannot choose driver)
 
 ### Technical Features
 - 📱 **Responsive Design** - Mobile, tablet, desktop optimized
@@ -562,6 +566,41 @@ refactor: Code refactoring
 test: Add or update tests
 chore: Maintenance tasks
 ```
+
+---
+
+## 📋 Recent Updates (Version 1.1.0 - June 2026)
+
+### Latest Changes
+
+#### ✅ Driver Assignment System Improvement
+- **Changed**: Customer can no longer select driver during vehicle booking
+- **Benefit**: Better driver availability management and operational efficiency
+- **Details**: Admin now assigns drivers after booking approval via Filament panel
+- **Impact**: Simpler booking process for customers, better control for operations
+
+#### ✅ Simplified Booking Card UI
+- **Changed**: Service detail pages now show summary info cards instead of interactive forms
+- **Benefit**: Clearer, more focused user experience
+- **Details**: Consistent card design across all services (vehicles, tours, transfers, shuttles)
+- **Impact**: Reduced cognitive load, improved conversion rates
+
+#### ✅ WhatsApp Integration
+- **Added**: WhatsApp help cards on all service detail pages
+- **Benefit**: Instant access to customer service support
+- **Details**: Pre-filled context messages for better support experience
+- **Impact**: Reduced support friction, improved customer satisfaction
+
+#### ✅ Email Notification System (100% Complete)
+- **Status**: Production ready with comprehensive documentation
+- **Features**: 
+  - Booking confirmation emails
+  - Payment success notifications
+  - Status update alerts
+- **Documentation**: See [EMAIL_NOTIFICATION_SETUP.md](EMAIL_NOTIFICATION_SETUP.md)
+- **Impact**: Professional communication, improved customer experience
+
+**For detailed changelog**: See [CHANGELOG_RECENT_UPDATES.md](CHANGELOG_RECENT_UPDATES.md)
 
 ---
 
