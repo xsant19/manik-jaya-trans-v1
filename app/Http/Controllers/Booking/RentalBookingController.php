@@ -62,10 +62,19 @@ class RentalBookingController extends Controller
             'payment_status' => 'unpaid',
         ]);
 
+        // Send email to customer
         try {
             \Illuminate\Support\Facades\Mail::to(auth()->user()->email)->send(new \App\Mail\BookingCreatedMail($rentalBooking));
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Failed to send email: ' . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error('Failed to send customer email: ' . $e->getMessage());
+        }
+
+        // Send notification to admin/company
+        try {
+            $adminEmail = config('mail.admin_email', env('MAIL_ADMIN_ADDRESS', 'manikjayatrans@gmail.com'));
+            \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\AdminBookingNotification($rentalBooking, 'rental'));
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Failed to send admin notification email: ' . $e->getMessage());
         }
 
         return redirect()->route('customer.rental.show', $rentalBooking)->with('success', 'Booking berhasil dibuat!');

@@ -351,7 +351,38 @@ Konfigurasi email menggunakan Mailtrap/SMTP di `.env`.
 
 ---
 
-## 11. Filament Admin Panel
+## 11. Data Seeding Strategy
+
+### Factories (5 buah)
+
+**Path**: `database/factories/`
+
+Proyek ini menggunakan **Laravel Factories** untuk generate data testing, menggantikan seeders manual:
+
+1. **VehicleFactory** — 15 realistic vehicles, capacity-based pricing, states: available/maintenance/inactive
+2. **DriverFactory** — Indonesian names, phone format 08XX, license numbers, states: available/on_trip/inactive
+3. **TourPackageFactory** — 12 tour packages, duration-based pricing, detailed itineraries
+4. **AirportTransferFactory** — 8 airport routes, realistic pricing & duration
+5. **HotelShuttleFactory** — 10 hotel shuttle routes, shared shuttle concept
+
+**Benefits**: Flexible, reusable for testing, maintainable, realistic data, supports states.
+
+**Documentation**: Lihat `FACTORY_SETUP.md` untuk detail lengkap.
+
+---
+
+### Seeders (1 buah)
+
+**AdminSeeder only** — Create admin user untuk Filament login:
+- Email: `admin@manikjaya.test`
+- Password: `password`
+- Role: `admin`
+
+**All other seeders removed** — Diganti dengan factory calls di `DatabaseSeeder.php`.
+
+---
+
+## 12. Filament Admin Panel
 
 ### Resources (11 buah)
 
@@ -374,6 +405,7 @@ Users, Vehicles, Drivers, TourPackages, AirportTransfers, HotelShuttles, RentalB
 |---------------|---------------------------------------|---------------------------------|
 | Controller    | PascalCase + `Controller`             | `RentalBookingController`       |
 | Model         | PascalCase singular                   | `RentalBooking`                 |
+| Factory       | PascalCase + `Factory`                | `VehicleFactory`                |
 | Table         | snake_case plural                     | `rental_bookings`               |
 | Variable      | camelCase                             | `$totalPrice`                   |
 | Constant      | UPPER_SNAKE_CASE                      | `BOOKING_STATUS_PENDING`        |
@@ -522,10 +554,11 @@ Sebelum menganggap pekerjaan selesai, pastikan:
 |              | `app/Services/BookingService.php`                    |
 |              | `app/Services/PaymentService.php`                    |
 | Models       | `app/Models/*.php` (11 model)                        |
+| Factories    | `database/factories/*.php` (5 factories)             |
 | Migrations   | `database/migrations/*.php` (13 migration)           |
-| Seeders      | `database/seeders/*.php` (7 seeder)                  |
+| Seeders      | `database/seeders/AdminSeeder.php` (1 seeder only)   |
 | Filament     | `app/Filament/Resources/` (11 resource)              |
-| Mail         | `app/Mail/*.php` (3 mail class)                      |
+| Mail         | `app/Mail/*.php` (4 mail class)                      |
 | Middleware   | `app/Http/Middleware/`                                |
 | Requests     | `app/Http/Requests/*.php` (6 form request)           |
 | Config       | `.env`, `config/midtrans.php`, `config/mail.php`     |

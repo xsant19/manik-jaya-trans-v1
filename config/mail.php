@@ -115,4 +115,16 @@ return [
         'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Laravel')),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Email Address
+    |--------------------------------------------------------------------------
+    |
+    | This email address will receive notifications about new bookings
+    | and other administrative notifications.
+    |
+    */
+
+    'admin_email' => env('MAIL_ADMIN_ADDRESS', 'manikjayatrans@gmail.com'),
+
 ];
