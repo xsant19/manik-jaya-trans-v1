@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    RedirectMatch 403 ^/\.env
+    RedirectMatch 403 ^/composer\.json
+    RedirectMatch 403 ^/storage/logs/
+</IfModule>

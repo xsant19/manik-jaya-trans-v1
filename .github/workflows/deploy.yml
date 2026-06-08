@@ -20,12 +20,13 @@ jobs:
           # Scan the remote host keys to avoid strict host key checking errors
           ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy files via SCP
+      - name: Deploy Laravel via SCP with Debug Logs
         run: |
-          scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa -r \
-            . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html/
-        with:
-          debug: true
+          shopt -s dotglob
+          shopt -s extglob
+
+          scp -v -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa -r \
+            ./!(.git) ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html/
 
       - name: Execute Remote SSH Commands (Post-Deployment)
         uses: appleboy/ssh-action@v1.0.3
