@@ -25,6 +25,7 @@
 - ✅ Simplified booking card UI (summary only, bukan form interaktif)
 - ✅ WhatsApp integration pada semua halaman detail layanan
 - ✅ Email notification system 100% complete dan production ready
+- ✅ Invoice & Voucher PDF generation dengan DOMPDF
 - 📄 Documentation updates across all project files
 - 📝 Lihat `CHANGELOG_RECENT_UPDATES.md` untuk detail lengkap
 

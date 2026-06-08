@@ -50,6 +50,7 @@ use App\Http\Controllers\Booking\TransferBookingController;
 use App\Http\Controllers\Booking\ShuttleBookingController;
 
 use App\Http\Controllers\Frontend\BookingHistoryController;
+use App\Http\Controllers\Frontend\InvoiceController;
 
 // Authenticated Routes
 Route::middleware(['auth', 'role:customer'])->group(function () {
@@ -82,6 +83,16 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
 
     // Payment Route
     Route::post('/payment/{type}/{booking_code}', [\App\Http\Controllers\Frontend\PaymentController::class, 'store'])->name('payment.store');
+
+    // Invoice & Voucher PDF
+    Route::get('/customer/my-bookings/{type}/{booking_code}/invoice',
+        [InvoiceController::class, 'download']
+    )->name('customer.invoice.download')
+     ->where('type', 'rental|tour|transfer|shuttle');
+
+    Route::get('/customer/my-bookings/rental/{booking_code}/voucher',
+        [InvoiceController::class, 'downloadVoucher']
+    )->name('customer.rental.voucher');
 });
 
 // Webhook Route

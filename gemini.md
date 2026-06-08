@@ -397,6 +397,7 @@ grid grid-cols-1 md:grid-cols-3 gap-8
 - [x] Admin panel Filament (11 resources, dashboard widgets)
 - [x] Payment integration (Midtrans, callback, status sync)
 - [x] Notification system (3 email templates)
+- [x] Invoice & Voucher PDF generation (DOMPDF)
 
 ### 🚧 Pending (Phase 9–10)
 - [ ] Validation testing

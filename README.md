@@ -88,6 +88,7 @@ Sistem ini dibangun dengan fokus pada:
 - ℹ️ **Informational Pages** - About, Contact + FAQ, Terms, Privacy
 - 💬 **Interactive Support** - Floating WhatsApp Button for direct CS contact
 - 📞 **WhatsApp Help Cards** - Available on all service detail pages for instant assistance
+- 📄 **Invoice & Voucher PDF** - Download PDF format for booking invoices and travel vouchers
 
 **Note**: Untuk booking kendaraan, customer tidak memilih supir. Supir akan ditugaskan oleh admin setelah booking diapprove.
 
@@ -599,6 +600,11 @@ chore: Maintenance tasks
   - Status update alerts
 - **Documentation**: See [EMAIL_NOTIFICATION_SETUP.md](EMAIL_NOTIFICATION_SETUP.md)
 - **Impact**: Professional communication, improved customer experience
+
+#### ✅ Invoice & Voucher PDF Generation
+- **Added**: Download PDF feature for all booking types and special travel voucher for rentals
+- **Benefit**: Customer can save their proof of payment and details offline
+- **Impact**: Professional look, easy record-keeping
 
 **For detailed changelog**: See [CHANGELOG_RECENT_UPDATES.md](CHANGELOG_RECENT_UPDATES.md)
 

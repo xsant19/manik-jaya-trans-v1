@@ -443,6 +443,52 @@ Comprehensive guide covering:
 
 ---
 
+## 📄 Update #5: Invoice & Voucher PDF Generation
+
+### Deskripsi
+Penambahan fitur untuk men-download Invoice (semua layanan) dan Voucher Perjalanan (khusus rental kendaraan) dalam format PDF bagi customer.
+
+### Perubahan
+
+#### **Fitur Utama**
+- ✅ Fitur download Invoice PDF untuk status pembayaran `paid`
+- ✅ Fitur download Voucher Perjalanan PDF untuk status booking `approved`, `paid`, dan driver sudah di-assign (khusus Rental)
+- ✅ Menggunakan library `barryvdh/laravel-dompdf`
+
+#### **Frontend Changes**
+**File yang dimodifikasi**:
+- `resources/views/frontend/booking/rental/show.blade.php`
+- `resources/views/frontend/booking/tours/show.blade.php`
+- `resources/views/frontend/booking/transfers/show.blade.php`
+- `resources/views/frontend/booking/shuttles/show.blade.php`
+
+**View Template Baru**:
+- `resources/views/invoice/booking-invoice.blade.php`
+- `resources/views/invoice/rental-voucher.blade.php`
+
+#### **Backend Changes**
+**File Baru**: `app/Http/Controllers/Frontend/InvoiceController.php`
+- Method `download()`: Men-generate invoice PDF untuk semua jenis booking.
+- Method `downloadVoucher()`: Men-generate voucher PDF khusus rental.
+- Pengamanan ketat (authorization 403) membatasi akses unduh untuk selain pemilik booking atau yang belum lunas.
+
+**Routing**: 
+Penambahan 2 rute baru di `routes/web.php` di dalam middleware customer:
+- `customer.invoice.download`
+- `customer.rental.voucher`
+
+### Documentation Updates
+- ✅ `CHANGELOG_RECENT_UPDATES.md` - (This file)
+- ✅ `agents.md` - Menambahkan info fitur Invoice PDF pada checklist.
+
+### Testing Checklist
+- [x] Download Invoice berjalan dengan data dinamis.
+- [x] Download Voucher Rental memuat detail driver dengan jelas.
+- [x] Rute diamankan dengan kebijakan 403.
+- [x] Format PDF styling rapi menggunakan inline CSS dan tabel.
+
+---
+
 ## 📝 Documentation Updates Summary
 
 ### Files Updated

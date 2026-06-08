@@ -741,6 +741,15 @@ php artisan optimize:clear
 
 ### 🚧 In Progress / Pending
 
+#### Recent Updates (v1.1.0):
+- ✅ Driver assignment by admin only (customer tidak pilih supir)
+- ✅ Simplified booking card UI (summary only, bukan form interaktif)
+- ✅ WhatsApp integration pada semua halaman detail layanan
+- ✅ Email notification system 100% complete dan production ready
+- ✅ Invoice & Voucher PDF generation dengan DOMPDF
+- 📄 Documentation updates across all project files
+- 📝 Lihat `CHANGELOG_RECENT_UPDATES.md` untuk detail lengkap
+
 #### Phase 9: Testing & Optimization
 - [ ] Validation testing
 - [ ] Authorization testing
