@@ -21,6 +21,7 @@ jobs:
           ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Deploy Laravel via SCP with Debug Logs
+        shell: bash # <--- This forces GitHub to use Bash so it understands the syntax
         run: |
           shopt -s dotglob
           shopt -s extglob
