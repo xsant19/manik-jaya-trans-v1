@@ -3,7 +3,7 @@
 
 ## 1. Ringkasan Sistem
 
-Sistem Informasi Travel Manik Jaya Trans adalah aplikasi monolithic web application berbasis Laravel 13. Sistem menggunakan MVC sebagai arsitektur aplikasi utama, Filament 4 untuk admin panel, Tailwind CSS untuk tampilan frontend, MySQL untuk database, dan Midtrans Sandbox untuk pembayaran.
+Sistem Informasi Travel Manik Jaya Trans adalah aplikasi monolithic web application berbasis Laravel 13. Sistem menggunakan MVC sebagai arsitektur aplikasi utama, Filament 5.6.6 untuk admin panel, Tailwind CSS v4.3 untuk tampilan frontend, MySQL 5.7+ / 8.0+ untuk database, dan Midtrans Sandbox 2.6 untuk pembayaran.
 
 ## 2. Acuan Desain
 
@@ -528,6 +528,7 @@ Payment morphTo payable
 ```text
 app/
 ├── Filament/
+│   ├── Pages/
 │   ├── Resources/
 │   └── Widgets/
 ├── Http/
@@ -556,6 +557,8 @@ Controllers:
 - ShuttleBookingController
 - PaymentController
 - MidtransCallbackController
+- InvoiceController
+- DocumentController
 
 Services:
 - BookingCodeService
@@ -584,6 +587,7 @@ Filament Resources:
 - TransferBookingResource
 - ShuttleBookingResource
 - PaymentResource
+- LaporanKeuangan (Custom Page)
 
 ## 7. Route Design
 
@@ -616,6 +620,8 @@ POST /airport-transfers/:airportTransfer/booking
 GET /hotel-shuttles/:hotelShuttle/booking
 POST /hotel-shuttles/:hotelShuttle/booking
 POST /payments/:type/:bookingCode
+GET /invoice/:type/:bookingCode/download
+GET /voucher/:type/:bookingCode/download
 ```
 
 Payment callback:
@@ -626,6 +632,9 @@ POST /payments/midtrans/callback
 Admin:
 ```text
 /admin
+/admin/laporan-keuangan
+GET /documents/spk/:type/:id
+GET /documents/laporan-keuangan
 ```
 
 ## 8. API Design

@@ -9,12 +9,12 @@ Tech Stack:
 
 - Laravel 13
 - PHP 8.3+
-- Filament 4
-- Tailwind CSS
-- MySQL
+- Filament 5.6.6
+- Tailwind CSS v4.3
+- MySQL 5.7+ / 8.0+
 - Blade Template
-- Vite
-- Midtrans Sandbox
+- Vite 8.0
+- Midtrans Sandbox 2.6
 
 Metodologi pengerjaan:
 
@@ -1101,6 +1101,8 @@ Core Deliverables:
 - Filament admin panel
 - Payment integration
 - Notification
+- Document Generation (Invoice, Voucher, SPK)
+- Laporan Keuangan Export
 - Responsive UI
 - Testing
 - Deployment readiness
@@ -1119,6 +1121,8 @@ Project dianggap selesai jika:
 - Payment integration berjalan.
 - Admin dapat CRUD data.
 - Filament admin panel stabil.
+- Dokumen PDF (Invoice, Voucher, SPK) dapat diunduh.
+- Laporan Keuangan dapat difilter dan diekspor.
 - Validation berjalan.
 - Authorization aman.
 - Responsive UI selesai.

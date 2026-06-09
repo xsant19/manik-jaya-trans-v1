@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
 
+use function PHPUnit\Framework\isArray;
+
 class Vehicle extends Model
 {
     use HasFactory;
@@ -37,7 +39,6 @@ class Vehicle extends Model
             get: function () {
                 // Access the raw array directly from the attributes
                 $images = json_decode($this->attributes['image'] ?? '[]', true);
-
                 if (empty($images)) {
                     return [];
                 }

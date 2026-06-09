@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\TourBookings\Tables;
 
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -73,6 +75,20 @@ class TourBookingsTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                Action::make('spk')
+                    ->label('SPK')
+                    ->icon(Heroicon::OutlinedDocumentText)
+                    ->color('info')
+                    ->url(fn ($record) => route('documents.spk', ['type' => 'tour', 'id' => $record->id]))
+                    ->openUrlInNewTab()
+                    ->visible(fn ($record) => in_array($record->booking_status, ['approved', 'on_trip', 'completed'])),
+                Action::make('evoucher')
+                    ->label('E-Voucher')
+                    ->icon(Heroicon::OutlinedTicket)
+                    ->color('success')
+                    ->url(fn ($record) => route('documents.evoucher', ['type' => 'tour', 'id' => $record->id]))
+                    ->openUrlInNewTab()
+                    ->visible(fn ($record) => in_array($record->booking_status, ['approved', 'on_trip', 'completed']) && $record->payment_status === 'paid'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

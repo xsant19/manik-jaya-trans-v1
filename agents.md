@@ -26,6 +26,8 @@
 - ✅ WhatsApp integration pada semua halaman detail layanan
 - ✅ Email notification system 100% complete dan production ready
 - ✅ Invoice & Voucher PDF generation dengan DOMPDF
+- ✅ Fitur cetak SPK (Surat Perintah Kerja) PDF untuk Driver via Admin Panel
+- ✅ Modul Laporan Keuangan Export (PDF & Excel) terintegrasi Filament v5 Schema
 - 📄 Documentation updates across all project files
 - 📝 Lihat `CHANGELOG_RECENT_UPDATES.md` untuk detail lengkap
 
@@ -527,6 +529,8 @@ Sebelum menganggap pekerjaan selesai, pastikan:
 3. Admin tidak boleh mengubah `total_price` booking tanpa alasan teknis.
 4. Jangan hapus data master yang sudah terkait booking.
 5. **UPDATE**: Admin menugaskan supir melalui field `driver_id` pada rental booking setelah booking diapprove.
+6. **UPDATE**: Admin dapat mengunduh Surat Perintah Kerja (SPK) untuk semua jenis booking.
+7. **UPDATE**: Tersedia halaman kustom Laporan Keuangan untuk ekspor transaksi ke PDF dan Excel.
 
 ### Saat Menambah Fitur Baru
 

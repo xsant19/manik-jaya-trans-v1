@@ -2,12 +2,12 @@
     <x-page-container class="py-12 md:py-16">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="md:col-span-1">
-                <span class="font-bold text-xl text-carbon-black tracking-tight block mb-4 notranslate">MANIK JAYA.</span>
+                <img src="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781009142/Logo_f7m95a.png" alt="Manik Jaya Trans Logo" class="h-8 w-auto mb-4">
                 <p class="text-storm-gray text-sm leading-relaxed">
                     {{ config('company.tagline') }}
                 </p>
             </div>
-            
+
             <div>
                 <h4 class="font-bold text-carbon-black mb-4">Layanan</h4>
                 <ul class="space-y-3 text-sm text-storm-gray">
@@ -17,7 +17,7 @@
                     <li><a href="{{ route('shuttles.index') }}" class="notranslate hover:text-carbon-black transition-colors">Hotel Shuttle</a></li>
                 </ul>
             </div>
-            
+
             <div>
                 <h4 class="font-bold text-carbon-black mb-4">Perusahaan</h4>
                 <ul class="space-y-3 text-sm text-storm-gray">
@@ -27,7 +27,7 @@
                     <li><a href="{{ route('privacy') }}" class="hover:text-carbon-black transition-colors">Kebijakan Privasi</a></li>
                 </ul>
             </div>
-            
+
             <div>
                 <h4 class="font-bold text-carbon-black mb-4">Kontak</h4>
                 <ul class="space-y-3 text-sm text-storm-gray">
@@ -56,7 +56,7 @@
                 </ul>
             </div>
         </div>
-        
+
         <div class="border-t border-soft-divider mt-12 pt-8 text-center text-sm text-dust-bunny">
             &copy; {{ date('Y') }} {{ config('company.name') }}. All rights reserved.
         </div>

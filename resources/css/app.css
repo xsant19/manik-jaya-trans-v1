@@ -267,22 +267,20 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     will-change: transform;
+    overflow: hidden;
 }
 
 .lang-switch-track[aria-checked="true"] .lang-switch-thumb {
     transform: translateX(26px);
 }
 
-/* Language code text inside the thumb */
+/* Language flag image inside the thumb */
 .lang-switch-flag {
-    font-size: 10px;
-    font-weight: 700;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #222222;
-    letter-spacing: 0.02em;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 9999px;
+    display: block;
     user-select: none;
 }
 

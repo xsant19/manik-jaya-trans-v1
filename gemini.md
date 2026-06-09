@@ -13,11 +13,11 @@ Sistem Informasi Travel Manik Jaya Trans adalah aplikasi web berbasis Laravel un
 
 **Tech Stack**:
 - Laravel 13, PHP 8.3+
-- Filament 4 (Admin Panel)
-- Tailwind CSS v4 + Vite
-- MySQL
+- Filament 5.6.6 (Admin Panel)
+- Tailwind CSS v4.3 + Vite 8.0
+- MySQL 5.7+ / 8.0+
 - Blade Template
-- Midtrans Sandbox (Payment Gateway)
+- Midtrans Sandbox 2.6 (Payment Gateway)
 
 ---
 
@@ -398,6 +398,8 @@ grid grid-cols-1 md:grid-cols-3 gap-8
 - [x] Payment integration (Midtrans, callback, status sync)
 - [x] Notification system (3 email templates)
 - [x] Invoice & Voucher PDF generation (DOMPDF)
+- [x] SPK (Surat Perintah Kerja) PDF generation untuk Driver
+- [x] Modul Laporan Keuangan Export (PDF & Excel) terintegrasi Filament v5 Schema
 
 ### 🚧 Pending (Phase 9–10)
 - [ ] Validation testing

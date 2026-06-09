@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'Manik Jaya Trans') }}</title>
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781007908/favicon_obwlpf.png" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{-- Google Translate: hide default widget & override injected styles --}}

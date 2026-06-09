@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'Manik Jaya Trans') }} - Authentication</title>
+    <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781007908/favicon_obwlpf.png" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     {{-- Google Translate: hide default widget & override injected styles --}}
@@ -25,8 +26,8 @@
     <div id="google_translate_element" style="display:none;"></div>
 
     <div class="min-h-screen flex flex-col items-center justify-center p-4">
-        <a href="{{ route('home') }}" class="mb-8 block">
-            <span class="font-bold text-2xl text-carbon-black tracking-tight notranslate">MANIK JAYA.</span>
+        <a href="{{ route('home') }}" class="mb-8 block overflow-hidden">
+            <img src="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781009142/Logo_f7m95a.png" alt="Manik Jaya Trans Logo" class="h-12 w-auto mx-auto">
         </a>
 
         <div class="w-full max-w-md bg-canvas-white rounded-card border border-soft-divider p-8">
@@ -37,7 +38,7 @@
 
             @yield('content')
         </div>
-        
+
         <div class="mt-8 text-sm text-storm-gray">
             &copy; {{ date('Y') }} Sistem Informasi Travel Manik Jaya Trans
         </div>
@@ -82,7 +83,14 @@
             document.querySelectorAll('[data-lang-toggle]').forEach(function(toggle) {
                 toggle.setAttribute('aria-checked', isEn ? 'true' : 'false');
                 var flag = toggle.querySelector('[data-lang-thumb-flag]');
-                if (flag) flag.textContent = isEn ? 'EN' : 'ID';
+                if (flag) {
+                    if (flag.tagName === 'IMG') {
+                        flag.src = isEn ? flag.getAttribute('data-flag-en') : flag.getAttribute('data-flag-id');
+                        flag.alt = isEn ? 'EN' : 'ID';
+                    } else {
+                        flag.textContent = isEn ? 'EN' : 'ID';
+                    }
+                }
             });
         }
 
@@ -95,7 +103,14 @@
                 toggle.setAttribute('aria-checked', isEn ? 'true' : 'false');
 
                 var flag = toggle.querySelector('[data-lang-thumb-flag]');
-                if (flag) flag.textContent = isEn ? 'EN' : 'ID';
+                if (flag) {
+                    if (flag.tagName === 'IMG') {
+                        flag.src = isEn ? flag.getAttribute('data-flag-en') : flag.getAttribute('data-flag-id');
+                        flag.alt = isEn ? 'EN' : 'ID';
+                    } else {
+                        flag.textContent = isEn ? 'EN' : 'ID';
+                    }
+                }
 
                 toggle.addEventListener('click', function() {
                     var currentlyEn = this.getAttribute('aria-checked') === 'true';
