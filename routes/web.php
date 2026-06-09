@@ -97,3 +97,6 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
 
 // Webhook Route
 Route::post('/payments/midtrans/callback', [\App\Http\Controllers\Webhook\MidtransCallbackController::class, 'handle'])->name('midtrans.callback');
+
+// Dokumen PDF & Excel (Admin)
+require __DIR__ . '/documents.php';
