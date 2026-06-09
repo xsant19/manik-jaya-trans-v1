@@ -28,8 +28,8 @@
     <x-page-container>
         <div class="rounded-card overflow-hidden border border-soft-divider">
             <img
-                src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1920&auto=format&fit=crop"
-                alt="Pemandangan Pura Tanah Lot Bali"
+                src="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781011657/Jalan-Cinta_-Bali_ipibmo.jpg"
+                alt="Jalan Cinta Bali Indonesia"
                 class="w-full h-[280px] md:h-[400px] object-cover object-center"
             />
         </div>
@@ -59,8 +59,8 @@
             </div>
             <div class="rounded-card overflow-hidden border border-soft-divider">
                 <img
-                    src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?q=80&w=1920&auto=format&fit=crop"
-                    alt="Sawah terasering Tegalalang Ubud Bali"
+                    src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781011279/Tegalalang_kiswqz.jpg"
+                    alt="Tegallalang Rice Terrace Ubud Bali"
                     class="w-full h-[320px] md:h-[400px] object-cover object-center"
                 />
             </div>
@@ -231,7 +231,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
             <div class="order-2 md:order-1 rounded-card overflow-hidden border border-soft-divider">
                 <img
-                    src="https://images.unsplash.com/photo-1604999565976-8913ad2ddb37?q=80&w=1920&auto=format&fit=crop"
+                    src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781011289/Uluwatu_xym36w.jpg"
                     alt="Pura Uluwatu Bali"
                     class="w-full h-[320px] md:h-[400px] object-cover object-center"
                 />

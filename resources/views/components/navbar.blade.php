@@ -2,10 +2,10 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div class="flex justify-between h-16">
             <div class="flex items-center">
-                <a href="{{ route('home') }}" class="flex-shrink-0 flex items-center">
-                    <span class="font-bold text-xl text-carbon-black tracking-tight notranslate">MANIK JAYA.</span>
+                <a href="{{ route('home') }}" class="shrink-0 flex items-center overflow-hidden">
+                    <img src="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781009142/Logo_f7m95a.png" alt="Manik Jaya Trans Logo" class="h-8 w-auto">
                 </a>
-                <div class="hidden xl:ml-10 xl:flex xl:space-x-8">
+                <div class="hidden xl:ml-4 xl:flex xl:space-x-6">
                     <!-- Guest Links -->
                     <a href="{{ route('home') }}" class="text-carbon-black font-medium hover:text-storm-gray px-3 py-2 rounded-md whitespace-nowrap">Beranda</a>
                     <a href="{{ route('tours.index') }}" class="text-carbon-black font-medium hover:text-storm-gray px-3 py-2 rounded-md whitespace-nowrap">Paket Wisata</a>
@@ -188,7 +188,14 @@
             toggle.setAttribute('aria-checked', isEn ? 'true' : 'false');
 
             var flag = toggle.querySelector('[data-lang-thumb-flag]');
-            if (flag) flag.textContent = isEn ? 'EN' : 'ID';
+            if (flag) {
+                if (flag.tagName === 'IMG') {
+                    flag.src = isEn ? flag.getAttribute('data-flag-en') : flag.getAttribute('data-flag-id');
+                    flag.alt = isEn ? 'EN' : 'ID';
+                } else {
+                    flag.textContent = isEn ? 'EN' : 'ID';
+                }
+            }
 
             // Click handler
             toggle.addEventListener('click', function() {
@@ -212,7 +219,14 @@
             toggle.setAttribute('aria-checked', isEn ? 'true' : 'false');
 
             var flag = toggle.querySelector('[data-lang-thumb-flag]');
-            if (flag) flag.textContent = isEn ? 'EN' : 'ID';
+            if (flag) {
+                if (flag.tagName === 'IMG') {
+                    flag.src = isEn ? flag.getAttribute('data-flag-en') : flag.getAttribute('data-flag-id');
+                    flag.alt = isEn ? 'EN' : 'ID';
+                } else {
+                    flag.textContent = isEn ? 'EN' : 'ID';
+                }
+            }
         });
     }
 

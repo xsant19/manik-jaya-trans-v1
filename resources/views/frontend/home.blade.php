@@ -9,47 +9,47 @@
     aria-label="Hero slideshow destinasi Bali"
 >
     {{-- ── Slides ── --}}
-    {{-- Slide 1: Tanah Lot --}}
+    {{-- Slide 1: Tirta Gangga --}}
     <div class="hero-slide" aria-hidden="true">
         <img
-            src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=1920&auto=format&fit=crop"
-            alt="Pura Tanah Lot Bali"
+            src="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781010410/Tirta-Gangga_-Bali_-Indonesia_mxndtu.jpg"
+            alt="Tirta Gangga Bali"
             class="h-full w-full object-cover object-center"
         />
     </div>
 
-    {{-- Slide 2: Tegalalang Rice Terrace --}}
+    {{-- Slide 2: Ulun Danu Beratan --}}
     <div class="hero-slide" aria-hidden="true">
         <img
-            src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?q=80&w=1920&auto=format&fit=crop"
-            alt="Tegalalang Rice Terrace Ubud"
+            src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010410/Ulun-Danu-Beratan_-Bali_-Indonesia_pm9zpk.jpg"
+            alt="Ulun Danu Beratan Bali"
             class="h-full w-full object-cover object-center"
         />
     </div>
 
-    {{-- Slide 3: Uluwatu Temple --}}
+    {{-- Slide 3: Black Lava Kintamani --}}
     <div class="hero-slide" aria-hidden="true">
         <img
-            src="https://images.unsplash.com/photo-1604999565976-8913ad2ddb37?q=80&w=1920&auto=format&fit=crop"
-            alt="Pura Uluwatu Bali"
+            src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010411/Black-Lava-Kintamani_-Bali_-Indonesia_atrjop.jpg"
+            alt="Black Lava Kintamani Bali"
             class="h-full w-full object-cover object-center"
         />
     </div>
 
-    {{-- Slide 4: Bali Beach --}}
+    {{-- Slide 4: Tanah Lot --}}
     <div class="hero-slide" aria-hidden="true">
         <img
-            src="https://images.unsplash.com/photo-1573790387438-4da905039392?q=80&w=1920&auto=format&fit=crop"
-            alt="Pantai Bali"
+            src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010412/Tanah-Lot_-Bali_-Indonesia_y55bdj.jpg"
+            alt="Tanah Lot Bali"
             class="h-full w-full object-cover object-center"
         />
     </div>
 
-    {{-- Slide 5: Bali Rice Fields --}}
+    {{-- Slide 5: Tegallalang Rice Terrace --}}
     <div class="hero-slide" aria-hidden="true">
         <img
-            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=1920&auto=format&fit=crop"
-            alt="Sawah Bali"
+            src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010415/Tegallalang_-Bali_-Indonesia_nx2n5o.jpg"
+            alt="Tegallalang Rice Terrace Ubud"
             class="h-full w-full object-cover object-center"
         />
     </div>
