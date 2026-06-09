@@ -489,6 +489,31 @@ Penambahan 2 rute baru di `routes/web.php` di dalam middleware customer:
 
 ---
 
+## 🖨️ Update #6: Cetak SPK (Surat Perintah Kerja) Driver
+
+### Deskripsi
+Admin sekarang dapat mengunduh Surat Perintah Kerja (SPK) dalam format PDF untuk driver yang bertugas.
+
+### Perubahan
+- ✅ Aksi khusus (Action `export_spk`) pada setiap tabel booking di Filament Admin (`RentalBookingsTable`, dll).
+- ✅ Template `resources/views/pdf/spk.blade.php` berbasis `DomPDF`.
+- ✅ Controller `App\Http\Controllers\DocumentController` untuk logika pembuatan SPK yang disatukan dari semua jenis layanan.
+
+---
+
+## 📈 Update #7: Modul Laporan Keuangan
+
+### Deskripsi
+Penyediaan halaman kustom "Laporan Keuangan" pada Admin Panel Filament untuk mengekspor laporan transaksi ke dalam format PDF dan Excel dengan filter tanggal spesifik.
+
+### Perubahan
+- ✅ Fitur Filter Rentang Tanggal (Dari & Sampai) menggunakan *DatePicker* native Filament.
+- ✅ Fitur Tombol *Quick Presets* ("Bulan Ini", "Bulan Lalu") menggunakan komponen `ToggleButtons` native dari Filament v5 Schema.
+- ✅ Ekspor PDF lanskap A4 dengan library DomPDF (`resources/views/pdf/laporan-keuangan.blade.php`).
+- ✅ Ekspor Excel tabel data lengkap menggunakan library `Maatwebsite\Excel` (via `App\Exports\LaporanKeuanganExport`).
+
+---
+
 ## 📝 Documentation Updates Summary
 
 ### Files Updated

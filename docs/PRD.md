@@ -5,7 +5,7 @@
 
 Sistem Informasi Travel Manik Jaya Trans adalah aplikasi berbasis website untuk mengelola layanan travel, paket wisata, penyewaan kendaraan, airport transfer, hotel shuttle, booking pelanggan, pembayaran, notifikasi email, serta pengelolaan data operasional oleh admin.
 
-Aplikasi ini dibangun menggunakan Laravel 13 sebagai backend framework, Filament 4 sebagai admin panel, Tailwind CSS sebagai frontend styling, Blade Template sebagai view engine, dan MySQL sebagai database utama.
+Aplikasi ini dibangun menggunakan Laravel 13 sebagai backend framework, Filament 5.6.6 sebagai admin panel, Tailwind CSS v4.3 sebagai frontend styling, Blade Template sebagai view engine, dan MySQL sebagai database utama.
 
 Sistem dirancang untuk menggantikan proses manual seperti pencatatan menggunakan buku, spreadsheet, WhatsApp, telepon, media sosial, serta konfirmasi manual. Sistem juga dirancang agar customer dapat melihat layanan dan melakukan booking secara mandiri melalui website.
 
@@ -196,6 +196,8 @@ Batasan admin:
 16. Menerima email booking.
 17. Menerima email pembayaran berhasil.
 18. Menerima email perubahan status booking.
+19. Mengunduh Invoice PDF untuk transaksi yang sudah lunas.
+20. Mengunduh Voucher Perjalanan PDF untuk layanan sewa kendaraan (jika sudah approved & lunas).
 
 ### 6.3 Fitur Admin
 
@@ -218,6 +220,8 @@ Batasan admin:
 17. Filter data berdasarkan status.
 18. Search berdasarkan booking code.
 19. Melihat data customer pada booking.
+20. Mengunduh Laporan Keuangan (PDF & Excel) dengan rentang tanggal khusus.
+21. Mengunduh cetak Surat Perintah Kerja (SPK) PDF untuk pengugasan supir.
 
 ## 7. User Flow Ringkas
 
@@ -409,9 +413,9 @@ Backend:
 - Policy untuk ownership booking.
 
 Frontend:
+- Tailwind CSS v4.3.
+- Vite 8.0.
 - Blade Template.
-- Tailwind CSS.
-- Vite.
 - Design token dari `DESIGN.md`.
 
 Admin:
