@@ -19,7 +19,7 @@
 
                     <div class="mb-6">
                         <label class="block text-sm font-medium text-carbon-black mb-2">Tipe Sewa <span class="text-red-500">*</span></label>
-                        <select name="rental_type" required class="w-full border border-soft-divider rounded-btn p-3 focus:outline-none focus:border-carbon-black" onchange="toggleEndDate(this.value)">
+                        <select name="rental_type" id="rental_type" required class="w-full border border-soft-divider rounded-btn p-3 focus:outline-none focus:border-carbon-black" onchange="toggleEndDate(this.value); resetAvailability();">
                             <option value="full_day" {{ old('rental_type') == 'full_day' ? 'selected' : '' }}>Sehari Penuh (Full Day) - Rp {{ number_format($vehicle->price_full_day, 0, ',', '.') }} / Hari</option>
                             <option value="half_day" {{ old('rental_type') == 'half_day' ? 'selected' : '' }}>Setengah Hari (Half Day) - Rp {{ number_format($vehicle->price_half_day, 0, ',', '.') }} / 12 Jam</option>
                         </select>
@@ -29,15 +29,22 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <label class="block text-sm font-medium text-carbon-black mb-2">Tanggal Mulai <span class="text-red-500">*</span></label>
-                            <input type="date" name="start_date" value="{{ old('start_date') }}" required min="{{ date('Y-m-d') }}" class="w-full border border-soft-divider rounded-btn p-3 focus:outline-none focus:border-carbon-black">
+                            <input type="date" name="start_date" id="start_date" value="{{ old('start_date') }}" required min="{{ date('Y-m-d') }}" class="w-full border border-soft-divider rounded-btn p-3 focus:outline-none focus:border-carbon-black" onchange="resetAvailability()">
                             <x-form-error :messages="$errors->get('start_date')" />
                         </div>
                         <div id="endDateContainer">
                             <label class="block text-sm font-medium text-carbon-black mb-2">Tanggal Selesai</label>
-                            <input type="date" name="end_date" id="end_date" value="{{ old('end_date') }}" min="{{ date('Y-m-d') }}" class="w-full border border-soft-divider rounded-btn p-3 focus:outline-none focus:border-carbon-black">
+                            <input type="date" name="end_date" id="end_date" value="{{ old('end_date') }}" min="{{ date('Y-m-d') }}" class="w-full border border-soft-divider rounded-btn p-3 focus:outline-none focus:border-carbon-black" onchange="resetAvailability()">
                             <span class="text-xs text-storm-gray mt-1 block">Kosongkan jika hanya menyewa 1 hari.</span>
                             <x-form-error :messages="$errors->get('end_date')" />
                         </div>
+                    </div>
+                    
+                    <div class="mb-6 flex flex-col sm:flex-row items-center gap-4">
+                        <button type="button" id="btnCheckAvailability" onclick="checkAvailability()" class="px-5 py-2.5 text-sm font-semibold rounded-btn border border-carbon-black text-carbon-black bg-canvas-white hover:bg-faint-gray transition-colors">
+                            Cek Ketersediaan
+                        </button>
+                        <div id="availabilityMessage" class="text-sm font-medium"></div>
                     </div>
 
                     <h3 class="text-xl font-bold text-carbon-black mb-6 mt-10">Informasi Penjemputan</h3>
@@ -55,7 +62,8 @@
                     </div>
 
                     <div class="border-t border-soft-divider pt-6">
-                        <x-primary-button type="submit" class="w-full">Lanjutkan & Konfirmasi Pemesanan</x-primary-button>
+                        <x-primary-button type="submit" id="submitBtn" class="w-full opacity-50 cursor-not-allowed" disabled>Lanjutkan & Konfirmasi Pemesanan</x-primary-button>
+                        <p class="text-xs text-center text-storm-gray mt-3">Silakan 'Cek Ketersediaan' terlebih dahulu untuk melanjutkan pesanan.</p>
                     </div>
                 </form>
             </div>
@@ -101,7 +109,68 @@
             input.disabled = false;
         }
     }
+
+    function resetAvailability() {
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('submitBtn').classList.add('opacity-50', 'cursor-not-allowed');
+        document.getElementById('availabilityMessage').innerHTML = '';
+    }
+
+    async function checkAvailability() {
+        const startDate = document.getElementById('start_date').value;
+        const endDate = document.getElementById('end_date').value;
+        const rentalType = document.getElementById('rental_type').value;
+        const msgContainer = document.getElementById('availabilityMessage');
+        const btn = document.getElementById('btnCheckAvailability');
+        const submitBtn = document.getElementById('submitBtn');
+
+        if (!startDate) {
+            msgContainer.innerHTML = '<span class="text-red-600">Pilih tanggal mulai terlebih dahulu.</span>';
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = 'Mengecek...';
+        msgContainer.innerHTML = '';
+
+        try {
+            const response = await fetch('{{ route('booking.rental.check-availability', $vehicle) }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({
+                    start_date: startDate,
+                    end_date: endDate,
+                    rental_type: rentalType
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.available) {
+                msgContainer.innerHTML = `<span class="text-green-600">${result.message}</span>`;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                msgContainer.innerHTML = `<span class="text-red-600">${result.message}</span>`;
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        } catch (error) {
+            msgContainer.innerHTML = '<span class="text-red-600">Terjadi kesalahan. Silakan coba lagi.</span>';
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = 'Cek Ketersediaan';
+        }
+    }
+
     // init on load
-    document.addEventListener('DOMContentLoaded', () => toggleEndDate(document.querySelector('select[name="rental_type"]').value));
+    document.addEventListener('DOMContentLoaded', () => {
+        toggleEndDate(document.getElementById('rental_type').value);
+        // If there are old inputs (validation failed), user has to re-check
+        resetAvailability();
+    });
 </script>
 @endsection

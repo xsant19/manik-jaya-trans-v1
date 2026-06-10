@@ -64,6 +64,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     // Booking Routes
     Route::get('/booking/vehicles/{vehicle}', [RentalBookingController::class, 'create'])->name('booking.rental.create');
     Route::post('/booking/vehicles/{vehicle}', [RentalBookingController::class, 'store'])->name('booking.rental.store');
+    Route::post('/booking/vehicles/{vehicle}/check-availability', [RentalBookingController::class, 'checkAvailability'])->name('booking.rental.check-availability');
 
     Route::get('/booking/tours/{tour}', [TourBookingController::class, 'create'])->name('booking.tours.create');
     Route::post('/booking/tours/{tour}', [TourBookingController::class, 'store'])->name('booking.tours.store');

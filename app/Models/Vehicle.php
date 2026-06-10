@@ -115,7 +115,7 @@ class Vehicle extends Model
 
         // Tour bookings (single date) - only count if payment paid
         $count += $this->tourBookings()
-            ->whereDate('travel_date', $date)
+            ->whereDate('booking_date', $date)
             ->whereIn('booking_status', ['pending', 'approved', 'on_trip'])
             ->whereHas('payment', function ($q) {
                 $q->where('status', 'paid');
@@ -124,7 +124,7 @@ class Vehicle extends Model
 
         // Transfer bookings (single date) - only count if payment paid
         $count += $this->transferBookings()
-            ->whereDate('pickup_date', $date)
+            ->whereDate('booking_date', $date)
             ->whereIn('booking_status', ['pending', 'approved', 'on_trip'])
             ->whereHas('payment', function ($q) {
                 $q->where('status', 'paid');
@@ -133,7 +133,7 @@ class Vehicle extends Model
 
         // Shuttle bookings (single date) - only count if payment paid
         $count += $this->shuttleBookings()
-            ->whereDate('pickup_date', $date)
+            ->whereDate('booking_date', $date)
             ->whereIn('booking_status', ['pending', 'approved', 'on_trip'])
             ->whereHas('payment', function ($q) {
                 $q->where('status', 'paid');
