@@ -433,13 +433,15 @@ Service: `BookingCodeService`
 **Rental Booking**:
 ```php
 if (rental_type == 'full_day') {
-    total_price = vehicle->price_full_day
+    total_price = vehicle->price_full_day  // Full day = 12 jam
 } else {
-    total_price = vehicle->price_half_day
+    total_price = vehicle->price_half_day  // Half day = 6 jam
 }
 ```
 **Catatan Penting**: 
 - Sewa kendaraan include supir. 
+- **Full day**: 12 jam sewa
+- **Half day**: 6 jam sewa
 - Driver akan ditugaskan oleh admin melalui Filament panel setelah booking approved.
 - Customer TIDAK memilih supir saat booking (field tidak ada di form).
 - Form booking hanya berisi: rental_type, start_date, end_date, pickup_location, note.

@@ -117,7 +117,7 @@ Customer adalah pengguna yang sudah login dengan role customer.
 Kebutuhan customer:
 - Melihat layanan.
 - Booking paket wisata.
-- Booking kendaraan (include supir).
+- Booking kendaraan (include supir, full day = 12 jam atau half day = 6 jam).
 - Booking airport transfer.
 - Booking hotel shuttle.
 - Melihat riwayat booking.

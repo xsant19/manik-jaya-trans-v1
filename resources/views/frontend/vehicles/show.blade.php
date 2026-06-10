@@ -178,12 +178,12 @@
                                     <circle cx="12" cy="12" r="10"/>
                                     <polyline points="12 6 12 12 16 14"/>
                                 </svg>
-                                <span class="text-sm font-medium text-storm-gray">Half Day</span>
+                                <span class="text-sm font-medium text-storm-gray">Half Day (6 Jam)</span>
                             </div>
                             <p class="text-2xl font-bold text-carbon-black">
                                 Rp {{ number_format($vehicle->price_half_day, 0, ',', '.') }}
                             </p>
-                            <p class="mt-1 text-xs text-dust-bunny">Maks. 12 jam</p>
+                            <p class="mt-1 text-xs text-dust-bunny">Maksimal 6 jam pemakaian</p>
                         </div>
                         {{-- Full Day --}}
                         <div class="rounded-card border-2 border-carbon-black bg-canvas-white p-5">
@@ -194,7 +194,7 @@
                                         <circle cx="12" cy="12" r="10"/>
                                         <polyline points="12 6 12 12 16 14"/>
                                     </svg>
-                                    <span class="text-sm font-medium text-carbon-black">Full Day</span>
+                                    <span class="text-sm font-medium text-carbon-black">Full Day (12 Jam)</span>
                                 </div>
                                 <span class="rounded-btn bg-carbon-black px-2 py-0.5 text-xs font-semibold text-canvas-white">
                                     Populer
@@ -203,7 +203,7 @@
                             <p class="text-2xl font-bold text-carbon-black">
                                 Rp {{ number_format($vehicle->price_full_day, 0, ',', '.') }}
                             </p>
-                            <p class="mt-1 text-xs text-dust-bunny">Hingga pukul 23:59</p>
+                            <p class="mt-1 text-xs text-dust-bunny">Maksimal 12 jam pemakaian</p>
                         </div>
                     </div>
                 </div>
@@ -318,6 +318,189 @@
                     </div>
                 </div>
 
+                {{-- Area Coverage & Remote Area Policy --}}
+                <div class="mb-10 border-b border-soft-divider pb-10">
+                    <h2 class="mb-5 text-xl font-bold text-carbon-black">Area Layanan &amp; Kebijakan Wilayah</h2>
+                    
+                    {{-- Jam Operasional --}}
+                    <div class="mb-6 rounded-card border border-soft-divider bg-canvas-white p-5">
+                        <h3 class="mb-3 flex items-center gap-2 text-base font-semibold text-carbon-black">
+                            <svg class="size-5 text-storm-gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            Jam Operasional Driver
+                        </h3>
+                        <p class="text-sm text-storm-gray">Maksimal mulai pukul <span class="font-semibold text-carbon-black">07:00</span> hingga <span class="font-semibold text-carbon-black">23:50 (11:50 PM)</span></p>
+                    </div>
+
+                    {{-- Zona Standar (Included) --}}
+                    <div class="mb-6 rounded-card border-2 border-carbon-black bg-faint-gray p-5">
+                        <div class="mb-3 flex items-start justify-between gap-3">
+                            <h3 class="flex items-center gap-2 text-base font-semibold text-carbon-black">
+                                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                                Zona Penjemputan Standar
+                            </h3>
+                            <span class="inline-flex items-center gap-1.5 rounded-btn bg-carbon-black px-2.5 py-1 text-xs font-semibold text-canvas-white">
+                                <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                Included
+                            </span>
+                        </div>
+                        <p class="mb-3 text-sm text-storm-gray">Area berikut sudah termasuk dalam harga normal:</p>
+                        <div class="flex flex-wrap gap-2">
+                            @php
+                                $standardZones = ['Bandara (Airport)', 'Kuta', 'Seminyak', 'Canggu', 'Jimbaran Utara', 'Nusa Dua', 'Denpasar', 'Sanur', 'Ubud (area utama)'];
+                            @endphp
+                            @foreach($standardZones as $zone)
+                                <span class="inline-flex items-center gap-1.5 rounded-btn bg-canvas-white px-3 py-1.5 text-xs font-medium text-carbon-black border border-soft-divider">
+                                    <svg class="size-3 text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                    {{ $zone }}
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    {{-- Remote Area Surcharge --}}
+                    <div class="mb-6">
+                        <h3 class="mb-4 flex items-center gap-2 text-base font-semibold text-carbon-black">
+                            <svg class="size-5 text-storm-gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                                <path d="M21 3v5h-5"/>
+                                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                                <path d="M8 16H3v5"/>
+                            </svg>
+                            Area Terpencil (Biaya Tambahan)
+                        </h3>
+                        
+                        {{-- Bali Utara --}}
+                        <div class="mb-4 overflow-hidden rounded-card border border-soft-divider bg-canvas-white">
+                            <div class="border-b border-soft-divider bg-faint-gray px-4 py-3">
+                                <h4 class="text-sm font-semibold text-carbon-black">Bali Utara</h4>
+                            </div>
+                            <div class="divide-y divide-soft-divider">
+                                @php
+                                    $northAreas = [
+                                        ['destinations' => 'Bedugul, Jatiluwih, Batukaru, Penelokan, Kintamani', 'surcharge' => 100000],
+                                        ['destinations' => 'Munduk, Gitgit, Sekumpul, Banyumala, Aling-Aling', 'surcharge' => 150000],
+                                        ['destinations' => 'Lovina, Singaraja, Tejakula', 'surcharge' => 250000],
+                                        ['destinations' => 'Gilimanuk, Menjangan, Pemuteran', 'surcharge' => 350000],
+                                    ];
+                                @endphp
+                                @foreach($northAreas as $area)
+                                    <div class="flex items-center justify-between gap-4 px-4 py-3">
+                                        <span class="text-sm text-storm-gray">{{ $area['destinations'] }}</span>
+                                        <span class="shrink-0 text-sm font-semibold text-carbon-black">+Rp {{ number_format($area['surcharge'], 0, ',', '.') }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        {{-- Bali Timur --}}
+                        <div class="overflow-hidden rounded-card border border-soft-divider bg-canvas-white">
+                            <div class="border-b border-soft-divider bg-faint-gray px-4 py-3">
+                                <h4 class="text-sm font-semibold text-carbon-black">Bali Timur</h4>
+                            </div>
+                            <div class="divide-y divide-soft-divider">
+                                @php
+                                    $eastAreas = [
+                                        ['destinations' => 'Besakih, Lempuyang, Tirta Gangga, Sidemen', 'surcharge' => 150000],
+                                        ['destinations' => 'Tejakula, Amed, Lahanangan Sweet', 'surcharge' => 250000],
+                                        ['destinations' => 'Tianyar, Tulamben, Kubu, Gretek', 'surcharge' => 300000],
+                                    ];
+                                @endphp
+                                @foreach($eastAreas as $area)
+                                    <div class="flex items-center justify-between gap-4 px-4 py-3">
+                                        <span class="text-sm text-storm-gray">{{ $area['destinations'] }}</span>
+                                        <span class="shrink-0 text-sm font-semibold text-carbon-black">+Rp {{ number_format($area['surcharge'], 0, ',', '.') }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Biaya Tambahan Waktu Khusus --}}
+                    <div class="rounded-card border border-soft-divider bg-faint-gray p-5">
+                        <h3 class="mb-4 flex items-center gap-2 text-base font-semibold text-carbon-black">
+                            <svg class="size-5 text-storm-gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2v4"/>
+                                <path d="M12 18v4"/>
+                                <path d="m4.93 4.93 2.83 2.83"/>
+                                <path d="m16.24 16.24 2.83 2.83"/>
+                                <path d="M2 12h4"/>
+                                <path d="M18 12h4"/>
+                                <path d="m4.93 19.07 2.83-2.83"/>
+                                <path d="m16.24 7.76 2.83-2.83"/>
+                            </svg>
+                            Biaya Tambahan Waktu Khusus
+                        </h3>
+                        <ul class="space-y-3">
+                            @php
+                                $specialTimes = [
+                                    ['label' => 'Penjemputan Subuh (Sebelum 05:00)', 'price' => 50000, 'icon' => 'sunrise'],
+                                    ['label' => 'Layanan Malam/Dini Hari (00:00 - 06:00)', 'price' => 250000, 'icon' => 'moon'],
+                                    ['label' => 'Akomodasi Driver (Menginap di luar kota)', 'price' => 200000, 'note' => 'per malam', 'icon' => 'bed'],
+                                ];
+                            @endphp
+                            @foreach($specialTimes as $time)
+                                <li class="flex items-start justify-between gap-4">
+                                    <div class="flex items-start gap-2">
+                                        <svg class="mt-0.5 size-4 shrink-0 text-storm-gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            @if($time['icon'] === 'sunrise')
+                                                <path d="M12 2v8"/>
+                                                <path d="m4.93 10.93 1.41 1.41"/>
+                                                <path d="M2 18h2"/>
+                                                <path d="M20 18h2"/>
+                                                <path d="m19.07 10.93-1.41 1.41"/>
+                                                <path d="M22 22H2"/>
+                                                <path d="m8 6 4-4 4 4"/>
+                                                <path d="M16 18a4 4 0 0 0-8 0"/>
+                                            @elseif($time['icon'] === 'moon')
+                                                <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                                            @elseif($time['icon'] === 'bed')
+                                                <path d="M2 4v16"/>
+                                                <path d="M2 8h18a2 2 0 0 1 2 2v10"/>
+                                                <path d="M2 17h20"/>
+                                                <path d="M6 8v9"/>
+                                            @endif
+                                        </svg>
+                                        <div>
+                                            <span class="text-sm font-medium text-carbon-black">{{ $time['label'] }}</span>
+                                            @if(isset($time['note']))
+                                                <span class="block text-xs text-dust-bunny">{{ $time['note'] }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
+                                    <span class="shrink-0 text-sm font-semibold text-carbon-black whitespace-nowrap">+Rp {{ number_format($time['price'], 0, ',', '.') }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+
+                    {{-- Important Notice --}}
+                    <div class="mt-6 rounded-card border-l-4 border-carbon-black bg-faint-gray p-4">
+                        <div class="flex items-start gap-3">
+                            <svg class="mt-0.5 size-5 shrink-0 text-carbon-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                            <div>
+                                <p class="text-sm font-semibold text-carbon-black">Penting untuk Diperhatikan</p>
+                                <p class="mt-1 text-sm leading-relaxed text-storm-gray">
+                                    Biaya tambahan area terpencil dan waktu khusus akan diinformasikan saat konfirmasi booking. Untuk rute yang tidak tercantum atau permintaan khusus, silakan hubungi kami via WhatsApp.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Syarat & Ketentuan --}}
                 <div class="mb-10">
                     <h2 class="mb-4 text-xl font-bold text-carbon-black">Syarat &amp; Ketentuan</h2>
@@ -325,11 +508,11 @@
                         <ul class="space-y-3">
                             @php
                                 $terms = [
-                                    'Harga berlaku untuk area Bali Selatan (Kuta, Seminyak, Nusa Dua, Sanur).',
-                                    'Area luar (Singaraja, Karangasem, Jembrana) dikenakan biaya tambahan, hubungi kami untuk konfirmasi.',
-                                    'Waktu sewa Full Day maksimal 12 jam atau hingga pukul 23:59 pada hari yang sama.',
+                                    'Harga standar berlaku untuk zona penjemputan standar (Airport, Kuta, Seminyak, Canggu, dll).',
+                                    'Biaya tambahan area terpencil dan waktu khusus akan dikonfirmasi sebelum booking final.',
+                                    'Waktu sewa Half Day maksimal 6 jam, Full Day maksimal 12 jam.',
                                     'Pembatalan kurang dari 24 jam sebelum keberangkatan dapat dikenakan biaya.',
-                                    'Driver membutuhkan waktu istirahat 1–2 jam untuk perjalanan di atas 10 jam.',
+                                    'Driver membutuhkan waktu istirahat jika perjalanan melebihi durasi sewa.',
                                 ];
                             @endphp
                             @foreach($terms as $i => $term)
@@ -361,7 +544,7 @@
                             <p class="mt-1 text-3xl font-bold text-carbon-black">
                                 Rp {{ number_format($vehicle->price_half_day, 0, ',', '.') }}
                             </p>
-                            <p class="mt-0.5 text-xs text-dust-bunny">Per 12 jam (Half Day)</p>
+                            <p class="mt-0.5 text-xs text-dust-bunny">Per 6 jam (Half Day)</p>
                         </div>
 
                         {{-- Vehicle Info Summary --}}

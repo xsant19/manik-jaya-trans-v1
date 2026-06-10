@@ -193,13 +193,13 @@ SHT-YYYYMMDD-0001     # Shuttle
 
 **WAJIB dihitung di BACKEND (service layer), BUKAN di frontend.**
 
-| Jenis Booking     | Rumus                                          |
-|-------------------|-------------------------------------------------|
-| Rental (full_day) | `vehicle->price_full_day`                       |
-| Rental (half_day) | `vehicle->price_half_day`                       |
-| Tour              | `tour_package->price × participant_count`       |
-| Transfer          | `airport_transfer->price`                       |
-| Shuttle           | `hotel_shuttle->price × passenger_count`        |
+| Jenis Booking     | Rumus                                          | Keterangan                    |
+|-------------------|------------------------------------------------|-------------------------------|
+| Rental (full_day) | `vehicle->price_full_day`                      | Full day = 12 jam             |
+| Rental (half_day) | `vehicle->price_half_day`                      | Half day = 6 jam              |
+| Tour              | `tour_package->price × participant_count`      |                               |
+| Transfer          | `airport_transfer->price`                      |                               |
+| Shuttle           | `hotel_shuttle->price × passenger_count`       |                               |
 
 ---
 

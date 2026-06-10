@@ -36,7 +36,7 @@ Semua halaman public frontend telah dibuat sesuai dengan spesifikasi DESIGN.md d
 - **View**: `resources/views/frontend/vehicles/show.blade.php`
 - **Fitur**:
   - Detail lengkap kendaraan
-  - Harga half day dan full day
+  - Harga half day (6 jam) dan full day (12 jam)
   - Sticky booking card di sidebar
   - Tombol booking (redirect ke login jika guest)
   - 404 jika kendaraan tidak available

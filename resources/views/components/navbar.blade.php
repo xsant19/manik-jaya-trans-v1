@@ -45,7 +45,7 @@
                                             Dashboard & Riwayat
                                         </div>
                                     </a>
-                                    <a href="#" class="text-carbon-black block px-4 py-2 text-sm hover:bg-faint-gray transition-colors" role="menuitem" tabindex="-1">
+                                    <a href="{{ route('profile.edit') }}" class="text-carbon-black block px-4 py-2 text-sm hover:bg-faint-gray transition-colors" role="menuitem" tabindex="-1">
                                         <div class="flex items-center">
                                             <svg class="mr-3 h-4 w-4 text-storm-gray" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
@@ -119,7 +119,7 @@
                     </div>
                     @if(auth()->user()->role === 'customer')
                         <a href="{{ route('customer.dashboard') }}" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Dashboard & Riwayat</a>
-                        <a href="#" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Edit Profil</a>
+                        <a href="{{ route('profile.edit') }}" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Edit Profil</a>
                     @else
                         <a href="/admin" class="block px-3 py-2 text-carbon-black font-medium hover:bg-faint-gray rounded-md transition-colors">Admin Panel</a>
                     @endif
