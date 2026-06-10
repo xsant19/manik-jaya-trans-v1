@@ -56,6 +56,11 @@ use App\Http\Controllers\Frontend\InvoiceController;
 Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+    // Profile Routes
+    Route::get('/profile', [\App\Http\Controllers\Frontend\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [\App\Http\Controllers\Frontend\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [\App\Http\Controllers\Frontend\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+
     // Booking Routes
     Route::get('/booking/vehicles/{vehicle}', [RentalBookingController::class, 'create'])->name('booking.rental.create');
     Route::post('/booking/vehicles/{vehicle}', [RentalBookingController::class, 'store'])->name('booking.rental.store');
