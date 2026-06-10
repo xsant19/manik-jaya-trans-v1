@@ -12,7 +12,7 @@
         <div class="flex flex-col md:flex-row gap-8">
             <!-- Form Area -->
             <div class="flex-grow">
-                <form action="{{ route('booking.rental.store', $vehicle) }}" method="POST" class="bg-canvas-white p-6 md:p-8 rounded-btn-card border border-soft-divider shadow-sm">
+                <form action="{{ route('booking.rental.store', $vehicle) }}" method="POST" class="bg-canvas-white p-6 md:p-8 rounded-btn-card border border-soft-divider shadow-sm" onsubmit="disableSubmitButton(this)">
                     @csrf
 
                     <h3 class="text-xl font-bold text-carbon-black mb-6">Detail Layanan</h3>
@@ -172,5 +172,14 @@
         // If there are old inputs (validation failed), user has to re-check
         resetAvailability();
     });
+    
+    function disableSubmitButton(form) {
+        const btn = form.querySelector('button[type="submit"]');
+        if(btn) {
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.innerHTML = 'Memproses...';
+        }
+    }
 </script>
 @endsection
