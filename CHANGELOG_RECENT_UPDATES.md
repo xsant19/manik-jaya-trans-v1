@@ -514,6 +514,22 @@ Penyediaan halaman kustom "Laporan Keuangan" pada Admin Panel Filament untuk men
 
 ---
 
+## 📦 Update #8: Vehicle Inventory System v2.2
+
+### Deskripsi
+Perubahan total pada sistem inventaris kendaraan dari semula berdasarkan kolom status menjadi berbasis ketersediaan riil harian melalui tabel khusus `vehicle_inventories`. Dilengkapi juga dengan fitur "Book Inventory" (Bulk Setup) bagi admin.
+
+### Perubahan
+- ✅ **Skema Database:** Kolom `status` pada tabel `vehicles` dihapus dan digantikan oleh tabel `vehicle_inventories`. Ketersediaan kendaraan kini dievaluasi secara dinamis terhadap rentang waktu penyewaan menggunakan `isAvailableForDateRange()`.
+- ✅ **Sinkronisasi Stok Otomatis (Observer):**
+  - Pemotongan stok hanya berlaku jika status pembayaran adalah `paid`.
+  - Stok dikembalikan otomatis ketika pesanan dibatalkan (`canceled`).
+  - Untuk layanan singkat (Shuttle/Transfer) yang selesai di hari yang sama, stok akan dikembalikan saat berstatus `completed`.
+- ✅ **Bulk Inventory Setup:** Admin disediakan *custom action* "**Atur Stok Beberapa Hari**" pada Panel Edit Kendaraan untuk mengatur stok selama beberapa hari sekaligus (*loop creation*).
+- ✅ **Konsistensi Data Booking:** Kolom `completed_at` dilindungi agar terisi otomatis hanya melalui event pergantian status dan akan kembali `null` jika pesanan di-*revert* secara tidak sengaja oleh admin.
+
+---
+
 ## 📝 Documentation Updates Summary
 
 ### Files Updated

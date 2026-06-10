@@ -16,11 +16,21 @@
 | Frontend         | Blade Template + Tailwind CSS v4.3 + Vite 8.0           |
 | Database         | MySQL 5.7+ / 8.0+                                        |
 | Payment Gateway  | Midtrans Sandbox 2.6                                     |
-| Status           | In Development — Phase 1–8 selesai, Phase 9 ongoing      |
-| Version          | 1.1.0                                                    |
-| Last Update      | 8 Juni 2026                                              |
+| Status           | In Development — Phase 1–9 selesai, Phase 10 ongoing     |
+| Version          | 1.2.0                                                    |
+| Last Update      | 10 Juni 2026                                             |
 
-**🆕 Recent Updates (v1.1.0)**:
+**🆕 Recent Updates (v1.2.0)**:
+- ✅ **Vehicle Inventory System** - Separate table untuk tracking stock per hari
+- ✅ **Payment-Based Stock Reduction** - Stock berkurang HANYA jika payment paid
+- ✅ **Same-Day Stock Return** - Untuk shuttle/transfer selesai < 1 hari
+- ✅ **Vehicle Status Removed** - Availability 100% ditentukan dari inventory
+- ✅ **Observer Pattern** - Automatic stock management via PaymentObserver & BookingStockObserver
+- ✅ **Admin Vehicle Assignment** - Admin assign vehicle ke tour/transfer/shuttle setelah booking
+- ✅ **Completed Timestamp** - Track exact completion time untuk semua booking types
+- 📝 Lihat `VEHICLE_INVENTORY_KEY_CHANGES.md` untuk detail lengkap
+
+**Previous Updates (v1.1.0)**:
 - ✅ Driver assignment by admin only (customer tidak pilih supir)
 - ✅ Simplified booking card UI (summary only, bukan form interaktif)
 - ✅ WhatsApp integration pada semua halaman detail layanan
@@ -28,8 +38,6 @@
 - ✅ Invoice & Voucher PDF generation dengan DOMPDF
 - ✅ Fitur cetak SPK (Surat Perintah Kerja) PDF untuk Driver via Admin Panel
 - ✅ Modul Laporan Keuangan Export (PDF & Excel) terintegrasi Filament v5 Schema
-- 📄 Documentation updates across all project files
-- 📝 Lihat `CHANGELOG_RECENT_UPDATES.md` untuk detail lengkap
 
 ---
 
@@ -84,10 +92,10 @@ app/
 │   ├── Middleware/              # Role middleware
 │   └── Requests/               # FormRequest classes
 ├── Mail/                        # BookingCreatedMail, BookingStatusUpdatedMail, PaymentSuccessMail
-├── Models/                      # 11 Eloquent models
-├── Observers/                   # Model observers
+├── Models/                      # 12 Eloquent models (NEW: VehicleInventory)
+├── Observers/                   # BookingObserver, PaymentObserver, BookingStockObserver
 ├── Providers/                   # Service providers
-└── Services/                    # BookingCodeService, BookingService, PaymentService
+└── Services/                    # BookingCodeService, BookingService, PaymentService, StockManagementService, VehicleAvailabilityService
 ```
 
 ### 3.3 Struktur Folder Frontend
@@ -105,38 +113,50 @@ resources/
     └── layouts/                 # app (authenticated), guest
 ```
 
-**Catatan Update Terbaru**:
+**Catatan Update Terbaru (v1.2.0)**:
 - Semua halaman detail layanan (vehicles, tours, transfers, shuttles) memiliki WhatsApp help card
 - Booking card di halaman detail hanya menampilkan summary info (bukan form interaktif)
 - WhatsApp number: `6281234567890` (placeholder, perlu update untuk production)
 - Email notification system 100% complete dengan 3 jenis email
+- **Vehicle Inventory System**: Stock management dengan tabel terpisah per hari
+- **Payment-Based Stock**: Stock berkurang HANYA saat payment paid, bukan saat booking dibuat
+- **Observer Pattern**: Automatic stock management melalui PaymentObserver & BookingStockObserver
 
 ---
 
 ## 4. Database
 
-### 4.1 Tabel (11 tabel utama)
+### 4.1 Tabel (12 tabel utama + 1 NEW)
 
-| Tabel               | Deskripsi                          | Status Field                                           |
+| Tabel                | Deskripsi                          | Status Field                                           |
 |----------------------|------------------------------------|--------------------------------------------------------|
 | `users`              | User (admin & customer)            | `role`: admin, customer                                |
+| `vehicles`           | Kendaraan rental                   | ❌ **STATUS REMOVED** - Availability dari inventory    |
+| `vehicle_inventories`| **NEW** Stock kendaraan per hari   | `stock`: jumlah unit tersedia                          |
 | `vehicles`           | Kendaraan rental                   | `status`: available, maintenance, inactive             |
 | `drivers`            | Driver                             | `status`: available, on_trip, inactive                 |
 | `tour_packages`      | Paket wisata                       | `status`: active, inactive                             |
 | `airport_transfers`  | Rute airport transfer              | `status`: active, inactive                             |
 | `hotel_shuttles`     | Layanan hotel shuttle              | `status`: active, inactive                             |
-| `rental_bookings`    | Booking sewa kendaraan             | `booking_status` + `payment_status`                    |
-| `tour_bookings`      | Booking paket wisata               | `booking_status` + `payment_status`                    |
-| `transfer_bookings`  | Booking airport transfer           | `booking_status` + `payment_status`                    |
-| `shuttle_bookings`   | Booking hotel shuttle              | `booking_status` + `payment_status`                    |
+| `rental_bookings`    | Booking sewa kendaraan             | `booking_status` + `payment_status` + **completed_at**|
+| `tour_bookings`      | Booking paket wisata               | `booking_status` + `payment_status` + **vehicle_id** + **driver_id** + **completed_at**|
+| `transfer_bookings`  | Booking airport transfer           | `booking_status` + `payment_status` + **vehicle_id** + **driver_id** + **completed_at**|
+| `shuttle_bookings`   | Booking hotel shuttle              | `booking_status` + `payment_status` + **vehicle_id** + **driver_id** + **completed_at**|
 | `payments`           | Payment records (polymorphic)      | `status`: pending, paid, failed, expired, refunded     |
+
+**🆕 New Table: `vehicle_inventories`**
+- `id`, `vehicle_id` (FK), `date`, `stock`, `timestamps`
+- **UNIQUE**: (vehicle_id, date) - satu vehicle satu stock per hari
+- **Purpose**: Track stock availability per tanggal untuk setiap vehicle
+- **Logic**: Available stock = `stock - COUNT(paid bookings on that date)`
 
 ### 4.2 Relasi Kunci
 
 ```
 User        → hasMany → RentalBooking, TourBooking, TransferBooking, ShuttleBooking, Payment
-Vehicle     → hasMany → RentalBooking
-Driver      → hasMany → RentalBooking
+Vehicle     → hasMany → RentalBooking, TourBooking, TransferBooking, ShuttleBooking
+Vehicle     → hasMany → VehicleInventory (NEW)
+Driver      → hasMany → RentalBooking, TourBooking, TransferBooking, ShuttleBooking
 TourPackage → hasMany → TourBooking
 AirportTransfer → hasMany → TransferBooking
 HotelShuttle    → hasMany → ShuttleBooking
@@ -167,9 +187,61 @@ unpaid → pending → paid → refunded
          failed / expired  (bisa retry jika booking belum canceled)
 ```
 
+**🆕 Stock Management Flow (v1.2.0)**:
+```
+Booking Created (unpaid) → Stock TIDAK berkurang
+         ↓
+Payment Paid → Stock berkurang (PaymentObserver triggered)
+         ↓
+   ┌─────┴─────┬──────────────┬────────────┐
+   ▼           ▼              ▼            ▼
+Cancel    Complete        Complete     Expire
+(paid)   (same day)      (multi-day)   (paid)
+   ↓           ↓              ↓            ↓
+Stock      Stock          Stock        Stock
+return     return         auto         return
+          (shuttle/      (end date)
+           transfer)
+```
+
+**Key Rules:**
+- Stock berkurang HANYA saat `payment.status = 'paid'`
+- Stock dikembalikan saat `booking_status = 'canceled'` (jika payment was paid)
+- Stock dikembalikan same-day untuk shuttle/transfer yang completed < 1 hari
+- Stock multi-day rental otomatis released di akhir periode
+
 ### 4.4 Tipe Data Harga
 
 Semua field harga menggunakan `decimal(12,2)`. Jangan gunakan float/double.
+
+### 4.5 Vehicle Inventory System (NEW v1.2.0)
+
+**Konsep:**
+- Vehicle TIDAK punya kolom `status` lagi
+- Availability 100% ditentukan dari tabel `vehicle_inventories`
+- Admin set stock untuk tanggal tertentu (bisa bulk untuk date range)
+- Jika tidak ada inventory record untuk tanggal X → vehicle NOT available
+
+**Available Stock Calculation:**
+```
+Available Stock = inventory.stock - COUNT(bookings where payment.status = 'paid' AND booking_status IN ['pending', 'approved', 'on_trip'])
+```
+
+**Example:**
+```
+Date: 2026-06-15
+Vehicle: Avanza #1
+Inventory Stock: 3
+
+Bookings:
+- Booking A: paid, pending → reduces stock
+- Booking B: paid, on_trip → reduces stock
+- Booking C: unpaid, pending → does NOT reduce stock
+- Booking D: paid, canceled → does NOT reduce stock
+- Booking E: paid, completed → does NOT reduce stock (same day)
+
+Available Stock = 3 - 2 = 1 unit
+```
 
 ---
 
@@ -520,7 +592,11 @@ Sebelum menganggap pekerjaan selesai, pastikan:
 6. Jangan buat route untuk endpoint yang sudah ditangani Filament.
 7. **PENTING**: Untuk rental booking, customer tidak memilih supir. Field `driver_id` diset `null` dan akan ditugaskan oleh admin via Filament.
 8. **PENTING**: Form booking kendaraan TIDAK menampilkan field pemilihan supir sama sekali.
-9. **UPDATE**: Email notification system sudah 100% complete. Lihat `EMAIL_NOTIFICATION_SETUP.md` untuk dokumentasi lengkap.
+9. **UPDATE v1.1**: Email notification system sudah 100% complete. Lihat `EMAIL_NOTIFICATION_SETUP.md` untuk dokumentasi lengkap.
+10. **UPDATE v1.2**: Vehicle TIDAK punya kolom `status`. Check availability dengan `$vehicle->isAvailableForDate($date)`.
+11. **UPDATE v1.2**: Stock berkurang HANYA saat payment paid, bukan saat booking dibuat.
+12. **UPDATE v1.2**: Observer handle stock management otomatis (PaymentObserver & BookingStockObserver).
+13. **UPDATE v1.2**: Admin assign vehicle ke tour/transfer/shuttle setelah booking dibuat (nullable FK).
 
 ### Saat Mengerjakan Admin Panel
 

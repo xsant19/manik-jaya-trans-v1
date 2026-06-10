@@ -12,7 +12,7 @@
         <div class="flex flex-col md:flex-row gap-8">
             <!-- Form Area -->
             <div class="flex-grow">
-                <form action="{{ route('booking.transfers.store', $transfer) }}" method="POST" class="bg-canvas-white p-6 md:p-8 rounded-btn-card border border-soft-divider shadow-sm">
+                <form action="{{ route('booking.transfers.store', $transfer) }}" method="POST" class="bg-canvas-white p-6 md:p-8 rounded-btn-card border border-soft-divider shadow-sm" onsubmit="disableSubmitButton(this)">
                     @csrf
                     
                     <h3 class="text-xl font-bold text-carbon-black mb-6">Detail Penjemputan</h3>
@@ -98,4 +98,15 @@
         </div>
     </x-page-container>
 </div>
+
+<script>
+    function disableSubmitButton(form) {
+        const btn = form.querySelector('button[type="submit"]');
+        if(btn) {
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.innerHTML = 'Memproses...';
+        }
+    }
+</script>
 @endsection

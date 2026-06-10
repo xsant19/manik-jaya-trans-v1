@@ -12,7 +12,7 @@
         <div class="flex flex-col md:flex-row gap-8">
             <!-- Form Area -->
             <div class="flex-grow">
-                <form action="{{ route('booking.tours.store', $tour) }}" method="POST" class="bg-canvas-white p-6 md:p-8 rounded-btn-card border border-soft-divider shadow-sm" id="bookingForm">
+                <form action="{{ route('booking.tours.store', $tour) }}" method="POST" class="bg-canvas-white p-6 md:p-8 rounded-btn-card border border-soft-divider shadow-sm" id="bookingForm" onsubmit="disableSubmitButton(this)">
                     @csrf
                     
                     <h3 class="text-xl font-bold text-carbon-black mb-6">Detail Layanan</h3>
@@ -86,6 +86,16 @@
         const total = basePrice * count;
         document.getElementById('estimatedTotal').innerText = 'Rp ' + total.toLocaleString('id-ID');
     }
+    
+    function disableSubmitButton(form) {
+        const btn = form.querySelector('button[type="submit"]');
+        if(btn) {
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.innerHTML = 'Memproses...';
+        }
+    }
+    
     document.addEventListener('DOMContentLoaded', calculateTotal);
 </script>
 @endsection

@@ -52,6 +52,9 @@ class RentalBookingForm
         ])
                     ->default('pending')
                     ->required(),
+                \Filament\Forms\Components\DateTimePicker::make('completed_at')
+                    ->disabled()
+                    ->dehydrated(false),
                 Select::make('payment_status')
                     ->options([
             'unpaid' => 'Unpaid',

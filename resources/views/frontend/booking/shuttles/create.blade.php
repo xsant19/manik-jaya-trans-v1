@@ -12,9 +12,9 @@
         <div class="flex flex-col md:flex-row gap-8">
             <!-- Form Area -->
             <div class="flex-grow">
-                <form action="{{ route('booking.shuttles.store', $shuttle) }}" method="POST" class="bg-canvas-white p-6 md:p-8 rounded-btn-card border border-soft-divider shadow-sm" id="bookingForm">
+                <form action="{{ route('booking.shuttles.store', $shuttle) }}" method="POST" class="bg-canvas-white p-6 md:p-8 rounded-btn-card border border-soft-divider shadow-sm" id="bookingForm" onsubmit="disableSubmitButton(this)">
                     @csrf
-                    
+
                     <h3 class="text-xl font-bold text-carbon-black mb-6">Detail Pemesanan</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -52,14 +52,14 @@
             <div class="w-full md:w-96 flex-shrink-0">
                 <div class="bg-faint-gray p-6 rounded-btn-card border border-soft-divider sticky top-24">
                     <h3 class="text-lg font-bold text-carbon-black mb-4">Ringkasan Shuttle</h3>
-                    
+
                     <div class="flex items-center space-x-4 mb-6 pb-6 border-b border-soft-divider">
                         <div>
                             <div class="font-bold text-carbon-black">{{ $shuttle->route_name }}</div>
                             <div class="text-sm text-storm-gray">Estimasi: {{ $shuttle->estimated_duration ?? '-' }}</div>
                         </div>
                     </div>
-                    
+
                     <ul class="space-y-3 text-sm text-carbon-black mb-6">
                         <li class="flex justify-between">
                             <span class="text-storm-gray">Penyewa</span>
@@ -88,10 +88,20 @@
         const basePrice = parseInt(document.getElementById('basePrice').getAttribute('data-price'));
         let count = parseInt(document.getElementById('passenger_count').value);
         if(isNaN(count) || count < 1) count = 1;
-        
+
         const total = basePrice * count;
         document.getElementById('estimatedTotal').innerText = 'Rp ' + total.toLocaleString('id-ID');
     }
+    
+    function disableSubmitButton(form) {
+        const btn = form.querySelector('button[type="submit"]');
+        if(btn) {
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'cursor-not-allowed');
+            btn.innerHTML = 'Memproses...';
+        }
+    }
+    
     document.addEventListener('DOMContentLoaded', calculateTotal);
 </script>
 @endsection

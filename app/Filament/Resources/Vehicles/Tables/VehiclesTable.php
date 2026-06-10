@@ -29,14 +29,6 @@ class VehiclesTable
                 TextColumn::make('price_half_day')
                     ->numeric()
                     ->sortable(),
-                TextColumn::make('status')
-                    ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'available' => 'success',
-                        'maintenance' => 'warning',
-                        'inactive' => 'danger',
-                        default => 'gray',
-                    }),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -47,12 +39,7 @@ class VehiclesTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                \Filament\Tables\Filters\SelectFilter::make('status')
-                    ->options([
-                        'available' => 'Available',
-                        'maintenance' => 'Maintenance',
-                        'inactive' => 'Inactive',
-                    ]),
+                //
             ])
             ->recordActions([
                 EditAction::make(),

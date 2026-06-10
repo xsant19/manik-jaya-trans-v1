@@ -12,6 +12,8 @@ class ShuttleBooking extends Model
     protected $fillable = [
         'user_id',
         'hotel_shuttle_id',
+        'vehicle_id',
+        'driver_id',
         'booking_code',
         'booking_date',
         'passenger_count',
@@ -20,6 +22,7 @@ class ShuttleBooking extends Model
         'total_price',
         'booking_status',
         'payment_status',
+        'completed_at',
     ];
 
     protected function casts(): array
@@ -28,6 +31,7 @@ class ShuttleBooking extends Model
             'booking_date' => 'date',
             'pickup_time' => 'datetime',
             'total_price' => 'decimal:2',
+            'completed_at' => 'datetime',
         ];
     }
 
@@ -39,6 +43,16 @@ class ShuttleBooking extends Model
     public function hotelShuttle()
     {
         return $this->belongsTo(HotelShuttle::class);
+    }
+
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
+
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class);
     }
 
     public function payment()

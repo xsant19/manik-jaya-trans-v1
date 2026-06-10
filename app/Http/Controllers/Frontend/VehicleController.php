@@ -10,13 +10,12 @@ class VehicleController extends Controller
 {
     public function index()
     {
-        $vehicles = Vehicle::where('status', 'available')->get();
+        $vehicles = Vehicle::all();
         return view('frontend.vehicles.index', compact('vehicles'));
     }
 
     public function show(Vehicle $vehicle)
     {
-        abort_if($vehicle->status !== 'available', 404);
         return view('frontend.vehicles.show', compact('vehicle'));
     }
 }
