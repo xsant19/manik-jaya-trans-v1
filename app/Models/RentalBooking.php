@@ -22,6 +22,7 @@ class RentalBooking extends Model
         'total_price',
         'booking_status',
         'payment_status',
+        'completed_at',
     ];
 
     protected function casts(): array
@@ -30,6 +31,7 @@ class RentalBooking extends Model
             'start_date' => 'date',
             'end_date' => 'date',
             'total_price' => 'decimal:2',
+            'completed_at' => 'datetime',
         ];
     }
 

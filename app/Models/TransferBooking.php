@@ -12,6 +12,8 @@ class TransferBooking extends Model
     protected $fillable = [
         'user_id',
         'airport_transfer_id',
+        'vehicle_id',
+        'driver_id',
         'booking_code',
         'booking_date',
         'passenger_count',
@@ -21,6 +23,7 @@ class TransferBooking extends Model
         'total_price',
         'booking_status',
         'payment_status',
+        'completed_at',
     ];
 
     protected function casts(): array
@@ -29,6 +32,7 @@ class TransferBooking extends Model
             'booking_date' => 'date',
             'pickup_time' => 'datetime',
             'total_price' => 'decimal:2',
+            'completed_at' => 'datetime',
         ];
     }
 
@@ -40,6 +44,16 @@ class TransferBooking extends Model
     public function airportTransfer()
     {
         return $this->belongsTo(AirportTransfer::class);
+    }
+
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
+
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class);
     }
 
     public function payment()

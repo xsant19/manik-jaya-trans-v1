@@ -20,7 +20,6 @@ class VehicleSeeder extends Seeder
                 'price_full_day' => 1200000,
                 'price_half_day' => 800000,
                 'description' => 'Minibus nyaman dengan kapasitas hingga 14 penumpang, cocok untuk rombongan wisata menengah.',
-                'status' => 'available',
             ],
             [
                 'name' => 'Toyota Innova Zenix Hybrid',
@@ -29,7 +28,6 @@ class VehicleSeeder extends Seeder
                 'price_full_day' => 1000000,
                 'price_half_day' => 650000,
                 'description' => 'Mobil keluarga premium yang sangat nyaman dan tangguh, irit bahan bakar dengan teknologi hybrid.',
-                'status' => 'available',
             ],
             [
                 'name' => 'Isuzu Elf Long',
@@ -38,7 +36,6 @@ class VehicleSeeder extends Seeder
                 'price_full_day' => 1500000,
                 'price_half_day' => 1000000,
                 'description' => 'Kapasitas lebih besar untuk rombongan wisata. AC dingin dan kursi yang nyaman.',
-                'status' => 'maintenance',
             ],
             [
                 'name' => 'Toyota Avanza',
@@ -47,7 +44,6 @@ class VehicleSeeder extends Seeder
                 'price_full_day' => 500000,
                 'price_half_day' => 350000,
                 'description' => 'Pilihan ekonomis untuk perjalanan keluarga kecil. Sangat praktis untuk di Bali.',
-                'status' => 'available',
             ],
             [
                 'name' => 'Toyota Alphard Transformer',
@@ -56,7 +52,6 @@ class VehicleSeeder extends Seeder
                 'price_full_day' => 2500000,
                 'price_half_day' => 1500000,
                 'description' => 'Kendaraan mewah untuk perjalanan VIP atau bisnis. Ekstra nyaman dengan captain seat.',
-                'status' => 'available',
             ],
         ];
 

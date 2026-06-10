@@ -22,19 +22,19 @@ class RentalBookingController extends Controller
 
     public function create(Vehicle $vehicle)
     {
-        abort_if($vehicle->status !== 'available', 404);
-
         return view('frontend.booking.rental.create', compact('vehicle'));
     }
 
     public function store(StoreRentalBookingRequest $request, Vehicle $vehicle)
     {
-        abort_if($vehicle->status !== 'available', 404);
-
         $validated = $request->validated();
 
         $startDate = Carbon::parse($validated['start_date']);
         $endDate = isset($validated['end_date']) ? Carbon::parse($validated['end_date']) : $startDate->copy();
+
+        if (!$vehicle->isAvailableForDateRange($startDate, $endDate)) {
+            return back()->withErrors(['start_date' => 'Kendaraan tidak tersedia untuk tanggal tersebut.'])->withInput();
+        }
 
         if ($validated['rental_type'] === 'half_day') {
             $totalPrice = $vehicle->price_half_day;

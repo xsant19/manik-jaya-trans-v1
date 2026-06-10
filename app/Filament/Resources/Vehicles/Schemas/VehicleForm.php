@@ -36,10 +36,6 @@ class VehicleForm
                     ->maxFiles(3)
                     ->reorderable()
                     ->helperText('Upload hingga 3 gambar kendaraan. Gambar pertama akan menjadi gambar utama.'),
-                Select::make('status')
-                    ->options(['available' => 'Available', 'maintenance' => 'Maintenance', 'inactive' => 'Inactive'])
-                    ->default('available')
-                    ->required(),
             ]);
     }
 }

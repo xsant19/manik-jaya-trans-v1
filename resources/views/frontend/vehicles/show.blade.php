@@ -115,12 +115,6 @@
                         <span class="inline-flex items-center gap-1 rounded-btn bg-carbon-black px-3 py-1 text-xs font-semibold text-canvas-white">
                             {{ $vehicle->type }}
                         </span>
-                        @if($vehicle->status === 'available')
-                            <span class="inline-flex items-center gap-1.5 rounded-btn bg-faint-gray px-3 py-1 text-xs font-medium text-storm-gray">
-                                <span class="size-2 rounded-full bg-green-500 inline-block"></span>
-                                Tersedia
-                            </span>
-                        @endif
                     </div>
 
                     <h1 class="mb-4 text-3xl font-bold leading-tight tracking-tight text-carbon-black md:text-4xl">

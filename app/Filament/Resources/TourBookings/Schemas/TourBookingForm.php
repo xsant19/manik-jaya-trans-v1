@@ -20,6 +20,14 @@ class TourBookingForm
                 Select::make('tour_package_id')
                     ->relationship('tourPackage', 'name')
                     ->required(),
+                Select::make('vehicle_id')
+                    ->relationship('vehicle', 'name')
+                    ->searchable()
+                    ->preload(),
+                Select::make('driver_id')
+                    ->relationship('driver', 'name')
+                    ->searchable()
+                    ->preload(),
                 TextInput::make('booking_code')
                     ->required()
                     ->disabled()
@@ -47,6 +55,9 @@ class TourBookingForm
         ])
                     ->default('pending')
                     ->required(),
+                \Filament\Forms\Components\DateTimePicker::make('completed_at')
+                    ->disabled()
+                    ->dehydrated(false),
                 Select::make('payment_status')
                     ->options([
             'unpaid' => 'Unpaid',
