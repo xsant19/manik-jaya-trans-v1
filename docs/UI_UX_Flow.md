@@ -317,13 +317,11 @@ Membuka detail
 ↓
 Klik Booking
 ↓
-Pilih full day atau half day
+Pilih full day (12 jam) atau half day (6 jam)
 ↓
 Isi tanggal mulai
 ↓
 Isi tanggal selesai jika perlu
-↓
-Pilih driver opsional
 ↓
 Isi lokasi jemput
 ↓
@@ -337,9 +335,11 @@ Booking dibuat
 ```
 
 UX:
-- Jika half day, end_date boleh tidak ditonjolkan.
-- Total harga harus terlihat.
+- **Full day**: Sewa 12 jam dengan harga price_full_day.
+- **Half day**: Sewa 6 jam dengan harga price_half_day.
+- Total harga harus terlihat sebelum submit.
 - Kendaraan maintenance tidak bisa dibooking.
+- Driver TIDAK dipilih customer (ditugaskan admin setelah approved).
 
 ## 11. Flow Booking Airport Transfer
 

@@ -28,7 +28,7 @@
 
 **Manik Jaya Trans** adalah sistem informasi travel berbasis web yang menyediakan berbagai layanan transportasi di Bali:
 
-- 🚘 **Sewa Kendaraan** - Full day / Half day rental dengan driver
+- 🚘 **Sewa Kendaraan** - Full day (12 jam) / Half day (6 jam) rental dengan driver
 - 🏝️ **Paket Wisata** - Tour packages ke destinasi populer Bali
 - ✈️ **Airport Transfer** - Antar-jemput bandara
 - 🏨 **Hotel Shuttle** - Shuttle dari/ke hotel

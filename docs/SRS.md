@@ -343,8 +343,8 @@ Aturan:
 
 Behavior:
 - total_price dihitung backend.
-- full_day memakai price_full_day.
-- half_day memakai price_half_day.
+- full_day (12 jam sewa) memakai price_full_day.
+- half_day (6 jam sewa) memakai price_half_day.
 - booking_code dibuat otomatis.
 - booking_status default pending.
 - payment_status default unpaid.

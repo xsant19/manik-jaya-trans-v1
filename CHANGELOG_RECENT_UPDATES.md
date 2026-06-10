@@ -99,8 +99,8 @@ Penyederhanaan UI card booking pada halaman detail layanan untuk konsistensi dan
 <!-- Simple summary card with direct CTA -->
 <div class="booking-summary-card">
     <h3>Harga Sewa</h3>
-    <p>Full Day: Rp {{ number_format($vehicle->price_full_day) }}</p>
-    <p>Half Day: Rp {{ number_format($vehicle->price_half_day) }}</p>
+    <p>Full Day (12 jam): Rp {{ number_format($vehicle->price_full_day) }}</p>
+    <p>Half Day (6 jam): Rp {{ number_format($vehicle->price_half_day) }}</p>
     
     <div class="features">
         <p>✓ Kapasitas: {{ $vehicle->capacity }} orang</p>

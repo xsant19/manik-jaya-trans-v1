@@ -674,7 +674,7 @@ Tanggung jawab:
 ### BookingService
 
 Tanggung jawab:
-- Hitung total harga.
+- Hitung total harga berdasarkan rental_type (full_day = 12 jam, half_day = 6 jam).
 - Simpan booking.
 - Set status awal.
 - Trigger email.

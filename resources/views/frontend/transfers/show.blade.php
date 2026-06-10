@@ -169,4 +169,131 @@
         </div>
     </x-page-container>
 </div>
+
+{{-- Syarat & Ketentuan Layanan --}}
+<div class="border-t border-soft-divider bg-faint-gray py-16">
+    <x-page-container>
+        <div class="mx-auto max-w-4xl">
+            <h2 class="mb-8 text-center text-3xl font-bold text-carbon-black">Syarat & Ketentuan Layanan</h2>
+            
+            <div class="space-y-6">
+                {{-- Mata Uang --}}
+                <div class="rounded-card border border-soft-divider bg-canvas-white p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-carbon-black">
+                            <svg class="size-5 text-canvas-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="mb-2 text-lg font-semibold text-carbon-black">Mata Uang</h3>
+                            <p class="text-sm leading-relaxed text-storm-gray">Semua harga yang tertera dan ditawarkan menggunakan mata uang <strong class="text-carbon-black">Rupiah (IDR)</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Fasilitas Include --}}
+                <div class="rounded-card border border-soft-divider bg-canvas-white p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-carbon-black">
+                            <svg class="size-5 text-canvas-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="mb-2 text-lg font-semibold text-carbon-black">Fasilitas yang Termasuk</h3>
+                            <p class="mb-3 text-sm leading-relaxed text-storm-gray">Harga sudah termasuk:</p>
+                            <ul class="space-y-2 text-sm text-storm-gray">
+                                <li class="flex items-start gap-2">
+                                    <svg class="mt-0.5 size-4 shrink-0 text-carbon-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                    <span>Bensin (Bahan Bakar)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="mt-0.5 size-4 shrink-0 text-carbon-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                    <span>Biaya Parkir</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="mt-0.5 size-4 shrink-0 text-carbon-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                    <span>Biaya Jalan Tol</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Kebutuhan Penjemputan --}}
+                <div class="rounded-card border border-soft-divider bg-canvas-white p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-carbon-black">
+                            <svg class="size-5 text-canvas-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="mb-2 text-lg font-semibold text-carbon-black">Kebutuhan Penjemputan di Bandara</h3>
+                            <p class="text-sm leading-relaxed text-storm-gray">Untuk layanan penjemputan di Bandara, mohon siapkan:</p>
+                            <ul class="mt-3 space-y-2 text-sm text-storm-gray">
+                                <li class="flex items-start gap-2">
+                                    <svg class="mt-0.5 size-4 shrink-0 text-carbon-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                    <span><strong class="text-carbon-black">Nomor Penerbangan</strong> (Flight Number)</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="mt-0.5 size-4 shrink-0 text-carbon-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="20 6 9 17 4 12"/>
+                                    </svg>
+                                    <span><strong class="text-carbon-black">Nama Lengkap</strong> untuk pembuatan papan nama penjemputan (Signboard)</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Kebijakan Pembatalan --}}
+                <div class="grid gap-6 md:grid-cols-2">
+                    {{-- Pembatalan < 24 Jam --}}
+                    <div class="rounded-card border border-soft-divider bg-canvas-white p-6">
+                        <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-carbon-black">
+                            <svg class="size-5 text-canvas-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>
+                            </svg>
+                        </div>
+                        <h3 class="mb-2 text-lg font-semibold text-carbon-black">Pembatalan &lt; 24 Jam</h3>
+                        <p class="text-sm leading-relaxed text-storm-gray">Pesanan yang dibatalkan <strong class="text-carbon-black">kurang dari 24 jam</strong> sebelum jadwal tidak dapat dikembalikan (<strong class="text-carbon-black">non-refundable</strong>).</p>
+                    </div>
+
+                    {{-- Pembatalan > 24 Jam --}}
+                    <div class="rounded-card border border-soft-divider bg-canvas-white p-6">
+                        <div class="mb-4 flex size-10 items-center justify-center rounded-full bg-carbon-black">
+                            <svg class="size-5 text-canvas-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        <h3 class="mb-2 text-lg font-semibold text-carbon-black">Pembatalan &gt; 24 Jam</h3>
+                        <p class="text-sm leading-relaxed text-storm-gray">Pesanan yang dibatalkan <strong class="text-carbon-black">lebih dari 24 jam</strong> sebelum jadwal dapat dikembalikan (<strong class="text-carbon-black">refundable</strong>).</p>
+                    </div>
+                </div>
+
+                {{-- Important Notice --}}
+                <div class="rounded-card border-l-4 border-carbon-black bg-faint-gray p-5">
+                    <div class="flex items-start gap-3">
+                        <svg class="mt-0.5 size-5 shrink-0 text-carbon-black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+                        </svg>
+                        <div class="text-sm leading-relaxed text-storm-gray">
+                            <strong class="text-carbon-black">Catatan Penting:</strong> Dengan melakukan pemesanan, Anda dianggap telah membaca, memahami, dan menyetujui seluruh syarat dan ketentuan layanan kami. Untuk pertanyaan lebih lanjut, hubungi kami via WhatsApp.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </x-page-container>
+</div>
 @endsection
