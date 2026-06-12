@@ -10,6 +10,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Get;
 
 class TransferBookingForm
 {
@@ -58,7 +59,7 @@ class TransferBookingForm
                             ->relationship(
                                 'vehicle',
                                 'name',
-                                fn ($query, \Filament\Forms\Get $get) => $query->whereHas('inventories', function ($q) use ($get) {
+                                fn ($query, Get $get) => $query->whereHas('inventories', function ($q) use ($get) {
                                     $bookingDate = $get('booking_date');
                                     if ($bookingDate) {
                                         $q->whereDate('date', $bookingDate)->where('stock', '>', 0);

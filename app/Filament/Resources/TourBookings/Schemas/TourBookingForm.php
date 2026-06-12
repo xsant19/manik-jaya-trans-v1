@@ -9,6 +9,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Get;
 
 class TourBookingForm
 {
@@ -55,7 +56,7 @@ class TourBookingForm
                             ->relationship(
                                 'vehicle',
                                 'name',
-                                fn ($query, \Filament\Forms\Get $get) => $query->whereHas('inventories', function ($q) use ($get) {
+                                fn ($query, Get $get) => $query->whereHas('inventories', function ($q) use ($get) {
                                     $bookingDate = $get('booking_date');
                                     if ($bookingDate) {
                                         $q->whereDate('date', $bookingDate)->where('stock', '>', 0);
