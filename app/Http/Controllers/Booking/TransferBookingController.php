@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Booking;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTransferBookingRequest;
+use App\Mail\BookingCreatedMail;
 use App\Models\AirportTransfer;
 use App\Models\TransferBooking;
 use App\Services\BookingCodeService;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class TransferBookingController extends Controller
 {
@@ -51,17 +53,9 @@ class TransferBookingController extends Controller
 
         // Send email to customer
         try {
-            \Illuminate\Support\Facades\Mail::to(auth()->user()->email)->send(new \App\Mail\BookingCreatedMail($transferBooking));
+            Mail::to(auth()->user()->email)->send(new BookingCreatedMail($transferBooking));
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Failed to send customer email: ' . $e->getMessage());
-        }
-
-        // Send notification to admin/company
-        try {
-            $adminEmail = config('mail.admin_email', env('MAIL_ADMIN_ADDRESS', 'manikjayatrans@gmail.com'));
-            \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\AdminBookingNotification($transferBooking, 'transfer'));
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Failed to send admin notification email: ' . $e->getMessage());
+            Log::error('Failed to send email: '.$e->getMessage());
         }
 
         return redirect()->route('customer.transfers.show', $transferBooking)->with('success', 'Booking Airport Transfer berhasil dibuat!');

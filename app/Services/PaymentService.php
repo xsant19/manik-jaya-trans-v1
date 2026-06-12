@@ -3,9 +3,11 @@
 namespace App\Services;
 
 use App\Models\Payment;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Exception;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class PaymentService
 {
@@ -16,17 +18,17 @@ class PaymentService
     {
         // 1. Check if booking belongs to current user
         if ($booking->user_id != auth()->id()) {
-            throw new Exception("Unauthorized access to booking.");
+            throw new Exception('Unauthorized access to booking.');
         }
 
         // 2. Check if booking is canceled
         if ($booking->booking_status === 'canceled') {
-            throw new Exception("Cannot pay for a canceled booking.");
+            throw new Exception('Cannot pay for a canceled booking.');
         }
 
         // 3. Check if booking is already paid
         if ($booking->payment_status === 'paid') {
-            throw new Exception("This booking is already paid.");
+            throw new Exception('This booking is already paid.');
         }
 
         // 4. Check if there's already a pending payment with a valid snap URL
@@ -35,17 +37,17 @@ class PaymentService
             ->whereIn('status', ['pending'])
             ->first();
 
-        if ($existingPayment && !empty($existingPayment->raw_response['redirect_url'] ?? null)) {
+        if ($existingPayment && ! empty($existingPayment->raw_response['redirect_url'] ?? null)) {
             return $existingPayment->raw_response['redirect_url'];
         }
 
         // Configure Midtrans
-        \Midtrans\Config::$serverKey = config('midtrans.server_key');
-        \Midtrans\Config::$isProduction = config('midtrans.is_production');
-        \Midtrans\Config::$isSanitized = config('midtrans.is_sanitized');
-        \Midtrans\Config::$is3ds = config('midtrans.is_3ds');
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
+        Config::$isSanitized = config('midtrans.is_sanitized');
+        Config::$is3ds = config('midtrans.is_3ds');
 
-        $transactionId = 'TRX-' . time() . '-' . strtoupper(Str::random(5));
+        $transactionId = 'TRX-'.time().'-'.strtoupper(Str::random(5));
         $grossAmount = (int) $booking->total_price;
 
         $appUrl = config('app.url');
@@ -61,15 +63,15 @@ class PaymentService
                 'phone' => auth()->user()->phone ?? '',
             ],
             'callbacks' => [
-                'finish' => $appUrl . '/customer/dashboard'
-            ]
+                'finish' => $appUrl.'/customer/dashboard',
+            ],
         ];
 
         try {
-            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            $snapToken = Snap::getSnapToken($params);
             // Midtrans PHP library actually doesn't return redirect_url from getSnapToken by default,
             // we should use createTransaction() to get redirect_url
-            $snapTransaction = \Midtrans\Snap::createTransaction($params);
+            $snapTransaction = Snap::createTransaction($params);
 
             $redirectUrl = $snapTransaction->redirect_url;
 
@@ -93,8 +95,7 @@ class PaymentService
             return $redirectUrl;
 
         } catch (Exception $e) {
-            throw new Exception("Midtrans Error: " . $e->getMessage());
+            throw new Exception('Midtrans Error: '.$e->getMessage());
         }
     }
 }
-

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Carbon\Carbon;
 
 class VehicleInventory extends Model
 {
@@ -57,6 +56,7 @@ class VehicleInventory extends Model
     public function getAvailableStock(): int
     {
         $activeBookings = $this->vehicle->countPaidBookingsOnDate($this->date);
+
         return max(0, $this->stock - $activeBookings);
     }
 

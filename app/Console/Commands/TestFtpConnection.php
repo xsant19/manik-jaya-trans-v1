@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
-use Exception;
 
 class TestFtpConnection extends Command
 {
@@ -29,9 +29,9 @@ class TestFtpConnection extends Command
     {
         $diskName = $this->argument('disk');
 
-        $this->info("╔══════════════════════════════════════╗");
-        $this->info("║   FTP Connection Test - Laravel      ║");
-        $this->info("╚══════════════════════════════════════╝");
+        $this->info('╔══════════════════════════════════════╗');
+        $this->info('║   FTP Connection Test - Laravel      ║');
+        $this->info('╚══════════════════════════════════════╝');
         $this->newLine();
 
         $this->info("Testing FTP disk: {$diskName}");
@@ -59,15 +59,15 @@ class TestFtpConnection extends Command
             $this->line('2. Testing directory listing...');
             $files = $disk->files('/');
             $this->info('   ✓ Directory listing successful');
-            $this->line('   Files found: ' . count($files));
+            $this->line('   Files found: '.count($files));
 
             // 3. Test Write
             $this->line('3. Testing file upload...');
-            $testFile = 'ftp_test_' . time() . '.txt';
-            $testContent = 'Test content from Laravel FTP Test Command - ' . now()->toDateTimeString();
+            $testFile = 'ftp_test_'.time().'.txt';
+            $testContent = 'Test content from Laravel FTP Test Command - '.now()->toDateTimeString();
 
             $disk->put($testFile, $testContent);
-            $this->info('   ✓ File uploaded successfully: ' . $testFile);
+            $this->info('   ✓ File uploaded successfully: '.$testFile);
 
             // 4. Test Read
             $this->line('4. Testing file read...');
@@ -90,18 +90,18 @@ class TestFtpConnection extends Command
             // 6. Test URL
             $this->line('6. Testing file URL generation...');
             $url = $disk->url($testFile);
-            $this->info('   ✓ File URL: ' . $url);
+            $this->info('   ✓ File URL: '.$url);
 
             // 7. Test Size
             $this->line('7. Testing file size...');
             $size = $disk->size($testFile);
-            $this->info('   ✓ File size: ' . $size . ' bytes');
+            $this->info('   ✓ File size: '.$size.' bytes');
 
             // 8. Test Delete
             $this->line('8. Testing file deletion...');
             $disk->delete($testFile);
 
-            if (!$disk->exists($testFile)) {
+            if (! $disk->exists($testFile)) {
                 $this->info('   ✓ File deleted successfully');
             } else {
                 $this->warn('   ⚠ File deletion failed');
@@ -124,7 +124,7 @@ class TestFtpConnection extends Command
             $this->error('║   ✗ FTP Test Failed!                ║');
             $this->error('╚══════════════════════════════════════╝');
             $this->newLine();
-            $this->error('Error: ' . $e->getMessage());
+            $this->error('Error: '.$e->getMessage());
             $this->newLine();
 
             // Troubleshooting hints

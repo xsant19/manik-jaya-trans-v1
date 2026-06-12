@@ -3,20 +3,25 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\RentalBooking;
+use App\Models\ShuttleBooking;
+use App\Models\TourBooking;
+use App\Models\TransferBooking;
+use App\Services\PaymentService;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function store(Request $request, $type, $bookingCode, \App\Services\PaymentService $paymentService)
+    public function store(Request $request, $type, $bookingCode, PaymentService $paymentService)
     {
         $models = [
-            'rental' => \App\Models\RentalBooking::class,
-            'tour' => \App\Models\TourBooking::class,
-            'transfer' => \App\Models\TransferBooking::class,
-            'shuttle' => \App\Models\ShuttleBooking::class,
+            'rental' => RentalBooking::class,
+            'tour' => TourBooking::class,
+            'transfer' => TransferBooking::class,
+            'shuttle' => ShuttleBooking::class,
         ];
 
-        if (!array_key_exists($type, $models)) {
+        if (! array_key_exists($type, $models)) {
             abort(404);
         }
 
@@ -25,6 +30,7 @@ class PaymentController extends Controller
 
         try {
             $redirectUrl = $paymentService->createPaymentForBooking($booking);
+
             return redirect($redirectUrl);
         } catch (\Exception $e) {
             return redirect()->back()

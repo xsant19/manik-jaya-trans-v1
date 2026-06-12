@@ -2,34 +2,37 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Payment;
-use App\Filament\Widgets\LaporanKeuanganStatsWidget;
 use BackedEnum;
-use Carbon\Carbon;
-use Filament\Pages\Page;
-use Filament\Support\Icons\Heroicon;
-use UnitEnum;
-
-// Import yang dibutuhkan untuk Form Schema
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Actions;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\ToggleButtons;
-use Filament\Actions\Action;
+// Import yang dibutuhkan untuk Form Schema
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Pages\Page;
+use Filament\Schemas\Components\Callout;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Text;
+use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\HtmlString;
+use UnitEnum;
 
 class LaporanKeuangan extends Page implements HasForms
 {
     use InteractsWithForms;
 
     protected static ?string $title = 'Laporan Keuangan';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentChartBar;
+
     protected static ?string $navigationLabel = 'Laporan Keuangan';
+
     protected static string|UnitEnum|null $navigationGroup = 'Keuangan';
+
     protected static ?int $navigationSort = 2;
+
     protected string $view = 'filament.pages.laporan-keuangan';
 
     public function getBreadcrumbs(): array
@@ -41,14 +44,14 @@ class LaporanKeuangan extends Page implements HasForms
     }
 
     // Standar Filament: Gunakan array untuk menyimpan state form
-    public ?array $data = []; 
+    public ?array $data = [];
 
     public function mount(): void
     {
         // Mengisi nilai default form saat halaman dimuat
         $this->form->fill([
             'from' => now()->startOfMonth()->toDateString(),
-            'to'   => now()->toDateString(),
+            'to' => now()->toDateString(),
             'preset' => 'this_month',
         ]);
     }
@@ -65,19 +68,19 @@ class LaporanKeuangan extends Page implements HasForms
                             'default' => 1, // Layar HP (vertikal)
                             'md' => 2,      // Layar PC/Tablet (sejajar)
                         ])
-                        ->schema([
-                            DatePicker::make('from')
-                                ->label('Dari Tanggal')
-                                ->required()
-                                ->live() // Otomatis trigger update saat diubah
-                                ->afterStateUpdated(fn (callable $set) => $set('preset', null)),
+                            ->schema([
+                                DatePicker::make('from')
+                                    ->label('Dari Tanggal')
+                                    ->required()
+                                    ->live() // Otomatis trigger update saat diubah
+                                    ->afterStateUpdated(fn (callable $set) => $set('preset', null)),
 
-                            DatePicker::make('to')
-                                ->label('Sampai Tanggal')
-                                ->required()
-                                ->live()
-                                ->afterStateUpdated(fn (callable $set) => $set('preset', null)),
-                        ]),
+                                DatePicker::make('to')
+                                    ->label('Sampai Tanggal')
+                                    ->required()
+                                    ->live()
+                                    ->afterStateUpdated(fn (callable $set) => $set('preset', null)),
+                            ]),
 
                         // TOMBOL QUICK PRESETS MENGGUNAKAN TOGGLE BUTTONS
                         ToggleButtons::make('preset')
@@ -115,8 +118,8 @@ class LaporanKeuangan extends Page implements HasForms
                 ->color('danger')
                 ->url(fn () => route('documents.laporan-keuangan', [
                     // Ambil nilai dari properti $data form
-                    'from' => $this->data['from'] ?? null, 
-                    'to' => $this->data['to'] ?? null
+                    'from' => $this->data['from'] ?? null,
+                    'to' => $this->data['to'] ?? null,
                 ]))
                 ->openUrlInNewTab(),
 
@@ -125,22 +128,22 @@ class LaporanKeuangan extends Page implements HasForms
                 ->icon(Heroicon::OutlinedTableCells)
                 ->color('success')
                 ->url(fn () => route('documents.laporan-keuangan-excel', [
-                    'from' => $this->data['from'] ?? null, 
-                    'to' => $this->data['to'] ?? null
+                    'from' => $this->data['from'] ?? null,
+                    'to' => $this->data['to'] ?? null,
                 ]))
                 ->openUrlInNewTab(),
         ];
     }
 
     // Fungsi panduanSchema tetap sama seperti sebelumnya
-    public function panduanSchema(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
+    public function panduanSchema(Schema $schema): Schema
     {
         return $schema->schema([
-            \Filament\Schemas\Components\Section::make('Cara Menggunakan Laporan Keuangan')
+            Section::make('Cara Menggunakan Laporan Keuangan')
                 ->description('Ikuti langkah-langkah berikut untuk mengunduh laporan transaksi.')
                 ->schema([
                     // ... (Kode HTML Panduan Anda tidak saya ubah sama sekali) ...
-                    \Filament\Schemas\Components\Text::make(new \Illuminate\Support\HtmlString('
+                    Text::make(new HtmlString('
                         <div class="flex flex-col gap-5">
                             <div>
                                 <p class="text-sm font-semibold text-gray-900 dark:text-white mb-1">1. Tentukan Rentang Tanggal</p>
@@ -160,10 +163,10 @@ class LaporanKeuangan extends Page implements HasForms
                             </div>
                         </div>
                     ')),
-                    \Filament\Schemas\Components\Callout::make('Catatan Penting')
+                    Callout::make('Catatan Penting')
                         ->color('warning')
-                        ->description(new \Illuminate\Support\HtmlString('Laporan ini hanya mencakup transaksi berstatus <strong>Lunas (paid)</strong>. Transaksi berstatus pending, gagal, atau kedaluwarsa tidak diikutsertakan dalam perhitungan laporan.'))
-                ])
+                        ->description(new HtmlString('Laporan ini hanya mencakup transaksi berstatus <strong>Lunas (paid)</strong>. Transaksi berstatus pending, gagal, atau kedaluwarsa tidak diikutsertakan dalam perhitungan laporan.')),
+                ]),
         ]);
     }
 }

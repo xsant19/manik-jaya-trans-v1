@@ -3,13 +3,14 @@
 namespace App\Filament\Resources\ShuttleBookings\Pages;
 
 use App\Filament\Resources\ShuttleBookings\ShuttleBookingResource;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateShuttleBooking extends CreateRecord
 {
     protected static string $resource = ShuttleBookingResource::class;
 
-    protected function getCreateFormAction(): \Filament\Actions\Action
+    protected function getCreateFormAction(): Action
     {
         return parent::getCreateFormAction()
             ->submit(null)

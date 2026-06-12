@@ -2,6 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\Payment;
+use App\Models\RentalBooking;
+use App\Models\ShuttleBooking;
+use App\Models\TourBooking;
+use App\Models\TransferBooking;
+use App\Observers\BookingObserver;
+use App\Observers\BookingStockObserver;
+use App\Observers\PaymentObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,17 +28,17 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Existing booking observer for email notifications
-        \App\Models\RentalBooking::observe(\App\Observers\BookingObserver::class);
-        \App\Models\TourBooking::observe(\App\Observers\BookingObserver::class);
-        \App\Models\TransferBooking::observe(\App\Observers\BookingObserver::class);
-        \App\Models\ShuttleBooking::observe(\App\Observers\BookingObserver::class);
+        RentalBooking::observe(BookingObserver::class);
+        TourBooking::observe(BookingObserver::class);
+        TransferBooking::observe(BookingObserver::class);
+        ShuttleBooking::observe(BookingObserver::class);
 
         // NEW: Stock management observers
-        \App\Models\Payment::observe(\App\Observers\PaymentObserver::class);
+        Payment::observe(PaymentObserver::class);
 
-        \App\Models\RentalBooking::observe(\App\Observers\BookingStockObserver::class);
-        \App\Models\TourBooking::observe(\App\Observers\BookingStockObserver::class);
-        \App\Models\TransferBooking::observe(\App\Observers\BookingStockObserver::class);
-        \App\Models\ShuttleBooking::observe(\App\Observers\BookingStockObserver::class);
+        RentalBooking::observe(BookingStockObserver::class);
+        TourBooking::observe(BookingStockObserver::class);
+        TransferBooking::observe(BookingStockObserver::class);
+        ShuttleBooking::observe(BookingStockObserver::class);
     }
 }

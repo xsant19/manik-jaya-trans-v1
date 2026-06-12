@@ -3,13 +3,14 @@
 namespace App\Filament\Resources\TourBookings\Pages;
 
 use App\Filament\Resources\TourBookings\TourBookingResource;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateTourBooking extends CreateRecord
 {
     protected static string $resource = TourBookingResource::class;
 
-    protected function getCreateFormAction(): \Filament\Actions\Action
+    protected function getCreateFormAction(): Action
     {
         return parent::getCreateFormAction()
             ->submit(null)

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('vehicle_inventories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('vehicle_id')
-                  ->constrained('vehicles')
-                  ->onDelete('cascade');
+                ->constrained('vehicles')
+                ->onDelete('cascade');
             $table->date('date');
             $table->integer('stock')->default(1);
             $table->timestamps();

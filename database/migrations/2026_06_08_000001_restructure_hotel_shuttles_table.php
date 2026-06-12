@@ -12,9 +12,10 @@ return new class extends Migration
             // Hapus kolom hotel_name yang tidak relevan
             // Kita bungkus try-catch jika ada index sebelumnya
             try {
-                $table->dropIndex(['hotel_name']); 
-            } catch (\Exception $e) {}
-            
+                $table->dropIndex(['hotel_name']);
+            } catch (Exception $e) {
+            }
+
             $table->dropColumn('hotel_name');
 
             // Tambah route_name seperti airport_transfers

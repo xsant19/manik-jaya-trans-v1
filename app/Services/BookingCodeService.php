@@ -10,10 +10,9 @@ class BookingCodeService
     /**
      * Generate a unique booking code.
      *
-     * @param string $prefix Prefix for the booking type (e.g., RNT, TOUR, TRF, SHT)
-     * @param string $modelClass The fully qualified class name of the Eloquent Model
-     * @param string $column The column name where the booking code is stored
-     * @return string
+     * @param  string  $prefix  Prefix for the booking type (e.g., RNT, TOUR, TRF, SHT)
+     * @param  string  $modelClass  The fully qualified class name of the Eloquent Model
+     * @param  string  $column  The column name where the booking code is stored
      */
     public function generate(string $prefix, string $modelClass, string $column = 'booking_code'): string
     {
@@ -21,7 +20,7 @@ class BookingCodeService
         $baseFormat = "{$prefix}-{$dateStr}-";
 
         // Cari record terakhir pada hari ini berdasarkan prefix dan tanggal
-        $lastRecord = $modelClass::where($column, 'LIKE', $baseFormat . '%')
+        $lastRecord = $modelClass::where($column, 'LIKE', $baseFormat.'%')
             ->orderBy($column, 'desc')
             ->first();
 
@@ -40,6 +39,6 @@ class BookingCodeService
         // Format angka menjadi 4 digit (e.g., 0001, 0012, 0123)
         $paddedSequence = sprintf('%04d', $sequence);
 
-        return $baseFormat . $paddedSequence;
+        return $baseFormat.$paddedSequence;
     }
 }

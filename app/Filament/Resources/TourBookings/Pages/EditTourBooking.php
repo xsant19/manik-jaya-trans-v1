@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\TourBookings\Pages;
 
 use App\Filament\Resources\TourBookings\TourBookingResource;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
@@ -19,7 +20,7 @@ class EditTourBooking extends EditRecord
         ];
     }
 
-    protected function getSaveFormAction(): \Filament\Actions\Action
+    protected function getSaveFormAction(): Action
     {
         return parent::getSaveFormAction()
             ->submit(null)

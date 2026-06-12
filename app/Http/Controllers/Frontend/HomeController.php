@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\TourPackage;
 use App\Models\Vehicle;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {

@@ -6,13 +6,12 @@ use App\Models\Payment;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
-use Illuminate\Database\Eloquent\Builder;
 
 class RecentBookingsWidget extends TableWidget
 {
     protected static ?int $sort = 5;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     public function table(Table $table): Table
     {
@@ -41,18 +40,18 @@ class RecentBookingsWidget extends TableWidget
                     ->label('Jenis Layanan')
                     ->badge()
                     ->color(fn (string $state): string => match (true) {
-                        str_contains($state, 'RentalBooking')   => 'warning',
-                        str_contains($state, 'TourBooking')     => 'success',
+                        str_contains($state, 'RentalBooking') => 'warning',
+                        str_contains($state, 'TourBooking') => 'success',
                         str_contains($state, 'TransferBooking') => 'info',
-                        str_contains($state, 'ShuttleBooking')  => 'primary',
-                        default                                 => 'gray',
+                        str_contains($state, 'ShuttleBooking') => 'primary',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match (true) {
-                        str_contains($state, 'RentalBooking')   => 'Sewa Kendaraan',
-                        str_contains($state, 'TourBooking')     => 'Paket Wisata',
+                        str_contains($state, 'RentalBooking') => 'Sewa Kendaraan',
+                        str_contains($state, 'TourBooking') => 'Paket Wisata',
                         str_contains($state, 'TransferBooking') => 'Airport Transfer',
-                        str_contains($state, 'ShuttleBooking')  => 'Hotel Shuttle',
-                        default                                 => $state,
+                        str_contains($state, 'ShuttleBooking') => 'Hotel Shuttle',
+                        default => $state,
                     }),
 
                 TextColumn::make('gross_amount')
@@ -64,20 +63,20 @@ class RecentBookingsWidget extends TableWidget
                     ->label('Status Pembayaran')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'pending'  => 'warning',
-                        'paid'     => 'success',
-                        'failed'   => 'danger',
-                        'expired'  => 'gray',
+                        'pending' => 'warning',
+                        'paid' => 'success',
+                        'failed' => 'danger',
+                        'expired' => 'gray',
                         'refunded' => 'info',
-                        default    => 'gray',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'pending'  => 'Menunggu',
-                        'paid'     => 'Lunas',
-                        'failed'   => 'Gagal',
-                        'expired'  => 'Kedaluwarsa',
+                        'pending' => 'Menunggu',
+                        'paid' => 'Lunas',
+                        'failed' => 'Gagal',
+                        'expired' => 'Kedaluwarsa',
                         'refunded' => 'Refund',
-                        default    => $state,
+                        default => $state,
                     }),
 
                 TextColumn::make('created_at')

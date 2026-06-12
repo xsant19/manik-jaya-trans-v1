@@ -2,14 +2,13 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Frontend\CustomerDashboardController;
 use App\Http\Controllers\Frontend\AirportTransferController;
+use App\Http\Controllers\Frontend\CustomerDashboardController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\HotelShuttleController;
 use App\Http\Controllers\Frontend\TourPackageController;
 use App\Http\Controllers\Frontend\VehicleController;
 use Illuminate\Support\Facades\Route;
-use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,21 +44,23 @@ Route::middleware('guest')->group(function () {
 });
 
 use App\Http\Controllers\Booking\RentalBookingController;
+use App\Http\Controllers\Booking\ShuttleBookingController;
 use App\Http\Controllers\Booking\TourBookingController;
 use App\Http\Controllers\Booking\TransferBookingController;
-use App\Http\Controllers\Booking\ShuttleBookingController;
-
 use App\Http\Controllers\Frontend\BookingHistoryController;
 use App\Http\Controllers\Frontend\InvoiceController;
+use App\Http\Controllers\Frontend\PaymentController;
+use App\Http\Controllers\Frontend\ProfileController;
+use App\Http\Controllers\Webhook\MidtransCallbackController;
 
 // Authenticated Routes
 Route::middleware(['auth', 'role:customer'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
     // Profile Routes
-    Route::get('/profile', [\App\Http\Controllers\Frontend\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [\App\Http\Controllers\Frontend\ProfileController::class, 'update'])->name('profile.update');
-    Route::put('/profile/password', [\App\Http\Controllers\Frontend\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 
     // Booking Routes
     Route::get('/booking/vehicles/{vehicle}', [RentalBookingController::class, 'create'])->name('booking.rental.create');
@@ -88,13 +89,13 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
     });
 
     // Payment Route
-    Route::post('/payment/{type}/{booking_code}', [\App\Http\Controllers\Frontend\PaymentController::class, 'store'])->name('payment.store');
+    Route::post('/payment/{type}/{booking_code}', [PaymentController::class, 'store'])->name('payment.store');
 
     // Invoice & Voucher PDF
     Route::get('/customer/my-bookings/{type}/{booking_code}/invoice',
         [InvoiceController::class, 'download']
     )->name('customer.invoice.download')
-     ->where('type', 'rental|tour|transfer|shuttle');
+        ->where('type', 'rental|tour|transfer|shuttle');
 
     Route::get('/customer/my-bookings/rental/{booking_code}/voucher',
         [InvoiceController::class, 'downloadVoucher']
@@ -102,7 +103,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
 });
 
 // Webhook Route
-Route::post('/payments/midtrans/callback', [\App\Http\Controllers\Webhook\MidtransCallbackController::class, 'handle'])->name('midtrans.callback');
+Route::post('/payments/midtrans/callback', [MidtransCallbackController::class, 'handle'])->name('midtrans.callback');
 
 // Dokumen PDF & Excel (Admin)
-require __DIR__ . '/documents.php';
+require __DIR__.'/documents.php';

@@ -2,12 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\AirportTransfer;
-use App\Models\Driver;
-use App\Models\HotelShuttle;
-use App\Models\TourPackage;
-use App\Models\User;
-use App\Models\Vehicle;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 

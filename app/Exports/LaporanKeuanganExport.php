@@ -42,7 +42,7 @@ class LaporanKeuanganExport implements WithMultipleSheets
 //  Sheet 1 — Ringkasan
 // ─────────────────────────────────────────────────────────────────────────────
 
-class RingkasanSheet implements FromCollection, WithTitle, WithHeadings, ShouldAutoSize, WithStyles
+class RingkasanSheet implements FromCollection, ShouldAutoSize, WithHeadings, WithStyles, WithTitle
 {
     public function __construct(
         private $payments,
@@ -62,15 +62,15 @@ class RingkasanSheet implements FromCollection, WithTitle, WithHeadings, ShouldA
 
     public function collection()
     {
-        $totalRevenue      = $this->payments->sum('gross_amount');
+        $totalRevenue = $this->payments->sum('gross_amount');
         $totalTransactions = $this->payments->count();
-        $average           = $totalTransactions > 0 ? $totalRevenue / $totalTransactions : 0;
+        $average = $totalTransactions > 0 ? $totalRevenue / $totalTransactions : 0;
 
         return collect([
-            ['Periode', $this->from->format('d/m/Y') . ' — ' . $this->to->format('d/m/Y')],
-            ['Total Pendapatan', 'Rp ' . number_format($totalRevenue, 0, ',', '.')],
+            ['Periode', $this->from->format('d/m/Y').' — '.$this->to->format('d/m/Y')],
+            ['Total Pendapatan', 'Rp '.number_format($totalRevenue, 0, ',', '.')],
             ['Jumlah Transaksi', $totalTransactions],
-            ['Rata-rata per Transaksi', 'Rp ' . number_format($average, 0, ',', '.')],
+            ['Rata-rata per Transaksi', 'Rp '.number_format($average, 0, ',', '.')],
         ]);
     }
 
@@ -86,7 +86,7 @@ class RingkasanSheet implements FromCollection, WithTitle, WithHeadings, ShouldA
 //  Sheet 2 — Detail Transaksi
 // ─────────────────────────────────────────────────────────────────────────────
 
-class DetailTransaksiSheet implements FromCollection, WithTitle, WithHeadings, WithMapping, ShouldAutoSize, WithStyles
+class DetailTransaksiSheet implements FromCollection, ShouldAutoSize, WithHeadings, WithMapping, WithStyles, WithTitle
 {
     private int $rowNumber = 0;
 
@@ -126,10 +126,10 @@ class DetailTransaksiSheet implements FromCollection, WithTitle, WithHeadings, W
         $this->rowNumber++;
 
         $typeMap = [
-            'App\\Models\\RentalBooking'   => 'Sewa Kendaraan',
-            'App\\Models\\TourBooking'     => 'Paket Wisata',
+            'App\\Models\\RentalBooking' => 'Sewa Kendaraan',
+            'App\\Models\\TourBooking' => 'Paket Wisata',
             'App\\Models\\TransferBooking' => 'Airport Transfer',
-            'App\\Models\\ShuttleBooking'  => 'Hotel Shuttle',
+            'App\\Models\\ShuttleBooking' => 'Hotel Shuttle',
         ];
 
         return [

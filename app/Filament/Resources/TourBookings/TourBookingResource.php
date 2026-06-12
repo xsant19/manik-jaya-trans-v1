@@ -33,6 +33,7 @@ class TourBookingResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         $count = static::getModel()::where('booking_status', 'pending')->count();
+
         return $count > 0 ? (string) $count : null;
     }
 

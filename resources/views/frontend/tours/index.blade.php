@@ -1,10 +1,30 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12 bg-faint-gray border-b border-soft-divider">
+<div class="py-16 bg-faint-gray border-b border-soft-divider">
     <x-page-container>
-        <h1 class="text-4xl font-bold text-carbon-black mb-4">Paket Wisata</h1>
-        <p class="text-storm-gray text-lg max-w-2xl">Jelajahi keindahan Bali dengan paket wisata pilihan kami. Pengalaman tak terlupakan dengan pemandu berpengalaman.</p>
+        <div class="max-w-3xl mx-auto text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-carbon-black mb-6">Paket Wisata</h1>
+            <p class="text-storm-gray text-lg">Jelajahi keindahan Bali dengan paket wisata pilihan kami. Pengalaman tak terlupakan dengan pemandu berpengalaman.</p>
+        </div>
+
+        <div class="max-w-4xl mx-auto">
+            <form action="{{ route('tours.index') }}" method="GET" class="flex flex-col md:flex-row items-center gap-3 bg-canvas-white p-3 rounded-xl border border-soft-divider shadow-sm">
+                <div class="relative flex-grow w-full">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg class="h-6 w-6 text-storm-gray" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau destinasi wisata..." 
+                           class="w-full pl-12 pr-4 py-4 text-lg bg-transparent text-carbon-black focus:outline-none placeholder:text-storm-gray">
+                </div>
+                <button type="submit" class="w-full md:w-auto bg-carbon-black text-canvas-white px-8 py-4 rounded-lg font-bold text-lg hover:opacity-90 transition-opacity flex-shrink-0">
+                    Cari Paket Wisata
+                </button>
+            </form>
+        </div>
     </x-page-container>
 </div>
 

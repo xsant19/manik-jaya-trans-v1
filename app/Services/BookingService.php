@@ -6,9 +6,6 @@ class BookingService
 {
     /**
      * Membuat booking baru.
-     *
-     * @param  array  $data
-     * @return mixed
      */
     public function createBooking(array $data): mixed
     {
@@ -21,9 +18,6 @@ class BookingService
 
     /**
      * Membatalkan booking.
-     *
-     * @param  string  $bookingCode
-     * @return bool
      */
     public function cancelBooking(string $bookingCode): bool
     {
@@ -33,9 +27,6 @@ class BookingService
 
     /**
      * Mengambil detail booking berdasarkan kode.
-     *
-     * @param  string  $bookingCode
-     * @return mixed
      */
     public function findByCode(string $bookingCode): mixed
     {

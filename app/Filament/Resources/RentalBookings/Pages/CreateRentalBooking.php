@@ -3,13 +3,14 @@
 namespace App\Filament\Resources\RentalBookings\Pages;
 
 use App\Filament\Resources\RentalBookings\RentalBookingResource;
+use Filament\Actions\Action;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateRentalBooking extends CreateRecord
 {
     protected static string $resource = RentalBookingResource::class;
 
-    protected function getCreateFormAction(): \Filament\Actions\Action
+    protected function getCreateFormAction(): Action
     {
         return parent::getCreateFormAction()
             ->submit(null)

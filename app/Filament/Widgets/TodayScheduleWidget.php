@@ -6,7 +6,6 @@ use App\Models\RentalBooking;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
 /**
@@ -23,7 +22,7 @@ class TodayScheduleWidget extends TableWidget
 {
     protected static ?int $sort = 4;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     public function table(Table $table): Table
     {
@@ -61,9 +60,9 @@ class TodayScheduleWidget extends TableWidget
                     ->badge()
                     ->color(fn (string $state): string => $state === 'full_day' ? 'info' : 'primary')
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'full_day'  => 'Full Day',
-                        'half_day'  => 'Half Day',
-                        default     => $state,
+                        'full_day' => 'Full Day',
+                        'half_day' => 'Half Day',
+                        default => $state,
                     }),
 
                 TextColumn::make('pickup_location')
@@ -83,20 +82,20 @@ class TodayScheduleWidget extends TableWidget
                     ->label('Status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'pending'   => 'warning',
-                        'approved'  => 'info',
-                        'on_trip'   => 'primary',
+                        'pending' => 'warning',
+                        'approved' => 'info',
+                        'on_trip' => 'primary',
                         'completed' => 'success',
-                        'canceled'  => 'danger',
-                        default     => 'gray',
+                        'canceled' => 'danger',
+                        default => 'gray',
                     })
                     ->formatStateUsing(fn (string $state): string => match ($state) {
-                        'pending'   => 'Menunggu',
-                        'approved'  => 'Disetujui',
-                        'on_trip'   => 'Dalam Perjalanan',
+                        'pending' => 'Menunggu',
+                        'approved' => 'Disetujui',
+                        'on_trip' => 'Dalam Perjalanan',
                         'completed' => 'Selesai',
-                        'canceled'  => 'Dibatalkan',
-                        default     => $state,
+                        'canceled' => 'Dibatalkan',
+                        default => $state,
                     }),
             ])
             ->paginated(false)

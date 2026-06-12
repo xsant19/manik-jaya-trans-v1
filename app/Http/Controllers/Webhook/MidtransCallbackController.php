@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Webhook;
 
 use App\Http\Controllers\Controller;
+use App\Mail\PaymentSuccessMail;
+use App\Models\Payment;
 use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class MidtransCallbackController extends Controller
 {
@@ -22,14 +25,14 @@ class MidtransCallbackController extends Controller
             $signatureKey = $payload['signature_key'] ?? '';
 
             // Validate Signature Key
-            $mySignatureKey = hash("sha512", $orderId . $statusCode . $grossAmount . $serverKey);
+            $mySignatureKey = hash('sha512', $orderId.$statusCode.$grossAmount.$serverKey);
 
             if ($signatureKey !== $mySignatureKey) {
                 throw new Error('Invalid signature');
             }
 
-            $payment = \App\Models\Payment::where('transaction_id', $orderId)->first();
-            if (!$payment) {
+            $payment = Payment::where('transaction_id', $orderId)->first();
+            if (! $payment) {
                 throw new Error('Payment not found');
             }
 
@@ -73,9 +76,9 @@ class MidtransCallbackController extends Controller
 
                 if ($newStatus === 'paid') {
                     try {
-                        \Illuminate\Support\Facades\Mail::to($payment->payable->user->email)->send(new \App\Mail\PaymentSuccessMail($payment->payable));
+                        Mail::to($payment->payable->user->email)->send(new PaymentSuccessMail($payment->payable));
                     } catch (\Exception $e) {
-                        \Illuminate\Support\Facades\Log::error('Failed to send payment success email: ' . $e->getMessage());
+                        Log::error('Failed to send payment success email: '.$e->getMessage());
                     }
                 }
             }

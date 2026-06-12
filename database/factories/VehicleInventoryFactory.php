@@ -4,8 +4,8 @@ namespace Database\Factories;
 
 use App\Models\Vehicle;
 use App\Models\VehicleInventory;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class VehicleInventoryFactory extends Factory
 {

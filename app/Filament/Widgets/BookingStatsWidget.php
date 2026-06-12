@@ -16,34 +16,34 @@ class BookingStatsWidget extends StatsOverviewWidget
 {
     protected static ?int $sort = 1;
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     protected function getStats(): array
     {
         $today = Carbon::today();
         $startOfMonth = Carbon::now()->startOfMonth();
-        $endOfMonth   = Carbon::now()->endOfMonth();
+        $endOfMonth = Carbon::now()->endOfMonth();
 
         // ─── Pemesanan Hari Ini ───────────────────────────────────────────
-        $todayRental   = RentalBooking::whereDate('created_at', $today)->count();
-        $todayTour     = TourBooking::whereDate('created_at', $today)->count();
+        $todayRental = RentalBooking::whereDate('created_at', $today)->count();
+        $todayTour = TourBooking::whereDate('created_at', $today)->count();
         $todayTransfer = TransferBooking::whereDate('created_at', $today)->count();
-        $todayShuttle  = ShuttleBooking::whereDate('created_at', $today)->count();
-        $todayTotal    = $todayRental + $todayTour + $todayTransfer + $todayShuttle;
+        $todayShuttle = ShuttleBooking::whereDate('created_at', $today)->count();
+        $todayTotal = $todayRental + $todayTour + $todayTransfer + $todayShuttle;
 
         // ─── Total Pemesanan Keseluruhan ──────────────────────────────────
-        $allRental   = RentalBooking::count();
-        $allTour     = TourBooking::count();
+        $allRental = RentalBooking::count();
+        $allTour = TourBooking::count();
         $allTransfer = TransferBooking::count();
-        $allShuttle  = ShuttleBooking::count();
-        $allTotal    = $allRental + $allTour + $allTransfer + $allShuttle;
+        $allShuttle = ShuttleBooking::count();
+        $allTotal = $allRental + $allTour + $allTransfer + $allShuttle;
 
         // ─── Pemesanan Pending (menunggu persetujuan) ─────────────────────
-        $pendingRental   = RentalBooking::where('booking_status', 'pending')->count();
-        $pendingTour     = TourBooking::where('booking_status', 'pending')->count();
+        $pendingRental = RentalBooking::where('booking_status', 'pending')->count();
+        $pendingTour = TourBooking::where('booking_status', 'pending')->count();
         $pendingTransfer = TransferBooking::where('booking_status', 'pending')->count();
-        $pendingShuttle  = ShuttleBooking::where('booking_status', 'pending')->count();
-        $pendingTotal    = $pendingRental + $pendingTour + $pendingTransfer + $pendingShuttle;
+        $pendingShuttle = ShuttleBooking::where('booking_status', 'pending')->count();
+        $pendingTotal = $pendingRental + $pendingTour + $pendingTransfer + $pendingShuttle;
 
         // ─── Pendapatan Bulan Ini (dari payment berstatus paid) ───────────
         $revenueThisMonth = Payment::where('status', 'paid')
@@ -80,7 +80,7 @@ class BookingStatsWidget extends StatsOverviewWidget
 
             Stat::make(
                 'Pendapatan Bulan Ini',
-                'Rp ' . number_format((float) $revenueThisMonth, 0, ',', '.')
+                'Rp '.number_format((float) $revenueThisMonth, 0, ',', '.')
             )
                 ->description(Carbon::now()->translatedFormat('F Y'))
                 ->descriptionIcon(Heroicon::OutlinedBanknotes)

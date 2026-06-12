@@ -3,9 +3,10 @@
 namespace App\Filament\Resources\TransferBookings\Schemas;
 
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -60,11 +61,11 @@ class TransferBookingForm
                             ->helperText('Kendaraan penjemputan/pengantaran.'),
                         Select::make('driver_id')
                             ->relationship('driver', 'name', fn ($query) => $query->where('status', '!=', 'inactive'))
-                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->name . ' - ' . ucfirst(str_replace('_', ' ', $record->status)))
+                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->name.' - '.ucfirst(str_replace('_', ' ', $record->status)))
                             ->searchable()
                             ->preload()
                             ->helperText('Supir yang ditugaskan.'),
-                        \Filament\Forms\Components\DateTimePicker::make('completed_at')
+                        DateTimePicker::make('completed_at')
                             ->disabled()
                             ->dehydrated(false),
                     ])->columns(2),

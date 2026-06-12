@@ -13,20 +13,20 @@ return new class extends Migration
     {
         Schema::table('shuttle_bookings', function (Blueprint $table) {
             $table->foreignId('vehicle_id')
-                  ->nullable()
-                  ->after('hotel_shuttle_id')
-                  ->constrained('vehicles')
-                  ->onDelete('set null');
+                ->nullable()
+                ->after('hotel_shuttle_id')
+                ->constrained('vehicles')
+                ->onDelete('set null');
 
             $table->foreignId('driver_id')
-                  ->nullable()
-                  ->after('vehicle_id')
-                  ->constrained('drivers')
-                  ->onDelete('set null');
+                ->nullable()
+                ->after('vehicle_id')
+                ->constrained('drivers')
+                ->onDelete('set null');
 
             $table->timestamp('completed_at')
-                  ->nullable()
-                  ->after('booking_status');
+                ->nullable()
+                ->after('booking_status');
 
             // Indexes
             $table->index('vehicle_id', 'idx_shuttle_vehicle');

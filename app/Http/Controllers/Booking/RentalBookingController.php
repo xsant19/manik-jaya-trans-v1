@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Booking;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRentalBookingRequest;
+use App\Mail\BookingCreatedMail;
 use App\Models\Driver;
 use App\Models\RentalBooking;
 use App\Models\Vehicle;
 use App\Services\BookingCodeService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class RentalBookingController extends Controller
 {
@@ -23,6 +26,7 @@ class RentalBookingController extends Controller
     public function create(Vehicle $vehicle)
     {
         abort_if($vehicle->is_hidden, 404);
+
         return view('frontend.booking.rental.create', compact('vehicle'));
     }
 
@@ -35,7 +39,7 @@ class RentalBookingController extends Controller
         ]);
 
         $startDate = Carbon::parse($request->start_date);
-        
+
         if ($request->rental_type === 'half_day') {
             $endDate = $startDate->copy();
         } else {
@@ -62,7 +66,7 @@ class RentalBookingController extends Controller
         $startDate = Carbon::parse($validated['start_date']);
         $endDate = isset($validated['end_date']) ? Carbon::parse($validated['end_date']) : $startDate->copy();
 
-        if (!$vehicle->isAvailableForDateRange($startDate, $endDate)) {
+        if (! $vehicle->isAvailableForDateRange($startDate, $endDate)) {
             return back()->withErrors(['start_date' => 'Kendaraan tidak tersedia untuk tanggal tersebut.'])->withInput();
         }
 
@@ -94,17 +98,9 @@ class RentalBookingController extends Controller
 
         // Send email to customer
         try {
-            \Illuminate\Support\Facades\Mail::to(auth()->user()->email)->send(new \App\Mail\BookingCreatedMail($rentalBooking));
+            Mail::to(auth()->user()->email)->send(new BookingCreatedMail($rentalBooking));
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Failed to send customer email: ' . $e->getMessage());
-        }
-
-        // Send notification to admin/company
-        try {
-            $adminEmail = config('mail.admin_email', env('MAIL_ADMIN_ADDRESS', 'manikjayatrans@gmail.com'));
-            \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\AdminBookingNotification($rentalBooking, 'rental'));
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Failed to send admin notification email: ' . $e->getMessage());
+            Log::error('Failed to send email: '.$e->getMessage());
         }
 
         return redirect()->route('customer.rental.show', $rentalBooking)->with('success', 'Booking berhasil dibuat!');

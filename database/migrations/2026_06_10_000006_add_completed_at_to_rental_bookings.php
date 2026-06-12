@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::table('rental_bookings', function (Blueprint $table) {
             $table->timestamp('completed_at')
-                  ->nullable()
-                  ->after('booking_status');
+                ->nullable()
+                ->after('booking_status');
         });
     }
 

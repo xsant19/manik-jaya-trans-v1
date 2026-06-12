@@ -28,6 +28,6 @@ class LaporanKeuangan extends Page
     public function mount(): void
     {
         $this->from = now()->startOfMonth()->toDateString();
-        $this->to   = now()->toDateString();
+        $this->to = now()->toDateString();
     }
 }

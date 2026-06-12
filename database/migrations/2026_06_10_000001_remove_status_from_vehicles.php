@@ -23,8 +23,8 @@ return new class extends Migration
     {
         Schema::table('vehicles', function (Blueprint $table) {
             $table->enum('status', ['available', 'maintenance', 'inactive'])
-                  ->default('available')
-                  ->after('capacity');
+                ->default('available')
+                ->after('capacity');
         });
     }
 };

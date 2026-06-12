@@ -9,6 +9,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class TransferBookingsTable
@@ -54,7 +55,7 @@ class TransferBookingsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                \Filament\Tables\Filters\SelectFilter::make('booking_status')
+                SelectFilter::make('booking_status')
                     ->options([
                         'pending' => 'Pending',
                         'approved' => 'Approved',
@@ -62,7 +63,7 @@ class TransferBookingsTable
                         'completed' => 'Completed',
                         'canceled' => 'Canceled',
                     ]),
-                \Filament\Tables\Filters\SelectFilter::make('payment_status')
+                SelectFilter::make('payment_status')
                     ->options([
                         'unpaid' => 'Unpaid',
                         'pending' => 'Pending',

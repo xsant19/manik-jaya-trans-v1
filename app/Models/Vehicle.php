@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Storage;
-
-use function PHPUnit\Framework\isArray;
 
 class Vehicle extends Model
 {
@@ -80,7 +79,7 @@ class Vehicle extends Model
      * Get inventory for specific date
      * Returns null if no inventory record exists
      */
-    public function getInventoryForDate(\Carbon\Carbon $date): ?VehicleInventory
+    public function getInventoryForDate(Carbon $date): ?VehicleInventory
     {
         return $this->inventories()->forDate($date)->first();
     }
@@ -88,7 +87,7 @@ class Vehicle extends Model
     /**
      * Get or create inventory for specific date
      */
-    public function getOrCreateInventoryForDate(\Carbon\Carbon $date, int $defaultStock = 1): VehicleInventory
+    public function getOrCreateInventoryForDate(Carbon $date, int $defaultStock = 1): VehicleInventory
     {
         return $this->inventories()->firstOrCreate(
             ['date' => $date->format('Y-m-d')],
@@ -100,7 +99,7 @@ class Vehicle extends Model
      * Count bookings with PAID payment status on specific date
      * Only paid bookings reduce stock
      */
-    public function countPaidBookingsOnDate(\Carbon\Carbon $date): int
+    public function countPaidBookingsOnDate(Carbon $date): int
     {
         $count = 0;
 
@@ -148,11 +147,11 @@ class Vehicle extends Model
      * Get available stock for specific date
      * Returns 0 if no inventory record exists
      */
-    public function getAvailableStockForDate(\Carbon\Carbon $date): int
+    public function getAvailableStockForDate(Carbon $date): int
     {
         $inventory = $this->getInventoryForDate($date);
 
-        if (!$inventory) {
+        if (! $inventory) {
             return 0; // No inventory = not available
         }
 
@@ -162,7 +161,7 @@ class Vehicle extends Model
     /**
      * Check if vehicle is available for specific date
      */
-    public function isAvailableForDate(\Carbon\Carbon $date): bool
+    public function isAvailableForDate(Carbon $date): bool
     {
         return $this->getAvailableStockForDate($date) > 0;
     }
@@ -170,7 +169,7 @@ class Vehicle extends Model
     /**
      * Check if vehicle has inventory for specific date
      */
-    public function hasInventoryForDate(\Carbon\Carbon $date): bool
+    public function hasInventoryForDate(Carbon $date): bool
     {
         return $this->inventories()->forDate($date)->exists();
     }
@@ -178,12 +177,12 @@ class Vehicle extends Model
     /**
      * Check if vehicle is available for date range
      */
-    public function isAvailableForDateRange(\Carbon\Carbon $startDate, \Carbon\Carbon $endDate): bool
+    public function isAvailableForDateRange(Carbon $startDate, Carbon $endDate): bool
     {
         $currentDate = $startDate->copy();
 
         while ($currentDate->lte($endDate)) {
-            if (!$this->isAvailableForDate($currentDate)) {
+            if (! $this->isAvailableForDate($currentDate)) {
                 return false;
             }
             $currentDate->addDay();
@@ -195,7 +194,7 @@ class Vehicle extends Model
     /**
      * Get minimum available stock across date range
      */
-    public function getMinAvailableStockForDateRange(\Carbon\Carbon $startDate, \Carbon\Carbon $endDate): int
+    public function getMinAvailableStockForDateRange(Carbon $startDate, Carbon $endDate): int
     {
         $minStock = PHP_INT_MAX;
         $currentDate = $startDate->copy();
@@ -217,7 +216,7 @@ class Vehicle extends Model
     /**
      * Set stock for specific date
      */
-    public function setStockForDate(\Carbon\Carbon $date, int $stock): VehicleInventory
+    public function setStockForDate(Carbon $date, int $stock): VehicleInventory
     {
         return $this->inventories()->updateOrCreate(
             ['date' => $date->format('Y-m-d')],
@@ -228,7 +227,7 @@ class Vehicle extends Model
     /**
      * Set stock for date range (bulk operation)
      */
-    public function setStockForDateRange(\Carbon\Carbon $startDate, \Carbon\Carbon $endDate, int $stock): void
+    public function setStockForDateRange(Carbon $startDate, Carbon $endDate, int $stock): void
     {
         $currentDate = $startDate->copy();
 

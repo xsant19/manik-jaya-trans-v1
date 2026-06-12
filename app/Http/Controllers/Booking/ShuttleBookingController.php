@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Booking;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreShuttleBookingRequest;
+use App\Mail\BookingCreatedMail;
 use App\Models\HotelShuttle;
 use App\Models\ShuttleBooking;
 use App\Services\BookingCodeService;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class ShuttleBookingController extends Controller
 {
@@ -50,17 +52,9 @@ class ShuttleBookingController extends Controller
 
         // Send email to customer
         try {
-            \Illuminate\Support\Facades\Mail::to(auth()->user()->email)->send(new \App\Mail\BookingCreatedMail($shuttleBooking));
+            Mail::to(auth()->user()->email)->send(new BookingCreatedMail($shuttleBooking));
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Failed to send customer email: ' . $e->getMessage());
-        }
-
-        // Send notification to admin/company
-        try {
-            $adminEmail = config('mail.admin_email', env('MAIL_ADMIN_ADDRESS', 'manikjayatrans@gmail.com'));
-            \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\AdminBookingNotification($shuttleBooking, 'shuttle'));
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Failed to send admin notification email: ' . $e->getMessage());
+            Log::error('Failed to send email: '.$e->getMessage());
         }
 
         return redirect()->route('customer.shuttles.show', $shuttleBooking)->with('success', 'Booking Hotel Shuttle berhasil dibuat!');

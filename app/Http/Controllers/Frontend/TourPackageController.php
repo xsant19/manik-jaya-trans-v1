@@ -8,15 +8,25 @@ use Illuminate\Http\Request;
 
 class TourPackageController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $packages = TourPackage::where('status', 'active')->get();
-        return view('frontend.tours.index', compact('packages'));
+        $search = $request->input('search');
+        $packages = TourPackage::where('status', 'active')
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->get();
+
+        return view('frontend.tours.index', compact('packages', 'search'));
     }
 
     public function show(TourPackage $tour)
     {
         abort_if($tour->status !== 'active', 404);
+
         return view('frontend.tours.show', compact('tour'));
     }
 }

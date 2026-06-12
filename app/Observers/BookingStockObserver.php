@@ -2,8 +2,8 @@
 
 namespace App\Observers;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Services\StockManagementService;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -43,7 +43,7 @@ class BookingStockObserver
                 Log::info("Booking {$booking->booking_code} completed. Checking same-day stock return.");
 
                 // Set completed_at if not already set
-                if (!$booking->completed_at) {
+                if (! $booking->completed_at) {
                     $booking->completed_at = now();
                     $booking->saveQuietly(); // Save without triggering observer again
                 }

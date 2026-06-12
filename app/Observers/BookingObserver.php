@@ -2,15 +2,25 @@
 
 namespace App\Observers;
 
+use App\Mail\BookingStatusUpdatedMail;
+use App\Models\Driver;
+use App\Models\RentalBooking;
+use App\Models\ShuttleBooking;
+use App\Models\TourBooking;
+use App\Models\TransferBooking;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+
 class BookingObserver
 {
     public function updated($model)
     {
         if ($model->isDirty('booking_status')) {
             try {
-                \Illuminate\Support\Facades\Mail::to($model->user->email)->send(new \App\Mail\BookingStatusUpdatedMail($model));
+                Mail::to($model->user->email)->send(new BookingStatusUpdatedMail($model));
             } catch (\Exception $e) {
-                \Illuminate\Support\Facades\Log::error('Failed to send booking status email: ' . $e->getMessage());
+                Log::error('Failed to send booking status email: '.$e->getMessage());
             }
         }
 
@@ -36,21 +46,21 @@ class BookingObserver
 
     protected function recalculateDriverStatus($driverId)
     {
-        $driver = \App\Models\Driver::find($driverId);
-        if (!$driver || $driver->status === 'inactive') {
+        $driver = Driver::find($driverId);
+        if (! $driver || $driver->status === 'inactive') {
             return; // Don't auto-update inactive drivers
         }
 
-        $isOnTrip = \App\Models\RentalBooking::where('driver_id', $driverId)->where('booking_status', 'on_trip')->exists() ||
-                    \App\Models\TourBooking::where('driver_id', $driverId)->where('booking_status', 'on_trip')->exists() ||
-                    \App\Models\TransferBooking::where('driver_id', $driverId)->where('booking_status', 'on_trip')->exists() ||
-                    \App\Models\ShuttleBooking::where('driver_id', $driverId)->where('booking_status', 'on_trip')->exists();
+        $isOnTrip = RentalBooking::where('driver_id', $driverId)->where('booking_status', 'on_trip')->exists() ||
+                    TourBooking::where('driver_id', $driverId)->where('booking_status', 'on_trip')->exists() ||
+                    TransferBooking::where('driver_id', $driverId)->where('booking_status', 'on_trip')->exists() ||
+                    ShuttleBooking::where('driver_id', $driverId)->where('booking_status', 'on_trip')->exists();
 
         $newStatus = $isOnTrip ? 'on_trip' : 'available';
 
         if ($driver->status !== $newStatus) {
             // Using update directly without triggering model events to prevent infinite loops if Driver had observers
-            \Illuminate\Support\Facades\DB::table('drivers')
+            DB::table('drivers')
                 ->where('id', $driverId)
                 ->update(['status' => $newStatus, 'updated_at' => now()]);
         }

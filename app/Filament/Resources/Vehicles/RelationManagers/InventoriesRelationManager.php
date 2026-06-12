@@ -2,14 +2,17 @@
 
 namespace App\Filament\Resources\Vehicles\RelationManagers;
 
+use App\Models\VehicleInventory;
+use Carbon\Carbon;
+use Filament\Actions\Action;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
-use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\TextColumn;
@@ -79,15 +82,15 @@ class InventoriesRelationManager extends RelationManager
                             ->minValue(0),
                     ])
                     ->action(function (array $data, RelationManager $livewire) {
-                        $startDate = \Carbon\Carbon::parse($data['start_date']);
-                        $endDate = \Carbon\Carbon::parse($data['end_date']);
+                        $startDate = Carbon::parse($data['start_date']);
+                        $endDate = Carbon::parse($data['end_date']);
                         $stock = $data['stock'];
-                        
+
                         $vehicle = $livewire->getOwnerRecord();
-                        
+
                         $currentDate = $startDate->copy();
                         while ($currentDate->lte($endDate)) {
-                            \App\Models\VehicleInventory::updateOrCreate(
+                            VehicleInventory::updateOrCreate(
                                 [
                                     'vehicle_id' => $vehicle->id,
                                     'date' => $currentDate->toDateString(),
@@ -98,9 +101,9 @@ class InventoriesRelationManager extends RelationManager
                             );
                             $currentDate->addDay();
                         }
-                        
-                        \Filament\Notifications\Notification::make()
-                            ->title('Stok untuk ' . $startDate->diffInDays($endDate) + 1 . ' hari berhasil diperbarui')
+
+                        Notification::make()
+                            ->title('Stok untuk '.$startDate->diffInDays($endDate) + 1 .' hari berhasil diperbarui')
                             ->success()
                             ->send();
                     }),

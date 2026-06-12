@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
-use App\Models\Vehicle;
-use App\Models\VehicleInventory;
 use App\Models\RentalBooking;
+use App\Models\ShuttleBooking;
 use App\Models\TourBooking;
 use App\Models\TransferBooking;
-use App\Models\ShuttleBooking;
+use App\Models\VehicleInventory;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -21,8 +20,9 @@ class StockManagementService
     {
         $vehicle = $booking->vehicle;
 
-        if (!$vehicle) {
+        if (! $vehicle) {
             Log::warning("Booking {$booking->booking_code} has no vehicle assigned. Stock not reduced.");
+
             return;
         }
 
@@ -31,8 +31,9 @@ class StockManagementService
         foreach ($dates as $date) {
             $inventory = $vehicle->getInventoryForDate($date);
 
-            if (!$inventory) {
+            if (! $inventory) {
                 Log::warning("No inventory found for vehicle {$vehicle->id} on {$date->toDateString()}. Stock not reduced.");
+
                 continue;
             }
 
@@ -50,15 +51,16 @@ class StockManagementService
     {
         $vehicle = $booking->vehicle;
 
-        if (!$vehicle) {
+        if (! $vehicle) {
             return;
         }
 
         // Check if payment was paid (if so, stock needs to be "returned")
         $payment = $booking->payment;
 
-        if (!$payment || $payment->status !== 'paid') {
+        if (! $payment || $payment->status !== 'paid') {
             Log::info("Booking {$booking->booking_code} was canceled but payment was not paid. No stock return needed.");
+
             return;
         }
 
@@ -80,15 +82,16 @@ class StockManagementService
     {
         $vehicle = $booking->vehicle;
 
-        if (!$vehicle || !$booking->completed_at) {
+        if (! $vehicle || ! $booking->completed_at) {
             return;
         }
 
         // Only for short-duration bookings (shuttle/transfer)
         $isShortDuration = $this->isShortDurationBooking($booking);
 
-        if (!$isShortDuration) {
+        if (! $isShortDuration) {
             Log::info("Booking {$booking->booking_code} is multi-day, no same-day stock return.");
+
             return;
         }
 

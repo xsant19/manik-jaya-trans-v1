@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Booking;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTourBookingRequest;
+use App\Mail\BookingCreatedMail;
 use App\Models\TourBooking;
 use App\Models\TourPackage;
 use App\Services\BookingCodeService;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class TourBookingController extends Controller
 {
@@ -49,17 +51,9 @@ class TourBookingController extends Controller
 
         // Send email to customer
         try {
-            \Illuminate\Support\Facades\Mail::to(auth()->user()->email)->send(new \App\Mail\BookingCreatedMail($tourBooking));
+            Mail::to(auth()->user()->email)->send(new BookingCreatedMail($tourBooking));
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Failed to send customer email: ' . $e->getMessage());
-        }
-
-        // Send notification to admin/company
-        try {
-            $adminEmail = config('mail.admin_email', env('MAIL_ADMIN_ADDRESS', 'manikjayatrans@gmail.com'));
-            \Illuminate\Support\Facades\Mail::to($adminEmail)->send(new \App\Mail\AdminBookingNotification($tourBooking, 'tour'));
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Failed to send admin notification email: ' . $e->getMessage());
+            Log::error('Failed to send email: '.$e->getMessage());
         }
 
         return redirect()->route('customer.tours.show', $tourBooking)->with('success', 'Booking Paket Wisata berhasil dibuat!');

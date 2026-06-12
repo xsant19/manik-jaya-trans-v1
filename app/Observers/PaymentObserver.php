@@ -28,8 +28,9 @@ class PaymentObserver
             // Get the booking (polymorphic relationship)
             $booking = $payment->payable;
 
-            if (!$booking) {
+            if (! $booking) {
                 Log::warning("Payment {$payment->id} has no associated booking.");
+
                 return;
             }
 

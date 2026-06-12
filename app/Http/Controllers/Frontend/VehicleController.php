@@ -8,15 +8,25 @@ use Illuminate\Http\Request;
 
 class VehicleController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $vehicles = Vehicle::where('is_hidden', false)->get();
-        return view('frontend.vehicles.index', compact('vehicles'));
+        $search = $request->input('search');
+        $vehicles = Vehicle::where('is_hidden', false)
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('type', 'like', "%{$search}%");
+                });
+            })
+            ->get();
+
+        return view('frontend.vehicles.index', compact('vehicles', 'search'));
     }
 
     public function show(Vehicle $vehicle)
     {
         abort_if($vehicle->is_hidden, 404);
+
         return view('frontend.vehicles.show', compact('vehicle'));
     }
 }
