@@ -90,6 +90,7 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
 
     // Payment Route
     Route::post('/payment/{type}/{booking_code}', [PaymentController::class, 'store'])->name('payment.store');
+    Route::get('/payment/failed', [PaymentController::class, 'failed'])->name('payment.failed');
 
     // Invoice & Voucher PDF
     Route::get('/customer/my-bookings/{type}/{booking_code}/invoice',

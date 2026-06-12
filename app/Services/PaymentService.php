@@ -64,6 +64,7 @@ class PaymentService
             ],
             'callbacks' => [
                 'finish' => $appUrl.'/customer/dashboard',
+                'error' => route('payment.failed'),
             ],
         ];
 

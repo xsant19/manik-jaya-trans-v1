@@ -37,4 +37,9 @@ class PaymentController extends Controller
                 ->with('error', $e->getMessage());
         }
     }
+
+    public function failed(Request $request)
+    {
+        return view('frontend.payment.failed');
+    }
 }
