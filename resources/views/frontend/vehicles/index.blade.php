@@ -42,8 +42,8 @@
                                     </p>
                                 </div>
 
-                                <p class="text-sm text-storm-gray line-clamp-2 grow">
-                                    {{ Str::limit($vehicle->description, 100) }}
+                                <p class="mb-4 text-sm leading-relaxed text-storm-gray">
+                                    {{ Str::limit(strip_tags($vehicle->description), 100) }}
                                 </p>
 
                                 <div class="flex flex-wrap items-center justify-between gap-2 text-sm text-storm-gray mt-auto pt-2">

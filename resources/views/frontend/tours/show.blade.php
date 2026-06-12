@@ -150,46 +150,18 @@
                 {{-- Deskripsi --}}
                 <div class="mb-10 border-b border-soft-divider pb-10">
                     <h2 class="mb-4 text-xl font-bold text-carbon-black">Tentang Paket Ini</h2>
-                    <p class="leading-relaxed text-storm-gray">{{ $tour->description }}</p>
+                    <div class="fi-prose prose prose-sm max-w-none text-storm-gray">
+                        {!! str($tour->description)->sanitizeHtml() !!}
+                    </div>
                 </div>
 
-                {{-- Itinerary (Timeline) --}}
+                {{-- Itinerary --}}
                 @if($tour->itinerary)
                     <div class="mb-10 border-b border-soft-divider pb-10">
                         <h2 class="mb-6 text-xl font-bold text-carbon-black">Itinerary</h2>
-                        <ol class="space-y-0">
-                            @php
-                                $items = array_filter(array_map('trim', explode("\n", $tour->itinerary)));
-                            @endphp
-                            @foreach($items as $i => $item)
-                                @php
-                                    // Split "HH:MM - Label" or just use full string
-                                    $parts = explode(' - ', $item, 2);
-                                    $time  = isset($parts[1]) ? trim($parts[0]) : null;
-                                    $label = isset($parts[1]) ? trim($parts[1]) : trim($parts[0]);
-                                    $isLast = $loop->last;
-                                @endphp
-                                <li class="relative flex gap-4 {{ $isLast ? '' : 'pb-6' }}">
-                                    {{-- Timeline line --}}
-                                    @if(!$isLast)
-                                        <div class="absolute left-[11px] top-6 h-full w-px bg-soft-divider"></div>
-                                    @endif
-
-                                    {{-- Dot --}}
-                                    <div class="relative mt-1 flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-carbon-black bg-canvas-white">
-                                        <div class="size-2 rounded-full bg-carbon-black"></div>
-                                    </div>
-
-                                    {{-- Content --}}
-                                    <div class="flex-1 pb-1">
-                                        @if($time)
-                                            <p class="mb-0.5 text-xs font-semibold uppercase tracking-wider text-dust-bunny">{{ $time }}</p>
-                                        @endif
-                                        <p class="font-medium text-carbon-black">{{ $label }}</p>
-                                    </div>
-                                </li>
-                            @endforeach
-                        </ol>
+                        <div class="fi-prose prose prose-sm max-w-none text-storm-gray">
+                            {!! str($tour->itinerary)->sanitizeHtml() !!}
+                        </div>
                     </div>
                 @endif
 

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Vehicles\Schemas;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
@@ -28,7 +29,8 @@ class VehicleForm
                 TextInput::make('price_half_day')
                     ->required()
                     ->numeric(),
-                Textarea::make('description')
+                RichEditor::make('description')
+                    ->toolbarButtons(['bold', 'italic', 'underline', 'strike', 'link', 'h2', 'h3', 'bulletList', 'orderedList', 'undo', 'redo'])
                     ->columnSpanFull(),
                 FileUpload::make('image')
                     ->multiple()
