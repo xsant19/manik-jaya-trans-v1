@@ -77,8 +77,9 @@ class VehicleAvailabilityService
                 'name' => $vehicle->name,
                 'has_inventory' => $inventory !== null,
                 'stock' => $inventory ? $inventory->stock : 0,
-                'available_stock' => $vehicle->getAvailableStockForDate($date),
-                'paid_bookings' => $vehicle->countPaidBookingsOnDate($date),
+                'available_stock' => $inventory ? $inventory->getAvailableStock() : 0,
+                'active_bookings' => $vehicle->countActiveBookingsOnDate($date),
+                'is_available' => $inventory ? $inventory->getAvailableStock() > 0 : false,
             ];
         })->toArray();
     }

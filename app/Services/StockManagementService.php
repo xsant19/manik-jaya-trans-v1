@@ -71,7 +71,7 @@ class StockManagementService
         }
 
         // Note: Actual "return" happens automatically because booking_status becomes 'canceled'
-        // and countPaidBookingsOnDate() filters by active statuses
+        // and countActiveBookingsOnDate() filters by active statuses
     }
 
     /**
@@ -103,7 +103,7 @@ class StockManagementService
             Log::info("Stock returned for vehicle {$vehicle->id} on {$bookingDate->toDateString()} due to same-day completion of booking {$booking->booking_code}");
 
             // Note: Actual "return" happens automatically because booking_status becomes 'completed'
-            // and countPaidBookingsOnDate() filters by active statuses (pending, approved, on_trip only)
+            // and countActiveBookingsOnDate() filters by active statuses (pending, approved, on_trip only)
         }
     }
 

@@ -96,48 +96,36 @@ class Vehicle extends Model
     }
 
     /**
-     * Count bookings with PAID payment status on specific date
-     * Only paid bookings reduce stock
+     * Count active bookings on specific date
+     * Stock is reduced as long as booking is active, regardless of payment status
      */
-    public function countPaidBookingsOnDate(Carbon $date): int
+    public function countActiveBookingsOnDate(Carbon $date): int
     {
         $count = 0;
 
-        // Rental bookings (date range) - only count if payment paid
+        // Rental bookings (date range)
         $count += $this->rentalBookings()
             ->whereDate('start_date', '<=', $date)
             ->whereDate('end_date', '>=', $date)
             ->whereIn('booking_status', ['pending', 'approved', 'on_trip'])
-            ->whereHas('payment', function ($q) {
-                $q->where('status', 'paid');
-            })
             ->count();
 
-        // Tour bookings (single date) - only count if payment paid
+        // Tour bookings (single date)
         $count += $this->tourBookings()
             ->whereDate('booking_date', $date)
             ->whereIn('booking_status', ['pending', 'approved', 'on_trip'])
-            ->whereHas('payment', function ($q) {
-                $q->where('status', 'paid');
-            })
             ->count();
 
-        // Transfer bookings (single date) - only count if payment paid
+        // Transfer bookings (single date)
         $count += $this->transferBookings()
             ->whereDate('booking_date', $date)
             ->whereIn('booking_status', ['pending', 'approved', 'on_trip'])
-            ->whereHas('payment', function ($q) {
-                $q->where('status', 'paid');
-            })
             ->count();
 
-        // Shuttle bookings (single date) - only count if payment paid
+        // Shuttle bookings (single date)
         $count += $this->shuttleBookings()
             ->whereDate('booking_date', $date)
             ->whereIn('booking_status', ['pending', 'approved', 'on_trip'])
-            ->whereHas('payment', function ($q) {
-                $q->where('status', 'paid');
-            })
             ->count();
 
         return $count;
