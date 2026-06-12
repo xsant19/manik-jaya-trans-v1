@@ -6,6 +6,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Schema;
 
 class TourPackageForm
@@ -20,10 +21,10 @@ class TourPackageForm
                     ->label('Deskripsi Paket')
                     ->toolbarButtons(['bold', 'italic', 'underline', 'strike', 'link', 'h2', 'h3', 'bulletList', 'orderedList', 'undo', 'redo'])
                     ->columnSpanFull(),
-                RichEditor::make('itinerary')
+                Textarea::make('itinerary')
                     ->label('Itinerary (Jadwal)')
-                    ->toolbarButtons(['bold', 'italic', 'underline', 'strike', 'link', 'h2', 'h3', 'bulletList', 'orderedList', 'undo', 'redo'])
-                    ->helperText('Gunakan "Bullet List" (daftar berpoin) dari menu editor. Format: "08:00 - Penjemputan di hotel"')
+                    ->rows(10)
+                    ->helperText('Format: "08:00 - Penjemputan di hotel" (Gunakan enter untuk baris baru)')
                     ->columnSpanFull(),
                 TextInput::make('duration')
                     ->required()
