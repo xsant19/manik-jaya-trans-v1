@@ -159,9 +159,25 @@
                 @if($tour->itinerary)
                     <div class="mb-10 border-b border-soft-divider pb-10">
                         <h2 class="mb-6 text-xl font-bold text-carbon-black">Itinerary</h2>
-                        <div class="fi-prose prose prose-sm max-w-none text-storm-gray">
-                            {!! str($tour->itinerary)->sanitizeHtml() !!}
-                        </div>
+                        
+                        @if(strip_tags($tour->itinerary) === $tour->itinerary)
+                            {{-- Raw text from seeders --}}
+                            <div class="relative border-l-2 border-soft-divider ml-2.5 mt-4 space-y-6">
+                                @foreach(explode("\n", $tour->itinerary) as $item)
+                                    @if(trim($item))
+                                        <div class="relative pl-7">
+                                            <span class="absolute -left-[11px] top-1.5 size-5 rounded-full border-[5px] border-carbon-black bg-canvas-white shadow-[0_0_0_4px_#ffffff]"></span>
+                                            <p class="text-carbon-black font-medium text-[15px]">{!! nl2br(e(trim($item))) !!}</p>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                        @else
+                            {{-- HTML from RichEditor --}}
+                            <div class="fi-prose prose prose-sm max-w-none text-storm-gray itinerary-timeline">
+                                {!! str($tour->itinerary)->sanitizeHtml() !!}
+                            </div>
+                        @endif
                     </div>
                 @endif
 
