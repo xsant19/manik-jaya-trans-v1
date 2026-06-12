@@ -1,7 +1,7 @@
 # Changelog - Recent System Updates
 
-**Tanggal Update**: 8 Juni 2026  
-**Versi**: 1.1.0  
+**Tanggal Update**: 12 Juni 2026  
+**Versi**: 1.3.1  
 **Status**: ✅ Production Ready
 
 ---
@@ -743,7 +743,20 @@ All system updates have been successfully implemented, documented, and tested. T
 
 ---
 
-**Last Updated**: 8 Juni 2026  
-**Version**: 1.1.0  
+**Last Updated**: 12 Juni 2026  
+**Version**: 1.3.1  
 **Next Review**: Before Production Deployment
+
+---
+
+## 📝 Update #9: RichEditor Rendering Fixes (v1.3.1)
+
+### Deskripsi
+Perbaikan rendering HTML aman (`sanitizeHtml`) untuk konten RichEditor pada frontend, serta meluruskan aturan di dokumentasi mengenai input Itinerary.
+
+### Perubahan
+- ✅ **Frontend Render:** Blade templates (`vehicles/show.blade.php`, `tours/show.blade.php`) sekarang menggunakan `{!! str($data->description)->sanitizeHtml() !!}` dibalut dalam class `fi-prose` untuk merender styling text secara aman tanpa escaping tag HTML.
+- ✅ **Klarifikasi Itinerary:** Field `itinerary` pada Filament Panel tetap menggunakan `Textarea` (bukan RichEditor) sehingga UI di frontend dikembalikan ke menggunakan layout split-timeline (`\n`).
+- ✅ **Update Dokumen:** Pembaruan aturan di `agents.md` untuk menghindari kebingungan AI/Agent terkait render `Itinerary` dan penggunaan `RichEditor`.
+
 

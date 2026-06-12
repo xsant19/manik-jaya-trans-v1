@@ -23,7 +23,7 @@
 **🆕 Recent Updates (v1.3.0)**:
 - ✅ **Single Column Layout**: Form booking Filament menggunakan 1 kolom utuh tanpa sidebar terpisah.
 - ✅ **Confirmation Modals**: Pop-up konfirmasi untuk semua action Save/Create di Filament dan widget Dashboard.
-- ✅ **Rich Editor**: Field Description & Itinerary menggunakan RichEditor dengan rendering HTML aman (`sanitizeHtml`) di frontend.
+- ✅ **Rich Editor**: Field Description menggunakan RichEditor dengan rendering HTML aman (`sanitizeHtml`) di frontend dibalut class `fi-prose`. (Note: Field Itinerary tetap menggunakan Textarea standar dengan pemisah baris/enter).
 - ✅ **Vehicle Hidden Toggle**: Toggle `is_hidden` untuk menyembunyikan kendaraan dari frontend tanpa mengubah relasi.
 - ✅ **Admin Helpers**: Panduan teks (`helperText`) ditambahkan pada field form admin (Itinerary & Duration).
 
@@ -122,7 +122,7 @@ resources/
 **Catatan Update Terbaru (v1.3.0)**:
 - **Single Column Layout**: Booking form di panel admin menggunakan tata letak 1 kolom.
 - **Confirmation Modals**: Modal konfirmasi sebelum Create/Edit disimpan.
-- **RichEditor**: Digunakan untuk deskripsi dan itinerary dengan rendering HTML aman.
+- **RichEditor**: Digunakan HANYA untuk deskripsi dengan rendering HTML aman (itinerary tetap menggunakan Textarea).
 
 **Catatan Update (v1.2.0 & v1.1.0)**:
 - Semua halaman detail layanan memiliki WhatsApp help card.
