@@ -13,7 +13,7 @@ class VehicleAvailabilityService
      */
     public function getAvailableVehiclesForDate(Carbon $date, ?int $capacity = null): Collection
     {
-        $query = Vehicle::query();
+        $query = Vehicle::where('is_hidden', false);
 
         if ($capacity) {
             $query->where('capacity', '>=', $capacity);
@@ -32,7 +32,7 @@ class VehicleAvailabilityService
         Carbon $endDate,
         ?int $capacity = null
     ): Collection {
-        $query = Vehicle::query();
+        $query = Vehicle::where('is_hidden', false);
 
         if ($capacity) {
             $query->where('capacity', '>=', $capacity);

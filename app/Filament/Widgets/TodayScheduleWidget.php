@@ -53,6 +53,7 @@ class TodayScheduleWidget extends TableWidget
                     ->label('Kendaraan')
                     ->default('—')
                     ->badge()
+                    ->searchable()
                     ->color('warning'),
 
                 TextColumn::make('rental_type')
@@ -68,13 +69,15 @@ class TodayScheduleWidget extends TableWidget
                 TextColumn::make('pickup_location')
                     ->label('Lokasi Jemput')
                     ->limit(30)
+                    ->searchable()
                     ->default('—'),
 
                 TextColumn::make('driver.name')
                     ->label('Supir')
                     ->default('Belum ditugaskan')
                     ->color(fn ($record): string => $record->driver_id ? 'success' : 'warning')
-                    ->badge(),
+                    ->badge()
+                    ->searchable(),
 
                 TextColumn::make('booking_status')
                     ->label('Status')

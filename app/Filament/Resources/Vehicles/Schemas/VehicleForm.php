@@ -6,6 +6,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
 class VehicleForm
@@ -36,6 +37,10 @@ class VehicleForm
                     ->maxFiles(3)
                     ->reorderable()
                     ->helperText('Upload hingga 3 gambar kendaraan. Gambar pertama akan menjadi gambar utama.'),
+                Toggle::make('is_hidden')
+                    ->label('Sembunyikan dari Frontend')
+                    ->helperText('Jika diaktifkan, kendaraan ini tidak akan tampil di halaman pemesanan bagi pelanggan.')
+                    ->default(false),
             ]);
     }
 }

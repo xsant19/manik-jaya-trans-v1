@@ -6,6 +6,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class RentalBookingForm
@@ -14,58 +15,77 @@ class RentalBookingForm
     {
         return $schema
             ->components([
-                Select::make('user_id')
-                    ->relationship('user', 'name')
-                    ->required(),
-                Select::make('vehicle_id')
-                    ->relationship('vehicle', 'name')
-                    ->required(),
-                Select::make('driver_id')
-                    ->relationship('driver', 'name'),
-                TextInput::make('booking_code')
-                    ->required()
-                    ->disabled()
-                    ->dehydrated(),
-                Select::make('rental_type')
-                    ->options(['full_day' => 'Full day', 'half_day' => 'Half day'])
-                    ->required(),
-                DatePicker::make('start_date')
-                    ->required(),
-                DatePicker::make('end_date'),
-                TextInput::make('pickup_location')
-                    ->required(),
-                Textarea::make('note')
-                    ->columnSpanFull(),
-                TextInput::make('total_price')
-                    ->required()
-                    ->numeric()
-                    ->prefix('Rp')
-                    ->disabled()
-                    ->dehydrated(),
-                Select::make('booking_status')
-                    ->options([
-            'pending' => 'Pending',
-            'approved' => 'Approved',
-            'on_trip' => 'On trip',
-            'completed' => 'Completed',
-            'canceled' => 'Canceled',
-        ])
-                    ->default('pending')
-                    ->required(),
-                \Filament\Forms\Components\DateTimePicker::make('completed_at')
-                    ->disabled()
-                    ->dehydrated(false),
-                Select::make('payment_status')
-                    ->options([
-            'unpaid' => 'Unpaid',
-            'pending' => 'Pending',
-            'paid' => 'Paid',
-            'failed' => 'Failed',
-            'expired' => 'Expired',
-            'refunded' => 'Refunded',
-        ])
-                    ->default('unpaid')
-                    ->required(),
+                Section::make('Informasi Pelanggan & Pemesanan')
+                    ->schema([
+                        TextInput::make('booking_code')
+                            ->required()
+                            ->disabled()
+                            ->dehydrated(),
+                        Select::make('user_id')
+                            ->relationship('user', 'name')
+                            ->required(),
+                        Select::make('rental_type')
+                            ->options(['full_day' => 'Full day', 'half_day' => 'Half day'])
+                            ->required(),
+                        DatePicker::make('start_date')
+                            ->required(),
+                        DatePicker::make('end_date'),
+                        TextInput::make('pickup_location')
+                            ->required()
+                            ->columnSpanFull(),
+                        Textarea::make('note')
+                            ->columnSpanFull(),
+                    ])->columns(2),
+
+                Section::make('Penugasan & Operasional')
+                    ->description('⚠️ Pastikan kendaraan, supir, dan status sudah benar.')
+                    ->icon('heroicon-o-clipboard-document-check')
+                    ->schema([
+                        Select::make('booking_status')
+                            ->options([
+                                'pending' => 'Pending',
+                                'approved' => 'Approved',
+                                'on_trip' => 'On trip',
+                                'completed' => 'Completed',
+                                'canceled' => 'Canceled',
+                            ])
+                            ->default('pending')
+                            ->required(),
+                        Select::make('vehicle_id')
+                            ->relationship('vehicle', 'name')
+                            ->required()
+                            ->helperText('Kendaraan yang dirental.'),
+                        Select::make('driver_id')
+                            ->relationship('driver', 'name', fn ($query) => $query->where('status', '!=', 'inactive'))
+                            ->getOptionLabelFromRecordUsing(fn ($record) => $record->name . ' - ' . ucfirst(str_replace('_', ' ', $record->status)))
+                            ->searchable()
+                            ->preload()
+                            ->helperText('Supir yang ditugaskan.'),
+                        \Filament\Forms\Components\DateTimePicker::make('completed_at')
+                            ->disabled()
+                            ->dehydrated(false),
+                    ])->columns(2),
+
+                Section::make('Informasi Pembayaran')
+                    ->schema([
+                        TextInput::make('total_price')
+                            ->required()
+                            ->numeric()
+                            ->prefix('Rp')
+                            ->disabled()
+                            ->dehydrated(),
+                        Select::make('payment_status')
+                            ->options([
+                                'unpaid' => 'Unpaid',
+                                'pending' => 'Pending',
+                                'paid' => 'Paid',
+                                'failed' => 'Failed',
+                                'expired' => 'Expired',
+                                'refunded' => 'Refunded',
+                            ])
+                            ->default('unpaid')
+                            ->required(),
+                    ])->columns(2),
             ]);
     }
 }

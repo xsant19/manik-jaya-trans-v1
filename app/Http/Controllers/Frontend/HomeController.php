@@ -14,7 +14,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $vehicles = Vehicle::limit(6)->get();
+        $vehicles = Vehicle::where('is_hidden', false)->limit(6)->get();
         $packages = TourPackage::where('status', 'active')->limit(6)->get();
 
         return view('frontend.home', compact('vehicles', 'packages'));

@@ -22,6 +22,7 @@ class RentalBookingController extends Controller
 
     public function create(Vehicle $vehicle)
     {
+        abort_if($vehicle->is_hidden, 404);
         return view('frontend.booking.rental.create', compact('vehicle'));
     }
 
