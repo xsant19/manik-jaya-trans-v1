@@ -388,20 +388,17 @@ grid grid-cols-1 md:grid-cols-3 gap-8
 
 ## 📦 Project Status
 
-### ✅ Completed (Phase 1–8)
+### ✅ Completed (Phase 1–9)
 - [x] Project setup (Laravel, Tailwind, Filament)
-- [x] Authentication & authorization (register, login, logout, role, policy)
-- [x] Database & models (11 tabel, relasi, seeders)
-- [x] Frontend website (home, list, detail semua layanan, responsive)
-- [x] Booking system (4 layanan, dashboard, riwayat, detail)
-- [x] Admin panel Filament (11 resources, dashboard widgets)
-- [x] Payment integration (Midtrans, callback, status sync)
-- [x] Notification system (3 email templates)
-- [x] Invoice & Voucher PDF generation (DOMPDF)
-- [x] SPK (Surat Perintah Kerja) PDF generation untuk Driver
-- [x] Modul Laporan Keuangan Export (PDF & Excel) terintegrasi Filament v5 Schema
+- [x] Authentication & authorization
+- [x] Database & models (Vehicle Inventory, is_hidden toggle)
+- [x] Frontend website (Responsive, Rich HTML rendering)
+- [x] Booking system & Payment (Midtrans)
+- [x] Admin panel Filament (Single Column Layouts, Confirmation Modals, RichEditor)
+- [x] Notification system & PDF generation (DOMPDF)
+- [x] Stock Management Observer Pattern
 
-### 🚧 Pending (Phase 9–10)
+### 🚧 Pending (Phase 10)
 - [ ] Validation testing
 - [ ] Authorization testing
 - [ ] Responsive testing

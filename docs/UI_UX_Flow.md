@@ -473,7 +473,12 @@ Aturan:
 - Tidak redundant.
 - Fokus operasional.
 
-### 15.3 Kelola Data Master
+### 15.3 Kelola Data Master & Booking (UI Admin)
+
+UI Admin menggunakan skema **Single Column Layout**:
+- Form panjang/banyak tidak dibagi menjadi sidebar terpisah.
+- Tampilan satu kolom penuh (`columnSpanFull` pada section/schema utama).
+- Sebelum data disimpan (Create/Edit), terdapat modal konfirmasi ("Apakah Anda yakin...?").
 
 ```text
 Admin buka resource
@@ -482,9 +487,11 @@ Lihat list data
 ↓
 Create/Edit/Delete
 ↓
+Modal Konfirmasi
+↓
 Simpan
 ↓
-Data tampil di frontend jika active
+Data terupdate (dan tampil di frontend jika active/tidak hidden)
 ```
 
 ### 15.4 Kelola Booking
