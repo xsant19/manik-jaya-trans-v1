@@ -17,27 +17,33 @@
 | Database         | MySQL 5.7+ / 8.0+                                        |
 | Payment Gateway  | Midtrans Sandbox 2.6                                     |
 | Status           | In Development — Phase 1–9 selesai, Phase 10 ongoing     |
-| Version          | 1.2.0                                                    |
-| Last Update      | 10 Juni 2026                                             |
+| Version          | 1.3.0                                                    |
+| Last Update      | 12 Juni 2026                                             |
 
-**🆕 Recent Updates (v1.2.0)**:
-- ✅ **Vehicle Inventory System** - Separate table untuk tracking stock per hari
-- ✅ **Payment-Based Stock Reduction** - Stock berkurang HANYA jika payment paid
-- ✅ **Same-Day Stock Return** - Untuk shuttle/transfer selesai < 1 hari
-- ✅ **Vehicle Status Removed** - Availability 100% ditentukan dari inventory
-- ✅ **Observer Pattern** - Automatic stock management via PaymentObserver & BookingStockObserver
-- ✅ **Admin Vehicle Assignment** - Admin assign vehicle ke tour/transfer/shuttle setelah booking
-- ✅ **Completed Timestamp** - Track exact completion time untuk semua booking types
-- 📝 Lihat `VEHICLE_INVENTORY_KEY_CHANGES.md` untuk detail lengkap
+**🆕 Recent Updates (v1.3.0)**:
+- ✅ **Single Column Layout**: Form booking Filament menggunakan 1 kolom utuh tanpa sidebar terpisah.
+- ✅ **Confirmation Modals**: Pop-up konfirmasi untuk semua action Save/Create di Filament dan widget Dashboard.
+- ✅ **Rich Editor**: Field Description & Itinerary menggunakan RichEditor dengan rendering HTML aman (`sanitizeHtml`) di frontend.
+- ✅ **Vehicle Hidden Toggle**: Toggle `is_hidden` untuk menyembunyikan kendaraan dari frontend tanpa mengubah relasi.
+- ✅ **Admin Helpers**: Panduan teks (`helperText`) ditambahkan pada field form admin (Itinerary & Duration).
+
+**Previous Updates (v1.2.0)**:
+- ✅ Vehicle Inventory System (Separate table untuk tracking stock per hari)
+- ✅ Payment-Based Stock Reduction (Stock berkurang HANYA jika payment paid)
+- ✅ Same-Day Stock Return (Untuk shuttle/transfer selesai < 1 hari)
+- ✅ Vehicle Status Removed (Availability 100% ditentukan dari inventory)
+- ✅ Observer Pattern (PaymentObserver & BookingStockObserver)
+- ✅ Admin Vehicle Assignment
+- ✅ Completed Timestamp
 
 **Previous Updates (v1.1.0)**:
-- ✅ Driver assignment by admin only (customer tidak pilih supir)
-- ✅ Simplified booking card UI (summary only, bukan form interaktif)
-- ✅ WhatsApp integration pada semua halaman detail layanan
-- ✅ Email notification system 100% complete dan production ready
-- ✅ Invoice & Voucher PDF generation dengan DOMPDF
-- ✅ Fitur cetak SPK (Surat Perintah Kerja) PDF untuk Driver via Admin Panel
-- ✅ Modul Laporan Keuangan Export (PDF & Excel) terintegrasi Filament v5 Schema
+- ✅ Driver assignment by admin only
+- ✅ Simplified booking card UI
+- ✅ WhatsApp integration
+- ✅ Email notification system 100% complete
+- ✅ Invoice & Voucher PDF generation
+- ✅ SPK PDF untuk Driver
+- ✅ Modul Laporan Keuangan Export
 
 ---
 
@@ -113,14 +119,18 @@ resources/
     └── layouts/                 # app (authenticated), guest
 ```
 
-**Catatan Update Terbaru (v1.2.0)**:
-- Semua halaman detail layanan (vehicles, tours, transfers, shuttles) memiliki WhatsApp help card
-- Booking card di halaman detail hanya menampilkan summary info (bukan form interaktif)
-- WhatsApp number: `6281234567890` (placeholder, perlu update untuk production)
-- Email notification system 100% complete dengan 3 jenis email
-- **Vehicle Inventory System**: Stock management dengan tabel terpisah per hari
-- **Payment-Based Stock**: Stock berkurang HANYA saat payment paid, bukan saat booking dibuat
-- **Observer Pattern**: Automatic stock management melalui PaymentObserver & BookingStockObserver
+**Catatan Update Terbaru (v1.3.0)**:
+- **Single Column Layout**: Booking form di panel admin menggunakan tata letak 1 kolom.
+- **Confirmation Modals**: Modal konfirmasi sebelum Create/Edit disimpan.
+- **RichEditor**: Digunakan untuk deskripsi dan itinerary dengan rendering HTML aman.
+
+**Catatan Update (v1.2.0 & v1.1.0)**:
+- Semua halaman detail layanan memiliki WhatsApp help card.
+- Booking card di halaman detail hanya menampilkan summary info.
+- Email notification system 100% complete.
+- **Vehicle Inventory System**: Stock management dengan tabel terpisah per hari.
+- **Payment-Based Stock**: Stock berkurang HANYA saat payment paid.
+- **Observer Pattern**: Automatic stock management.
 
 ---
 

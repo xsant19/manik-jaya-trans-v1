@@ -18,4 +18,15 @@ class EditTourBooking extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    protected function getSaveFormAction(): \Filament\Actions\Action
+    {
+        return parent::getSaveFormAction()
+            ->submit(null)
+            ->requiresConfirmation()
+            ->action(fn () => $this->save())
+            ->modalHeading('Simpan Perubahan')
+            ->modalDescription('Apakah Anda yakin ingin menyimpan perubahan pada data pemesanan ini?')
+            ->modalSubmitActionLabel('Ya, Simpan');
+    }
 }

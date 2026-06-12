@@ -195,7 +195,7 @@
                                     {{ $vehicle->name }}
                                 </h3>
                                 <p class="mt-2 line-clamp-2 text-sm text-storm-gray">
-                                    {{ Str::limit($vehicle->description, 100) }}
+                                    {{ Str::limit(strip_tags($vehicle->description), 100) }}
                                 </p>
 
                                 {{-- Price --}}
@@ -297,8 +297,8 @@
                                 <h3 class="text-base font-bold leading-snug text-carbon-black group-hover:underline decoration-1 underline-offset-4 md:text-lg">
                                     {{ $package->name }}
                                 </h3>
-                                <p class="mt-2 line-clamp-2 text-sm text-storm-gray">
-                                    {{ Str::limit($package->description, 100) }}
+                                <p class="mb-4 text-sm leading-relaxed text-storm-gray">
+                                    {{ Str::limit(strip_tags($package->description), 100) }}
                                 </p>
 
                                 {{-- Price --}}

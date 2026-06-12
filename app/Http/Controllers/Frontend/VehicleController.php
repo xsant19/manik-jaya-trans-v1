@@ -10,12 +10,13 @@ class VehicleController extends Controller
 {
     public function index()
     {
-        $vehicles = Vehicle::all();
+        $vehicles = Vehicle::where('is_hidden', false)->get();
         return view('frontend.vehicles.index', compact('vehicles'));
     }
 
     public function show(Vehicle $vehicle)
     {
+        abort_if($vehicle->is_hidden, 404);
         return view('frontend.vehicles.show', compact('vehicle'));
     }
 }

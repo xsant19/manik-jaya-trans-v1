@@ -21,6 +21,7 @@ class Vehicle extends Model
         'price_half_day',
         'description',
         'image',
+        'is_hidden',
         // 'status' removed - availability determined from inventory
     ];
 

@@ -157,7 +157,9 @@
                 {{-- Deskripsi --}}
                 <div class="mb-10 border-b border-soft-divider pb-10">
                     <h2 class="mb-4 text-xl font-bold text-carbon-black">Tentang Kendaraan Ini</h2>
-                    <p class="leading-relaxed text-storm-gray">{{ $vehicle->description }}</p>
+                    <div class="fi-prose prose prose-sm max-w-none text-storm-gray">
+                        {!! str($vehicle->description)->sanitizeHtml() !!}
+                    </div>
                 </div>
 
                 {{-- Harga Sewa --}}

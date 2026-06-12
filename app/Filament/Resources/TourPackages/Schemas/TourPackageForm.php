@@ -16,13 +16,18 @@ class TourPackageForm
             ->components([
                 TextInput::make('name')
                     ->required(),
-                Textarea::make('description')
-                    ->required()
+                \Filament\Forms\Components\RichEditor::make('description')
+                    ->label('Deskripsi Paket')
+                    ->toolbarButtons(['bold', 'italic', 'underline', 'strike', 'link', 'h2', 'h3', 'bulletList', 'orderedList', 'undo', 'redo'])
                     ->columnSpanFull(),
-                Textarea::make('itinerary')
+                \Filament\Forms\Components\RichEditor::make('itinerary')
+                    ->label('Itinerary (Jadwal)')
+                    ->toolbarButtons(['bold', 'italic', 'underline', 'strike', 'link', 'h2', 'h3', 'bulletList', 'orderedList', 'undo', 'redo'])
+                    ->helperText('Gunakan "Bullet List" (daftar berpoin) dari menu editor. Format: "08:00 - Penjemputan di hotel"')
                     ->columnSpanFull(),
                 TextInput::make('duration')
-                    ->required(),
+                    ->required()
+                    ->helperText('Contoh: "8 Jam" atau "10 Jam"'),
                 TextInput::make('price')
                     ->required()
                     ->numeric()
