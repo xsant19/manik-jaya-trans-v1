@@ -13,8 +13,7 @@ use Illuminate\Support\Facades\Log;
 class StockManagementService
 {
     /**
-     * Reduce stock when payment is paid
-     * Called from PaymentObserver
+     * Reduce stock physically in database
      */
     public function reduceStockForBooking($booking): void
     {
@@ -37,15 +36,17 @@ class StockManagementService
                 continue;
             }
 
-            // Note: Stock is tracked via counting paid bookings, not physically reducing inventory.stock
-            // The getAvailableStock() method on VehicleInventory handles the calculation
-            Log::info("Stock conceptually reduced for vehicle {$vehicle->id} on {$date->toDateString()} due to booking {$booking->booking_code}");
+            if ($inventory->stock > 0) {
+                $inventory->decrement('stock');
+                Log::info("Stock physically reduced for vehicle {$vehicle->id} on {$date->toDateString()} due to booking {$booking->booking_code}");
+            } else {
+                Log::warning("Failed to reduce stock for vehicle {$vehicle->id} on {$date->toDateString()}: stock is already 0.");
+            }
         }
     }
 
     /**
-     * Return stock when booking is canceled
-     * Called from BookingObserver
+     * Return stock physically in database when booking is canceled
      */
     public function returnStockForCancellation($booking): void
     {
@@ -55,28 +56,41 @@ class StockManagementService
             return;
         }
 
-        // Check if payment was paid (if so, stock needs to be "returned")
-        $payment = $booking->payment;
+        $dates = $this->getBookingDates($booking);
 
-        if (! $payment || $payment->status !== 'paid') {
-            Log::info("Booking {$booking->booking_code} was canceled but payment was not paid. No stock return needed.");
+        foreach ($dates as $date) {
+            $inventory = $vehicle->getInventoryForDate($date);
+            if ($inventory) {
+                $inventory->increment('stock');
+                Log::info("Stock physically returned for vehicle {$vehicle->id} on {$date->toDateString()} due to cancellation of booking {$booking->booking_code}");
+            }
+        }
+    }
 
+    /**
+     * Return stock physically in database for a specific vehicle (e.g. when reassigned)
+     */
+    public function returnStockForVehicle($booking, $vehicleId): void
+    {
+        $vehicle = \App\Models\Vehicle::find($vehicleId);
+
+        if (! $vehicle) {
             return;
         }
 
         $dates = $this->getBookingDates($booking);
 
         foreach ($dates as $date) {
-            Log::info("Stock returned for vehicle {$vehicle->id} on {$date->toDateString()} due to cancellation of booking {$booking->booking_code}");
+            $inventory = $vehicle->getInventoryForDate($date);
+            if ($inventory) {
+                $inventory->increment('stock');
+                Log::info("Stock physically returned for old vehicle {$vehicle->id} on {$date->toDateString()} due to reassignment of booking {$booking->booking_code}");
+            }
         }
-
-        // Note: Actual "return" happens automatically because booking_status becomes 'canceled'
-        // and countActiveBookingsOnDate() filters by active statuses
     }
 
     /**
      * Return stock for same-day completed bookings (shuttle/transfer)
-     * Called from BookingObserver when booking is completed
      */
     public function returnStockForSameDayCompletion($booking): void
     {
@@ -100,10 +114,11 @@ class StockManagementService
         $completedDate = Carbon::parse($booking->completed_at);
 
         if ($bookingDate->isSameDay($completedDate)) {
-            Log::info("Stock returned for vehicle {$vehicle->id} on {$bookingDate->toDateString()} due to same-day completion of booking {$booking->booking_code}");
-
-            // Note: Actual "return" happens automatically because booking_status becomes 'completed'
-            // and countActiveBookingsOnDate() filters by active statuses (pending, approved, on_trip only)
+            $inventory = $vehicle->getInventoryForDate($bookingDate);
+            if ($inventory) {
+                $inventory->increment('stock');
+                Log::info("Stock physically returned for vehicle {$vehicle->id} on {$bookingDate->toDateString()} due to same-day completion of booking {$booking->booking_code}");
+            }
         }
     }
 

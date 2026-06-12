@@ -20,11 +20,44 @@ class BookingStockObserver
     }
 
     /**
+     * Handle booking "created" event
+     */
+    public function created(Model $booking): void
+    {
+        // For RentalBooking, stock is immediately reduced upon creation
+        if ($booking instanceof \App\Models\RentalBooking) {
+            Log::info("RentalBooking {$booking->booking_code} created. Reducing stock immediately.");
+            $this->stockService->reduceStockForBooking($booking);
+        }
+    }
+
+    /**
      * Handle booking "updated" event
      * Monitors booking_status changes for stock return
      */
     public function updated(Model $booking): void
     {
+        // Handle vehicle assignment (for Tour, Shuttle, Transfer)
+        if ($booking->isDirty('vehicle_id')) {
+            $oldVehicleId = $booking->getOriginal('vehicle_id');
+            $newVehicleId = $booking->vehicle_id;
+
+            if ($oldVehicleId && $newVehicleId && $oldVehicleId !== $newVehicleId) {
+                // Reassigned to a different vehicle
+                Log::info("Booking {$booking->booking_code} reassigned from vehicle {$oldVehicleId} to {$newVehicleId}");
+                $this->stockService->returnStockForVehicle($booking, $oldVehicleId);
+                $this->stockService->reduceStockForBooking($booking);
+            } elseif (! $oldVehicleId && $newVehicleId) {
+                // Assigned for the first time
+                Log::info("Booking {$booking->booking_code} assigned to vehicle {$newVehicleId}");
+                $this->stockService->reduceStockForBooking($booking);
+            } elseif ($oldVehicleId && ! $newVehicleId) {
+                // Unassigned
+                Log::info("Booking {$booking->booking_code} unassigned from vehicle {$oldVehicleId}");
+                $this->stockService->returnStockForVehicle($booking, $oldVehicleId);
+            }
+        }
+
         // Check if booking_status was changed
         if ($booking->isDirty('booking_status')) {
             $oldStatus = $booking->getOriginal('booking_status');

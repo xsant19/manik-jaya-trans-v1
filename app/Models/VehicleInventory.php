@@ -51,15 +51,13 @@ class VehicleInventory extends Model
     }
 
     /**
-     * Get available stock (considering active bookings with paid status)
+     * Get available stock (physical stock from database)
      */
     public function getAvailableStock(): int
     {
-        // Get number of active bookings for this vehicle on this date
-        $activeBookings = $this->vehicle->countActiveBookingsOnDate($this->date);
-
-        // Available stock is total stock minus active bookings);
-        return max(0, $this->stock - $activeBookings);
+        // Now that we physically reduce the stock in the DB upon booking/assignment,
+        // the `stock` column represents the actual remaining available stock.
+        return max(0, $this->stock);
     }
 
     /**

@@ -55,10 +55,19 @@ class ShuttleBookingForm
                             ->default('pending')
                             ->required(),
                         Select::make('vehicle_id')
-                            ->relationship('vehicle', 'name')
+                            ->relationship(
+                                'vehicle',
+                                'name',
+                                fn ($query, \Filament\Forms\Get $get) => $query->whereHas('inventories', function ($q) use ($get) {
+                                    $bookingDate = $get('booking_date');
+                                    if ($bookingDate) {
+                                        $q->whereDate('date', $bookingDate)->where('stock', '>', 0);
+                                    }
+                                })
+                            )
                             ->searchable()
                             ->preload()
-                            ->helperText('Kendaraan shuttle.'),
+                            ->helperText('Kendaraan untuk hotel shuttle.'),
                         Select::make('driver_id')
                             ->relationship('driver', 'name', fn ($query) => $query->where('status', '!=', 'inactive'))
                             ->getOptionLabelFromRecordUsing(fn ($record) => $record->name.' - '.ucfirst(str_replace('_', ' ', $record->status)))
