@@ -212,7 +212,7 @@ Field:
 - price_half_day
 - description
 - image
-- status
+- is_hidden
 
 Aturan:
 - name wajib.
@@ -220,16 +220,16 @@ Aturan:
 - capacity wajib angka minimal 1.
 - price_full_day wajib angka minimal 0.
 - price_half_day wajib angka minimal 0.
-- description opsional.
+- description opsional (RichEditor).
 - image opsional, format jpg, jpeg, png, webp.
 - image maksimal 2 MB.
-- status hanya available, maintenance, inactive.
+- is_hidden boolean default false.
 
 Behavior:
-- available tampil di frontend dan dapat dibooking.
-- maintenance tampil di admin tetapi tidak dapat dibooking.
-- inactive tidak tampil di frontend.
+- Jika is_hidden false dan stok pada `vehicle_inventories` > 0, tampil di frontend dan dapat dibooking.
+- Jika is_hidden true, tidak tampil di frontend.
 - Harga tidak boleh negatif.
+- Ketersediaan unit BUKAN dari status statis, melainkan dari sisa stok di tabel `vehicle_inventories` pada tanggal tersebut.
 
 ### 5.5 Validasi Driver
 
@@ -551,7 +551,14 @@ Transisi:
 - pending ke expired.
 - failed dapat mencoba ulang.
 - expired dapat mencoba ulang jika booking belum canceled.
-- paid dapat menjadi refunded oleh admin.
+### 7.3 Stock Management Flow
+
+Aturan pengurangan dan pengembalian stok kendaraan:
+- Booking dibuat (unpaid) → Stok **TIDAK** berkurang.
+- Payment paid → Stok berkurang (via `PaymentObserver`).
+- Booking canceled (yang sebelumnya paid) → Stok kembali.
+- Booking shuttle/transfer selesai (< 1 hari) → Stok otomatis kembali same-day (via `BookingStockObserver`).
+- Booking multi-day (rental) selesai → Stok dilepas pada akhir periode.
 
 ## 8. Aturan UI Berdasarkan DESIGN.md
 
@@ -575,6 +582,9 @@ Transisi:
 - Booking card pada detail layanan hanya menampilkan summary (bukan form interaktif).
 - Setiap halaman detail layanan menyediakan WhatsApp help card untuk kontak customer service.
 - WhatsApp number: placeholder `6281234567890` (perlu update untuk production).
+- Form panel admin di Filament **WAJIB** menggunakan Single Column Layout (tidak ada pemisahan form di sidebar kanan).
+- Setiap action simpan/destruktif (Create/Edit/Delete) **WAJIB** memiliki Confirmation Modal untuk mencegah kesalahan.
+- Semua field deskripsi pada detail layanan yang menggunakan RichEditor **WAJIB** dibalut dengan class `fi-prose` dan dirender dengan `sanitizeHtml` di frontend untuk styling aman.
 
 ## 9. Security Requirement
 

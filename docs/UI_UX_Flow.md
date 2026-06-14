@@ -296,9 +296,10 @@ Screen detail:
 - Nama paket.
 - Harga.
 - Durasi.
-- Deskripsi.
+- Deskripsi (Dirender dengan aman dari RichEditor HTML dibalut class `fi-prose`).
 - Itinerary.
-- Button booking.
+- WhatsApp help card.
+- Button booking langsung.
 
 Form:
 - Tanggal.
@@ -478,7 +479,9 @@ Aturan:
 UI Admin menggunakan skema **Single Column Layout**:
 - Form panjang/banyak tidak dibagi menjadi sidebar terpisah.
 - Tampilan satu kolom penuh (`columnSpanFull` pada section/schema utama).
-- Sebelum data disimpan (Create/Edit), terdapat modal konfirmasi ("Apakah Anda yakin...?").
+- Sebelum data disimpan/dihapus (Create/Edit/Delete), terdapat modal konfirmasi ("Apakah Anda yakin...?").
+- Form deskripsi menggunakan RichEditor.
+- Beberapa form menggunakan text helper (panduan admin) di bawah input (contoh: pada Itinerary).
 
 ```text
 Admin buka resource

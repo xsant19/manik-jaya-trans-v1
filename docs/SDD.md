@@ -3,7 +3,7 @@
 
 ## 1. Ringkasan Sistem
 
-Sistem Informasi Travel Manik Jaya Trans adalah aplikasi monolithic web application berbasis Laravel 13. Sistem menggunakan MVC sebagai arsitektur aplikasi utama, Filament 5.6.6 untuk admin panel, Tailwind CSS v4.3 untuk tampilan frontend, MySQL 5.7+ / 8.0+ untuk database, dan Midtrans Sandbox 2.6 untuk pembayaran.
+Sistem Informasi Travel Manik Jaya Trans adalah aplikasi monolithic web application berbasis Laravel 13. Sistem menggunakan MVC sebagai arsitektur aplikasi utama, Observers untuk event handling (seperti pengurangan stok), Filament 5.6.6 untuk admin panel, Tailwind CSS v4.3 untuk tampilan frontend, MySQL 5.7+ / 8.0+ untuk database, DOMPDF untuk generate dokumen, dan Midtrans Sandbox 2.6 untuk pembayaran.
 
 ## 2. Acuan Desain
 
@@ -245,20 +245,46 @@ price_full_day decimal(12,2)
 price_half_day decimal(12,2)
 description text nullable
 image varchar nullable
-status enum available/maintenance/inactive
+is_hidden boolean default false
 created_at timestamp
 updated_at timestamp
 ```
 
 Index:
 ```text
-status index
+is_hidden index
 type index
 ```
 
 Relasi:
 ```text
 Vehicle hasMany RentalBooking
+Vehicle hasMany TourBooking
+Vehicle hasMany TransferBooking
+Vehicle hasMany ShuttleBooking
+Vehicle hasMany VehicleInventory
+```
+
+### 5.2a vehicle_inventories (NEW)
+
+Field:
+```text
+id bigint primary key
+vehicle_id foreign key
+date date
+stock integer
+created_at timestamp
+updated_at timestamp
+```
+
+Index:
+```text
+vehicle_id, date unique
+```
+
+Relasi:
+```text
+VehicleInventory belongsTo Vehicle
 ```
 
 ### 5.3 drivers
@@ -380,6 +406,7 @@ note text nullable
 total_price decimal(12,2)
 booking_status enum pending/approved/on_trip/completed/canceled
 payment_status enum unpaid/pending/paid/failed/expired/refunded
+completed_at timestamp nullable
 created_at timestamp
 updated_at timestamp
 ```
@@ -424,6 +451,9 @@ note text nullable
 total_price decimal(12,2)
 booking_status enum pending/approved/on_trip/completed/canceled
 payment_status enum unpaid/pending/paid/failed/expired/refunded
+vehicle_id foreign key nullable
+driver_id foreign key nullable
+completed_at timestamp nullable
 created_at timestamp
 updated_at timestamp
 ```
@@ -451,6 +481,9 @@ note text nullable
 total_price decimal(12,2)
 booking_status enum pending/approved/on_trip/completed/canceled
 payment_status enum unpaid/pending/paid/failed/expired/refunded
+vehicle_id foreign key nullable
+driver_id foreign key nullable
+completed_at timestamp nullable
 created_at timestamp
 updated_at timestamp
 ```
@@ -477,6 +510,9 @@ note text nullable
 total_price decimal(12,2)
 booking_status enum pending/approved/on_trip/completed/canceled
 payment_status enum unpaid/pending/paid/failed/expired/refunded
+vehicle_id foreign key nullable
+driver_id foreign key nullable
+completed_at timestamp nullable
 created_at timestamp
 updated_at timestamp
 ```
@@ -540,6 +576,7 @@ app/
 │   └── Requests/
 ├── Mail/
 ├── Models/
+├── Observers/
 ├── Policies/
 └── Services/
 ```
@@ -575,7 +612,7 @@ Requests:
 - StoreDriverRequest
 - StoreTourPackageRequest
 
-Filament Resources:
+Filament Resources (Menggunakan Single Column Layout):
 - UserResource
 - VehicleResource
 - DriverResource
@@ -588,6 +625,10 @@ Filament Resources:
 - ShuttleBookingResource
 - PaymentResource
 - LaporanKeuangan (Custom Page)
+
+Observers:
+- PaymentObserver (Menghandle pengurangan stok saat paid)
+- BookingStockObserver (Menghandle auto-return stok saat cancel/complete)
 
 ## 7. Route Design
 

@@ -93,6 +93,11 @@ Transparent background, Carbon Black text (#222222), 8px border-radius, with 6px
 
 Carbon Black background (#222222), 12px border-radius, no internal padding or shadows.
 
+### Rich Text / HTML Content
+**Role:** Formatting description from admin RichEditor on the frontend.
+
+Wrap rendered HTML content with a container using the `fi-prose` class to ensure lists, bold text, and paragraphs inherit consistent styling without breaking the layout. All HTML must be safely rendered (e.g. `sanitizeHtml`).
+
 ## Do's and Don'ts
 
 ### Do
@@ -120,6 +125,9 @@ Minimal imagery focused on high-quality video embeds and maps. Videos are contai
 ## Layout
 
 The site employs a max-width contained layout, centering content on an expansive Canvas White background. The hero section features a prominent, centered headline with supporting text, typically followed by a focused video or informational graphic. Sections alternate between Canvas White and Faint Gray backgrounds, with consistent vertical spacing (48-64px) creating a clear rhythm. Content blocks are often centered stacks of text or simple 1-column layouts, emphasizing direct readability over complex grid structures. The navigation is a minimalist top bar with ghost links and a single primary action button.
+
+### Admin Panel Layout
+Forms in the Filament Admin Panel should strictly follow a **Single Column Layout**. Avoid using separate right sidebars for form inputs. Form fields should be stacked vertically in a single column to maintain a clean and straightforward flow, prioritizing fast data entry over complex grid arrangements. Any destructive or save actions (Create/Edit) must prompt a confirmation modal to avoid accidental submissions.
 
 ## Agent Prompt Guide
 

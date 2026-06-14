@@ -1,4 +1,4 @@
-# PRODUCT REQUIREMENT DOCUMENT V3
+# PRODUCT REQUIREMENT DOCUMENT v1.3.0
 # Sistem Informasi Travel Manik Jaya Trans
 
 ## 1. Ringkasan Produk
@@ -128,14 +128,21 @@ Kebutuhan customer:
 - Menerima email notifikasi.
 - Kontak customer service via WhatsApp dari halaman detail layanan.
 
+UX:
+- **Full day**: Sewa 12 jam dengan harga price_full_day.
+- **Half day**: Sewa 6 jam dengan harga price_half_day.
+- Total harga harus terlihat sebelum submit.
+- Kendaraan yang stok hariannya (inventory) habis tidak dapat dibooking.
+- Stok berkurang **HANYA** saat payment telah dibayar (paid).
+- Driver TIDAK dipilih customer (ditugaskan admin setelah approved).
+- Form booking kendaraan TIDAK menampilkan pilihan supir.
+
 Batasan customer:
 - Tidak dapat mengakses Filament admin panel.
 - Tidak dapat mengubah data master.
 - Tidak dapat melihat booking milik customer lain.
 - Tidak dapat mengubah status booking secara manual.
 - Tidak dapat mengubah harga booking.
-- Tidak dapat memilih supir (supir ditugaskan oleh admin).
-- Form booking kendaraan TIDAK menampilkan pilihan supir.
 
 ### 5.3 Admin
 
@@ -202,9 +209,9 @@ Batasan admin:
 ### 6.3 Fitur Admin
 
 1. Login admin panel.
-2. Dashboard ringkas.
+2. Dashboard ringkas (maksimal 4 widget).
 3. CRUD user.
-4. CRUD kendaraan.
+4. CRUD kendaraan (termasuk is_hidden toggle).
 5. CRUD driver.
 6. CRUD paket wisata.
 7. CRUD airport transfer.
@@ -222,6 +229,9 @@ Batasan admin:
 19. Melihat data customer pada booking.
 20. Mengunduh Laporan Keuangan (PDF & Excel) dengan rentang tanggal khusus.
 21. Mengunduh cetak Surat Perintah Kerja (SPK) PDF untuk pengugasan supir.
+22. Single Column Layout untuk semua form admin.
+23. Confirmation Modals pada setiap action simpan.
+24. RichEditor untuk deskripsi paket wisata & kendaraan.
 
 ## 7. User Flow Ringkas
 
@@ -381,21 +391,23 @@ Catatan Penting untuk Booking Kendaraan:
 
 Tabel utama:
 1. users
-2. vehicles
-3. drivers
-4. tour_packages
-5. airport_transfers
-6. hotel_shuttles
-7. rental_bookings
-8. tour_bookings
-9. transfer_bookings
-10. shuttle_bookings
-11. payments
+2. vehicles (menggunakan is_hidden, bukan status)
+3. vehicle_inventories (Sistem Inventory stok harian)
+4. drivers
+5. tour_packages
+6. airport_transfers
+7. hotel_shuttles
+8. rental_bookings (dengan completed_at)
+9. tour_bookings (dengan vehicle_id, driver_id, completed_at)
+10. transfer_bookings (dengan vehicle_id, driver_id, completed_at)
+11. shuttle_bookings (dengan vehicle_id, driver_id, completed_at)
+12. payments
 
 Relasi utama:
 - User memiliki banyak booking.
-- Vehicle memiliki banyak rental booking.
-- Driver memiliki banyak rental booking.
+- Vehicle memiliki banyak rental booking, tour booking, transfer booking, dan shuttle booking.
+- Vehicle memiliki banyak VehicleInventory.
+- Driver memiliki banyak rental booking, tour booking, transfer booking, dan shuttle booking.
 - TourPackage memiliki banyak tour booking.
 - AirportTransfer memiliki banyak transfer booking.
 - HotelShuttle memiliki banyak shuttle booking.
@@ -438,20 +450,20 @@ Email:
 - Laravel Mail.
 - Mailtrap atau SMTP untuk testing.
 
-## 11. Scope Project
+## 11. Scope Project (Phase 1-9 Selesai, Phase 10 Ongoing)
 
 ### 11.1 In Scope
 
 1. Website frontend customer.
 2. Auth customer.
 3. Role admin/customer.
-4. Admin panel Filament.
-5. CRUD kendaraan.
+4. Admin panel Filament (Single Column Layout).
+5. CRUD kendaraan (termasuk is_hidden toggle).
 6. CRUD driver.
 7. CRUD paket wisata.
 8. CRUD airport transfer.
 9. CRUD hotel shuttle.
-10. Booking kendaraan.
+10. Booking kendaraan (dengan Inventory System).
 11. Booking paket wisata.
 12. Booking airport transfer.
 13. Booking hotel shuttle.
@@ -459,9 +471,10 @@ Email:
 15. Detail booking customer.
 16. Payment basic.
 17. Midtrans Sandbox.
-18. Email notifikasi dasar.
+18. Email notifikasi (100% complete).
 19. Seeder data awal.
 20. UI sesuai `DESIGN.md`.
+21. Generate PDF (Invoice, Voucher, SPK, Laporan).
 
 ### 11.2 Out of Scope
 
