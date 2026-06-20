@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Booking;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTransferBookingRequest;
+use App\Mail\AdminBookingNotification;
 use App\Mail\BookingCreatedMail;
 use App\Models\AirportTransfer;
 use App\Models\TransferBooking;
@@ -55,7 +56,17 @@ class TransferBookingController extends Controller
         try {
             Mail::to(auth()->user()->email)->send(new BookingCreatedMail($transferBooking));
         } catch (\Exception $e) {
-            Log::error('Failed to send email: '.$e->getMessage());
+            Log::error('Failed to send booking created email to customer: '.$e->getMessage());
+        }
+
+        // Send email notification to admin
+        try {
+            $adminEmail = config('mail.admin_email');
+            if ($adminEmail) {
+                Mail::to($adminEmail)->send(new AdminBookingNotification($transferBooking, 'transfer'));
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to send booking notification email to admin: '.$e->getMessage());
         }
 
         return redirect()->route('customer.transfers.show', $transferBooking)->with('success', 'Booking Airport Transfer berhasil dibuat!');
