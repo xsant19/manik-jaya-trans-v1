@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Booking;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreTourBookingRequest;
+use App\Mail\AdminBookingNotification;
 use App\Mail\BookingCreatedMail;
 use App\Models\TourBooking;
 use App\Models\TourPackage;
@@ -53,7 +54,17 @@ class TourBookingController extends Controller
         try {
             Mail::to(auth()->user()->email)->send(new BookingCreatedMail($tourBooking));
         } catch (\Exception $e) {
-            Log::error('Failed to send email: '.$e->getMessage());
+            Log::error('Failed to send booking created email to customer: '.$e->getMessage());
+        }
+
+        // Send email notification to admin
+        try {
+            $adminEmail = config('mail.admin_email');
+            if ($adminEmail) {
+                Mail::to($adminEmail)->send(new AdminBookingNotification($tourBooking, 'tour'));
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to send booking notification email to admin: '.$e->getMessage());
         }
 
         return redirect()->route('customer.tours.show', $tourBooking)->with('success', 'Booking Paket Wisata berhasil dibuat!');

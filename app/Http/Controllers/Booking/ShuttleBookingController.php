@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Booking;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreShuttleBookingRequest;
+use App\Mail\AdminBookingNotification;
 use App\Mail\BookingCreatedMail;
 use App\Models\HotelShuttle;
 use App\Models\ShuttleBooking;
@@ -54,7 +55,17 @@ class ShuttleBookingController extends Controller
         try {
             Mail::to(auth()->user()->email)->send(new BookingCreatedMail($shuttleBooking));
         } catch (\Exception $e) {
-            Log::error('Failed to send email: '.$e->getMessage());
+            Log::error('Failed to send booking created email to customer: '.$e->getMessage());
+        }
+
+        // Send email notification to admin
+        try {
+            $adminEmail = config('mail.admin_email');
+            if ($adminEmail) {
+                Mail::to($adminEmail)->send(new AdminBookingNotification($shuttleBooking, 'shuttle'));
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to send booking notification email to admin: '.$e->getMessage());
         }
 
         return redirect()->route('customer.shuttles.show', $shuttleBooking)->with('success', 'Booking Hotel Shuttle berhasil dibuat!');
