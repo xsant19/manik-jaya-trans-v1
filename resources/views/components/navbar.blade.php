@@ -3,7 +3,7 @@
         <div class="flex justify-between h-16">
             <div class="flex items-center">
                 <a href="{{ route('home') }}" class="shrink-0 flex items-center overflow-hidden">
-                    <img src="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781009142/Logo_f7m95a.png" alt="Manik Jaya Trans Logo" class="h-8 w-auto">
+                    <img src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781009142/Logo_f7m95a.png" alt="Manik Jaya Trans Logo" class="h-8 w-auto">
                 </a>
                 <div class="hidden xl:ml-4 xl:flex xl:space-x-6">
                     <!-- Guest Links -->

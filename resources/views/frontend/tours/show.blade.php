@@ -29,14 +29,14 @@
                     <div class="relative bg-pale-drift col-span-2 row-span-2 overflow-hidden">
                         <img src="{{ asset($tour->imageUrls[0]) }}"
                              alt="{{ $tour->name }}"
-                             class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+                             class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />
                     </div>
                     {{-- 4 small right cells --}}
                     @for($i = 1; $i <= min(4, count($tour->imageUrls) - 1); $i++)
                         <div class="relative bg-faint-gray overflow-hidden">
                            <img src="{{ asset($tour->imageUrls[$i]) }}"
                                  alt="{{ $tour->name }} - Image {{ $i+1 }}"
-                                 class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 hover:scale-105" />
+                                 class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />
                         </div>
                     @endfor
                 </div>
@@ -50,7 +50,7 @@
                         <div class="min-w-full shrink-0 snap-center relative bg-pale-drift">
                             <img src="{{ asset($url) }}" 
                                  alt="{{ $tour->name }} - Slide {{ $index + 1 }}" 
-                                 class="absolute inset-0 h-full w-full object-cover" />
+                                 class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
                             
                             {{-- Image Counter Badge --}}
                             <div class="absolute bottom-3 right-3 bg-carbon-black/70 text-canvas-white text-xs font-medium px-2 py-1 rounded-md backdrop-blur-sm">

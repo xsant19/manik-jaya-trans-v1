@@ -12,9 +12,10 @@
     {{-- Slide 1: Tirta Gangga --}}
     <div class="hero-slide" aria-hidden="true">
         <img
-            src="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781010410/Tirta-Gangga_-Bali_-Indonesia_mxndtu.jpg"
+            src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010410/Tirta-Gangga_-Bali_-Indonesia_mxndtu.jpg"
             alt="Tirta Gangga Bali"
             class="h-full w-full object-cover object-center"
+            loading="eager" fetchpriority="high"
         />
     </div>
 
@@ -24,6 +25,7 @@
             src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010410/Ulun-Danu-Beratan_-Bali_-Indonesia_pm9zpk.jpg"
             alt="Ulun Danu Beratan Bali"
             class="h-full w-full object-cover object-center"
+            loading="lazy"
         />
     </div>
 
@@ -33,6 +35,7 @@
             src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010411/Black-Lava-Kintamani_-Bali_-Indonesia_atrjop.jpg"
             alt="Black Lava Kintamani Bali"
             class="h-full w-full object-cover object-center"
+            loading="lazy"
         />
     </div>
 
@@ -42,6 +45,7 @@
             src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010412/Tanah-Lot_-Bali_-Indonesia_y55bdj.jpg"
             alt="Tanah Lot Bali"
             class="h-full w-full object-cover object-center"
+            loading="lazy"
         />
     </div>
 
@@ -51,6 +55,7 @@
             src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010415/Tegallalang_-Bali_-Indonesia_nx2n5o.jpg"
             alt="Tegallalang Rice Terrace Ubud"
             class="h-full w-full object-cover object-center"
+            loading="lazy"
         />
     </div>
 
@@ -151,7 +156,7 @@
                                 @if($vehicle->image)
                                     <img src="{{ asset($vehicle->imageUrls[0]) }}"
                                          alt="{{ $vehicle->name }}"
-                                         class="vehicle-card-image aspect-video w-full object-cover" />
+                                         class="vehicle-card-image aspect-video w-full object-cover" loading="lazy" />
                                 @else
                                     {{-- Placeholder --}}
                                     <div class="vehicle-card-image flex aspect-video w-full items-center justify-center bg-pale-drift">
@@ -269,7 +274,7 @@
                                 @if($package->imageUrls)
                                     <img src="{{ asset($package->imageUrls[0]) }}"
                                          alt="{{ $package->name }}"
-                                         class="tour-card-image aspect-video w-full object-cover" />
+                                         class="tour-card-image aspect-video w-full object-cover" loading="lazy" />
                                 @else
                                     {{-- Placeholder --}}
                                     <div class="tour-card-image flex aspect-video w-full items-center justify-center bg-pale-drift">

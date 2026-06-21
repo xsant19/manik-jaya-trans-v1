@@ -44,9 +44,9 @@
                                 @if($package->imageUrls)
                                     <img src="{{ asset($package->imageUrls[0]) }}"
                                          alt="{{ $package->name }}"
-                                         class="tour-card-image aspect-video w-full object-cover" />
+                                         class="tour-card-image aspect-video w-full object-cover" loading="lazy" />
                                 @else
-                                    <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=800&auto=format&fit=crop" alt="Bali Tour" class="h-60 w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" />
+                                    <img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?q=80&w=800&auto=format&fit=crop" alt="Bali Tour" class="h-60 w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" loading="lazy" />
                                 @endif
                             </div>
 

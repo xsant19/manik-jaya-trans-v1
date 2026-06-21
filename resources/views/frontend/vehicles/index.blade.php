@@ -44,9 +44,9 @@
                                 @if($vehicle->imageUrls && count($vehicle->imageUrls) > 0)
                                     <img src="{{ asset($vehicle->imageUrls[0]) }}"
                                          alt="{{ $vehicle->name }}"
-                                         class="vehicle-card-image aspect-video w-full object-cover" />
+                                         class="vehicle-card-image aspect-video w-full object-cover" loading="lazy" />
                                 @else
-                                    <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=800&auto=format&fit=crop" alt="Vehicle" class="h-60 w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" />
+                                    <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?q=80&w=800&auto=format&fit=crop" alt="Vehicle" class="h-60 w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110" loading="lazy" />
                                 @endif
                             </div>
 
