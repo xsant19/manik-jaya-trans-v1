@@ -12,13 +12,17 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+    /**
+     * Create Midtrans payment and return snap_token as JSON.
+     * Used by Snap JS Pop Up mode on the booking detail pages.
+     */
     public function store(Request $request, $type, $bookingCode, PaymentService $paymentService)
     {
         $models = [
-            'rental' => RentalBooking::class,
-            'tour' => TourBooking::class,
+            'rental'   => RentalBooking::class,
+            'tour'     => TourBooking::class,
             'transfer' => TransferBooking::class,
-            'shuttle' => ShuttleBooking::class,
+            'shuttle'  => ShuttleBooking::class,
         ];
 
         if (! array_key_exists($type, $models)) {
@@ -29,12 +33,16 @@ class PaymentController extends Controller
         $booking = $modelClass::where('booking_code', $bookingCode)->firstOrFail();
 
         try {
-            $redirectUrl = $paymentService->createPaymentForBooking($booking);
+            $snapToken = $paymentService->createPaymentForBooking($booking);
 
-            return redirect($redirectUrl);
+            return response()->json([
+                'snap_token' => $snapToken,
+            ]);
+
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', $e->getMessage());
+            return response()->json([
+                'error' => $e->getMessage(),
+            ], 422);
         }
     }
 
