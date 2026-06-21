@@ -158,8 +158,6 @@
 /* Nav arrow buttons */
 .hero-nav-btn {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
     z-index: 20;
     width: 44px;
     height: 44px;
