@@ -12,9 +12,10 @@
     {{-- Slide 1: Tirta Gangga --}}
     <div class="hero-slide" aria-hidden="true">
         <img
-            src="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781010410/Tirta-Gangga_-Bali_-Indonesia_mxndtu.jpg"
+            src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010410/Tirta-Gangga_-Bali_-Indonesia_mxndtu.jpg"
             alt="Tirta Gangga Bali"
             class="h-full w-full object-cover object-center"
+            loading="eager" fetchpriority="high"
         />
     </div>
 
@@ -24,6 +25,7 @@
             src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010410/Ulun-Danu-Beratan_-Bali_-Indonesia_pm9zpk.jpg"
             alt="Ulun Danu Beratan Bali"
             class="h-full w-full object-cover object-center"
+            loading="lazy"
         />
     </div>
 
@@ -33,6 +35,7 @@
             src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010411/Black-Lava-Kintamani_-Bali_-Indonesia_atrjop.jpg"
             alt="Black Lava Kintamani Bali"
             class="h-full w-full object-cover object-center"
+            loading="lazy"
         />
     </div>
 
@@ -42,6 +45,7 @@
             src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010412/Tanah-Lot_-Bali_-Indonesia_y55bdj.jpg"
             alt="Tanah Lot Bali"
             class="h-full w-full object-cover object-center"
+            loading="lazy"
         />
     </div>
 
@@ -51,6 +55,7 @@
             src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781010415/Tegallalang_-Bali_-Indonesia_nx2n5o.jpg"
             alt="Tegallalang Rice Terrace Ubud"
             class="h-full w-full object-cover object-center"
+            loading="lazy"
         />
     </div>
 
@@ -95,19 +100,19 @@
     </div>
 
     {{-- ── Prev / Next Buttons ── --}}
-    <button id="hero-prev" type="button" class="hero-nav-btn left-4 sm:left-6" aria-label="Slide sebelumnya">
+    <button id="hero-prev" type="button" class="hero-nav-btn bottom-8 left-4 md:top-1/2 md:-translate-y-1/2 md:bottom-auto md:left-6" aria-label="Slide sebelumnya">
         <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m15 18-6-6 6-6"/>
         </svg>
     </button>
-    <button id="hero-next" type="button" class="hero-nav-btn right-4 sm:right-6" aria-label="Slide berikutnya">
+    <button id="hero-next" type="button" class="hero-nav-btn bottom-8 right-4 md:top-1/2 md:-translate-y-1/2 md:bottom-auto md:right-6" aria-label="Slide berikutnya">
         <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m9 18 6-6-6-6"/>
         </svg>
     </button>
 
     {{-- ── Dot Indicators ── --}}
-    <div class="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2" role="tablist" aria-label="Slide indicators">
+    <div class="absolute bottom-12 md:bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2" role="tablist" aria-label="Slide indicators">
         <button type="button" class="hero-dot" aria-label="Slide 1" role="tab"></button>
         <button type="button" class="hero-dot" aria-label="Slide 2" role="tab"></button>
         <button type="button" class="hero-dot" aria-label="Slide 3" role="tab"></button>
@@ -151,7 +156,7 @@
                                 @if($vehicle->image)
                                     <img src="{{ asset($vehicle->imageUrls[0]) }}"
                                          alt="{{ $vehicle->name }}"
-                                         class="vehicle-card-image aspect-video w-full object-cover" />
+                                         class="vehicle-card-image aspect-video w-full object-cover" loading="lazy" />
                                 @else
                                     {{-- Placeholder --}}
                                     <div class="vehicle-card-image flex aspect-video w-full items-center justify-center bg-pale-drift">
@@ -269,7 +274,7 @@
                                 @if($package->imageUrls)
                                     <img src="{{ asset($package->imageUrls[0]) }}"
                                          alt="{{ $package->name }}"
-                                         class="tour-card-image aspect-video w-full object-cover" />
+                                         class="tour-card-image aspect-video w-full object-cover" loading="lazy" />
                                 @else
                                     {{-- Placeholder --}}
                                     <div class="tour-card-image flex aspect-video w-full items-center justify-center bg-pale-drift">

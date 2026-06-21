@@ -27,7 +27,7 @@
 
     <div class="min-h-screen flex flex-col items-center justify-center p-4">
         <a href="{{ route('home') }}" class="mb-8 block overflow-hidden">
-            <img src="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781009142/Logo_f7m95a.png" alt="Manik Jaya Trans Logo" class="h-12 w-auto mx-auto">
+            <img src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781009142/Logo_f7m95a.png" alt="Manik Jaya Trans Logo" class="h-12 w-auto mx-auto">
         </a>
 
         <div class="w-full max-w-md bg-canvas-white rounded-card border border-soft-divider p-8">

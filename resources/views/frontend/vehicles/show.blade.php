@@ -29,14 +29,14 @@
                     <div class="overflow-hidden rounded-t-card border border-b-0 border-soft-divider bg-pale-drift">
                         <img src="{{ asset($vehicle->imageUrls[0]) }}"
                              alt="{{ $vehicle->name }}"
-                             class="h-[420px] w-full object-cover transition-transform duration-500 hover:scale-105" />
+                             class="h-[420px] w-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy" />
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         @if(isset($vehicle->imageUrls[1]))
                             <div class="overflow-hidden rounded-bl-card border border-soft-divider bg-faint-gray">
                                 <img src="{{ asset($vehicle->imageUrls[1]) }}"
                                      alt="{{ $vehicle->name }}"
-                                     class="h-44 w-full object-cover" />
+                                     class="h-44 w-full object-cover" loading="lazy" />
                             </div>
                         @else
                             <div class="flex h-44 items-center justify-center overflow-hidden rounded-bl-card border border-soft-divider bg-faint-gray">
@@ -52,7 +52,7 @@
                             <div class="overflow-hidden rounded-br-card border border-soft-divider bg-faint-gray">
                                 <img src="{{ asset($vehicle->imageUrls[2]) }}"
                                      alt="{{ $vehicle->name }}"
-                                     class="h-44 w-full object-cover" />
+                                     class="h-44 w-full object-cover" loading="lazy" />
                             </div>
                         @else
                             <div class="flex h-44 items-center justify-center overflow-hidden rounded-br-card border border-soft-divider bg-faint-gray">
@@ -75,7 +75,7 @@
                         <div class="vehicle-carousel min-w-full shrink-0 snap-center relative bg-pale-drift">
                             <img src="{{ asset($url) }}"
                                  alt="{{ $vehicle->name }} - Foto {{ $index + 1 }}"
-                                 class="absolute inset-0 h-full w-full object-cover" />
+                                 class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
                             {{-- Image Counter Badge --}}
                             <div class="absolute bottom-3 right-3 bg-carbon-black/70 text-canvas-white text-xs font-medium px-2 py-1 rounded-md backdrop-blur-sm">
                                 {{ $index + 1 }} / {{ count($vehicle->imageUrls) }}

@@ -2,7 +2,7 @@
     <x-page-container class="py-12 md:py-16">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="md:col-span-1">
-                <img src="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781009142/Logo_f7m95a.png" alt="Manik Jaya Trans Logo" class="h-8 w-auto mb-4">
+                <img src="https://res.cloudinary.com/dafmuqvhh/image/upload/q_auto/f_auto/v1781009142/Logo_f7m95a.png" alt="Manik Jaya Trans Logo" class="h-8 w-auto mb-4">
                 <p class="text-storm-gray text-sm leading-relaxed">
                     {{ config('company.tagline') }}
                 </p>
