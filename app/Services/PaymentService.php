@@ -12,9 +12,10 @@ use Midtrans\Snap;
 class PaymentService
 {
     /**
-     * Create a new payment record for a booking and return Midtrans Snap URL.
+     * Create a new payment record for a booking and return Midtrans Snap Token.
+     * Used by Snap JS Pop Up mode — only snap_token is needed, not redirect_url.
      */
-    public function createPaymentForBooking(Model $booking)
+    public function createPaymentForBooking(Model $booking): string
     {
         // 1. Check if booking belongs to current user
         if ($booking->user_id != auth()->id()) {
@@ -31,17 +32,17 @@ class PaymentService
             throw new Exception('This booking is already paid.');
         }
 
-        // 4. Check if there's already a pending payment with a valid snap URL
+        // 4. Re-use existing pending payment token if still available
         $existingPayment = Payment::where('payable_type', get_class($booking))
             ->where('payable_id', $booking->id)
-            ->whereIn('status', ['pending'])
+            ->where('status', 'pending')
             ->first();
 
-        if ($existingPayment && ! empty($existingPayment->raw_response['redirect_url'] ?? null)) {
-            return $existingPayment->raw_response['redirect_url'];
+        if ($existingPayment && ! empty($existingPayment->raw_response['token'] ?? null)) {
+            return $existingPayment->raw_response['token'];
         }
 
-        // Configure Midtrans
+        // 5. Configure Midtrans
         Config::$serverKey = config('midtrans.server_key');
         Config::$isProduction = config('midtrans.is_production');
         Config::$isSanitized = config('midtrans.is_sanitized');
@@ -49,8 +50,6 @@ class PaymentService
 
         $transactionId = 'TRX-'.time().'-'.strtoupper(Str::random(5));
         $grossAmount = (int) $booking->total_price;
-
-        $appUrl = config('app.url');
 
         $params = [
             'transaction_details' => [
@@ -62,19 +61,11 @@ class PaymentService
                 'email' => auth()->user()->email,
                 'phone' => auth()->user()->phone ?? '',
             ],
-            'callbacks' => [
-                'finish' => $appUrl.'/customer/dashboard',
-                'error' => route('payment.failed'),
-            ],
         ];
 
         try {
+            // Only call getSnapToken — sufficient for Snap JS Pop Up
             $snapToken = Snap::getSnapToken($params);
-            // Midtrans PHP library actually doesn't return redirect_url from getSnapToken by default,
-            // we should use createTransaction() to get redirect_url
-            $snapTransaction = Snap::createTransaction($params);
-
-            $redirectUrl = $snapTransaction->redirect_url;
 
             // Create new payment record
             Payment::create([
@@ -88,12 +79,11 @@ class PaymentService
                 'gross_amount' => $grossAmount,
                 'status' => 'pending',
                 'raw_response' => [
-                    'token' => $snapTransaction->token,
-                    'redirect_url' => $redirectUrl,
+                    'token' => $snapToken,
                 ],
             ]);
 
-            return $redirectUrl;
+            return $snapToken;
 
         } catch (Exception $e) {
             throw new Exception('Midtrans Error: '.$e->getMessage());

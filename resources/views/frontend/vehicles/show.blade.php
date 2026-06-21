@@ -18,29 +18,28 @@
     </x-page-container>
 </div>
 
-{{-- ── Image Gallery (1 Main + 2 Thumbnails below) ── --}}
+{{-- ── Image Gallery ── --}}
 <div class="bg-canvas-white">
     <x-page-container>
         <div class="py-6">
             @if($vehicle->imageUrls && count($vehicle->imageUrls) > 0)
-                {{-- Has image from DB --}}
-                <div class="space-y-2">
-                    {{-- Main image --}}
+
+                {{-- Desktop: 1 Main + 2 Thumbnails (hidden on mobile) --}}
+                <div class="hidden md:block space-y-2">
                     <div class="overflow-hidden rounded-t-card border border-b-0 border-soft-divider bg-pale-drift">
                         <img src="{{ asset($vehicle->imageUrls[0]) }}"
                              alt="{{ $vehicle->name }}"
-                             class="h-80 w-full object-cover transition-transform duration-500 hover:scale-105 md:h-[420px]" />
+                             class="h-[420px] w-full object-cover transition-transform duration-500 hover:scale-105" />
                     </div>
-                    {{-- 2 thumbnails below --}}
                     <div class="grid grid-cols-2 gap-2">
                         @if(isset($vehicle->imageUrls[1]))
                             <div class="overflow-hidden rounded-bl-card border border-soft-divider bg-faint-gray">
                                 <img src="{{ asset($vehicle->imageUrls[1]) }}"
                                      alt="{{ $vehicle->name }}"
-                                     class="h-32 w-full object-cover md:h-44" />
+                                     class="h-44 w-full object-cover" />
                             </div>
                         @else
-                            <div class="flex h-32 items-center justify-center overflow-hidden rounded-bl-card border border-soft-divider bg-faint-gray md:h-44">
+                            <div class="flex h-44 items-center justify-center overflow-hidden rounded-bl-card border border-soft-divider bg-faint-gray">
                                 <svg class="size-8 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                     <rect width="18" height="18" x="3" y="3" rx="2"/>
@@ -53,10 +52,10 @@
                             <div class="overflow-hidden rounded-br-card border border-soft-divider bg-faint-gray">
                                 <img src="{{ asset($vehicle->imageUrls[2]) }}"
                                      alt="{{ $vehicle->name }}"
-                                     class="h-32 w-full object-cover md:h-44" />
+                                     class="h-44 w-full object-cover" />
                             </div>
                         @else
-                            <div class="flex h-32 items-center justify-center overflow-hidden rounded-br-card border border-soft-divider bg-faint-gray md:h-44">
+                            <div class="flex h-44 items-center justify-center overflow-hidden rounded-br-card border border-soft-divider bg-faint-gray">
                                 <svg class="size-8 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                     <rect width="18" height="18" x="3" y="3" rx="2"/>
@@ -67,11 +66,28 @@
                         @endif
                     </div>
                 </div>
+
+                {{-- Mobile Carousel (hidden on desktop) --}}
+                <div class="md:hidden flex overflow-x-auto snap-x snap-mandatory rounded-card h-[300px]"
+                     style="scrollbar-width: none; -ms-overflow-style: none;">
+                    <style>.vehicle-carousel::-webkit-scrollbar { display: none; }</style>
+                    @foreach($vehicle->imageUrls as $index => $url)
+                        <div class="vehicle-carousel min-w-full shrink-0 snap-center relative bg-pale-drift">
+                            <img src="{{ asset($url) }}"
+                                 alt="{{ $vehicle->name }} - Foto {{ $index + 1 }}"
+                                 class="absolute inset-0 h-full w-full object-cover" />
+                            {{-- Image Counter Badge --}}
+                            <div class="absolute bottom-3 right-3 bg-carbon-black/70 text-canvas-white text-xs font-medium px-2 py-1 rounded-md backdrop-blur-sm">
+                                {{ $index + 1 }} / {{ count($vehicle->imageUrls) }}
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
             @else
-                {{-- No image: 3-panel placeholder grid --}}
-                <div class="space-y-2">
-                    {{-- Main placeholder --}}
-                    <div class="flex h-80 items-center justify-center overflow-hidden rounded-t-card border border-b-0 border-soft-divider bg-pale-drift md:h-[420px]">
+                {{-- No image: Desktop 3-panel placeholder (hidden on mobile) --}}
+                <div class="hidden md:block space-y-2">
+                    <div class="flex h-[420px] items-center justify-center overflow-hidden rounded-t-card border border-b-0 border-soft-divider bg-pale-drift">
                         <svg class="size-20 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                              fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
@@ -80,10 +96,9 @@
                             <circle cx="17" cy="17" r="2"/>
                         </svg>
                     </div>
-                    {{-- 2 smaller placeholder tiles --}}
                     <div class="grid grid-cols-2 gap-2">
                         @for($i = 0; $i < 2; $i++)
-                            <div class="flex h-32 items-center justify-center overflow-hidden border border-soft-divider bg-faint-gray {{ $i === 0 ? 'rounded-bl-card' : 'rounded-br-card' }} md:h-44">
+                            <div class="flex h-44 items-center justify-center overflow-hidden border border-soft-divider bg-faint-gray {{ $i === 0 ? 'rounded-bl-card' : 'rounded-br-card' }}">
                                 <svg class="size-8 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                     <rect width="18" height="18" x="3" y="3" rx="2"/>
@@ -93,6 +108,17 @@
                             </div>
                         @endfor
                     </div>
+                </div>
+
+                {{-- No image: Mobile Placeholder --}}
+                <div class="md:hidden flex h-[300px] items-center justify-center bg-pale-drift rounded-card overflow-hidden">
+                    <svg class="size-12 text-dust-bunny" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
+                        <circle cx="7" cy="17" r="2"/>
+                        <path d="M9 17h6"/>
+                        <circle cx="17" cy="17" r="2"/>
+                    </svg>
                 </div>
             @endif
         </div>
@@ -602,7 +628,7 @@
                                 <p class="mt-1 text-xs leading-relaxed text-storm-gray mb-3">
                                     Hubungi kami via WhatsApp untuk pertanyaan seputar kendaraan ini.
                                 </p>
-                                <a href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20bertanya%20tentang%20{{ urlencode($vehicle->name) }}"
+                                <a href="https://wa.me/{{ config('company.phone_intl') }}?text=Halo,%20saya%20ingin%20bertanya%20tentang%20{{ urlencode($vehicle->name) }}"
                                    target="_blank"
                                    class="inline-flex items-center gap-2 text-xs font-medium text-carbon-black hover:underline">
                                     <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">

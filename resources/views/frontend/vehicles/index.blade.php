@@ -284,7 +284,7 @@
         {{-- CTA Contact --}}
         <div class="mt-8 text-center">
             <p class="text-storm-gray mb-4">Punya rencana perjalanan khusus? Konsultasi gratis dengan kami!</p>
-            <a href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20konsultasi%20mengenai%20area%20perjalanan%20saya"
+            <a href="https://wa.me/{{ config('company.phone_intl') }}?text=Halo,%20saya%20ingin%20konsultasi%20mengenai%20area%20perjalanan%20saya"
                target="_blank"
                class="inline-flex items-center gap-2 rounded-btn bg-carbon-black px-6 py-3 text-sm font-semibold text-canvas-white transition-opacity hover:opacity-90">
                 <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">

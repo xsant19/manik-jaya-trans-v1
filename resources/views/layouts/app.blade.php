@@ -7,6 +7,11 @@
     <link rel="icon" type="image/x-icon" href="https://res.cloudinary.com/dafmuqvhh/image/upload/v1781007908/favicon_obwlpf.png" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    {{-- Midtrans Snap JS --}}
+    <script type="text/javascript"
+        src="{{ config('midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js' }}"
+        data-client-key="{{ config('midtrans.client_key') }}"></script>
+
     {{-- Google Translate: hide default widget & override injected styles --}}
     <style>
         /* Hide the default Google Translate toolbar & widget */
@@ -62,5 +67,8 @@
         }
     </script>
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    {{-- Page-specific scripts (e.g. Snap JS callbacks) --}}
+    @stack('scripts')
 </body>
 </html>

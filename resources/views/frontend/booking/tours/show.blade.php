@@ -65,10 +65,13 @@
 
                     @if($tourBooking->payment_status === 'unpaid')
                         <p class="text-sm text-storm-gray mb-6">Silakan lakukan pembayaran agar pesanan Anda dapat segera kami proses.</p>
-                        <form action="{{ route('payment.store', ['type' => 'tour', 'booking_code' => $tourBooking->booking_code]) }}" method="POST" class="w-full">
-                            @csrf
-                            <x-primary-button type="submit" class="w-full">Bayar Sekarang</x-primary-button>
-                        </form>
+                        <button
+                            id="pay-button"
+                            type="button"
+                            class="w-full flex items-center justify-center gap-2 bg-carbon-black text-canvas-white px-8 py-4 rounded-lg font-medium hover:bg-black transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                            <span id="pay-button-text">Bayar Sekarang</span>
+                        </button>
                     @else
                         <div class="p-4 bg-green-50 text-green-800 rounded-btn text-center font-medium mb-3">
                             ✓ Pembayaran Lunas
@@ -89,3 +92,59 @@
     </x-page-container>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var payButton = document.getElementById('pay-button');
+    if (!payButton) return;
+
+    payButton.addEventListener('click', function () {
+        payButton.disabled = true;
+        document.getElementById('pay-button-text').textContent = 'Memproses...';
+
+        fetch('{{ route('payment.store', ['type' => 'tour', 'booking_code' => $tourBooking->booking_code]) }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+            if (data.error) {
+                alert('Gagal memulai pembayaran: ' + data.error);
+                payButton.disabled = false;
+                document.getElementById('pay-button-text').textContent = 'Bayar Sekarang';
+                return;
+            }
+
+            window.snap.pay(data.snap_token, {
+                language: 'id',
+                onSuccess: function (result) {
+                    window.location.href = '{{ route('customer.dashboard') }}';
+                },
+                onPending: function (result) {
+                    window.location.href = '{{ route('customer.dashboard') }}';
+                },
+                onError: function (result) {
+                    alert('Pembayaran gagal. Silakan coba lagi.');
+                    payButton.disabled = false;
+                    document.getElementById('pay-button-text').textContent = 'Bayar Sekarang';
+                },
+                onClose: function () {
+                    payButton.disabled = false;
+                    document.getElementById('pay-button-text').textContent = 'Bayar Sekarang';
+                },
+            });
+        })
+        .catch(function () {
+            alert('Terjadi kesalahan. Silakan coba lagi.');
+            payButton.disabled = false;
+            document.getElementById('pay-button-text').textContent = 'Bayar Sekarang';
+        });
+    });
+});
+</script>
+@endpush
