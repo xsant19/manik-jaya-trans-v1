@@ -5,7 +5,7 @@
 <!-- Hero Section — Images Slider -->
 <section
     id="hero-slider"
-    class="relative h-[85vh] min-h-[560px] w-full overflow-hidden bg-carbon-black"
+    class="relative h-[85svh] min-h-[560px] w-full overflow-hidden bg-carbon-black"
     aria-label="Hero slideshow destinasi Bali"
 >
     {{-- ── Slides ── --}}

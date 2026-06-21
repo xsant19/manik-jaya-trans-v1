@@ -57,15 +57,21 @@ document.addEventListener('DOMContentLoaded', () => {
     slider.addEventListener('mouseleave', startAutoplay);
 
     // Touch / Swipe Navigation
+    // Touch / Swipe Navigation
     let touchStartX = 0;
+    let touchStartY = 0;
     let touchEndX = 0;
+    let touchEndY = 0;
 
     const handleSwipe = () => {
         const swipeThreshold = 50; // Minimum pixel distance to trigger swipe
-        const diff = touchStartX - touchEndX;
+        const diffX = touchStartX - touchEndX;
+        const diffY = Math.abs(touchStartY - touchEndY);
 
-        if (Math.abs(diff) > swipeThreshold) {
-            if (diff > 0) {
+        // Only trigger if horizontal movement is greater than threshold 
+        // AND horizontal movement is greater than vertical movement
+        if (Math.abs(diffX) > swipeThreshold && Math.abs(diffX) > diffY) {
+            if (diffX > 0) {
                 // Swiped left -> show next slide
                 next();
             } else {
@@ -78,10 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     slider.addEventListener('touchstart', (e) => {
         touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
     }, { passive: true });
 
     slider.addEventListener('touchend', (e) => {
         touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
         handleSwipe();
     }, { passive: true });
 
