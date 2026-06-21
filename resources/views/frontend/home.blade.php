@@ -100,19 +100,19 @@
     </div>
 
     {{-- ── Prev / Next Buttons ── --}}
-    <button id="hero-prev" type="button" class="hero-nav-btn bottom-8 left-4 md:top-1/2 md:-translate-y-1/2 md:bottom-auto md:left-6" aria-label="Slide sebelumnya">
+    <button id="hero-prev" type="button" class="hero-nav-btn hidden md:flex md:top-1/2 md:-translate-y-1/2 md:left-6" aria-label="Slide sebelumnya">
         <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m15 18-6-6 6-6"/>
         </svg>
     </button>
-    <button id="hero-next" type="button" class="hero-nav-btn bottom-8 right-4 md:top-1/2 md:-translate-y-1/2 md:bottom-auto md:right-6" aria-label="Slide berikutnya">
+    <button id="hero-next" type="button" class="hero-nav-btn hidden md:flex md:top-1/2 md:-translate-y-1/2 md:right-6" aria-label="Slide berikutnya">
         <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m9 18 6-6-6-6"/>
         </svg>
     </button>
 
     {{-- ── Dot Indicators ── --}}
-    <div class="absolute bottom-12 md:bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2" role="tablist" aria-label="Slide indicators">
+    <div class="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2" role="tablist" aria-label="Slide indicators">
         <button type="button" class="hero-dot" aria-label="Slide 1" role="tab"></button>
         <button type="button" class="hero-dot" aria-label="Slide 2" role="tab"></button>
         <button type="button" class="hero-dot" aria-label="Slide 3" role="tab"></button>
