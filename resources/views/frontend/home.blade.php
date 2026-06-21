@@ -100,12 +100,12 @@
     </div>
 
     {{-- ── Prev / Next Buttons ── --}}
-    <button id="hero-prev" type="button" class="hero-nav-btn hidden md:flex md:top-1/2 md:-translate-y-1/2 md:left-6" aria-label="Slide sebelumnya">
+    <button id="hero-prev" type="button" class="hero-nav-btn hidden md:flex items-center justify-center md:top-1/2 md:-translate-y-1/2 md:left-6" aria-label="Slide sebelumnya">
         <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m15 18-6-6 6-6"/>
         </svg>
     </button>
-    <button id="hero-next" type="button" class="hero-nav-btn hidden md:flex md:top-1/2 md:-translate-y-1/2 md:right-6" aria-label="Slide berikutnya">
+    <button id="hero-next" type="button" class="hero-nav-btn hidden md:flex items-center justify-center md:top-1/2 md:-translate-y-1/2 md:right-6" aria-label="Slide berikutnya">
         <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="m9 18 6-6-6-6"/>
         </svg>

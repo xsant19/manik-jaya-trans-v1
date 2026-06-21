@@ -56,6 +56,35 @@ document.addEventListener('DOMContentLoaded', () => {
     slider.addEventListener('mouseenter', stopAutoplay);
     slider.addEventListener('mouseleave', startAutoplay);
 
+    // Touch / Swipe Navigation
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    const handleSwipe = () => {
+        const swipeThreshold = 50; // Minimum pixel distance to trigger swipe
+        const diff = touchStartX - touchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                // Swiped left -> show next slide
+                next();
+            } else {
+                // Swiped right -> show prev slide
+                prev();
+            }
+            startAutoplay();
+        }
+    };
+
+    slider.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    slider.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
     // Animate hero content on slide change
     const animateContent = () => {
         const content = slider.querySelector('.hero-content');
