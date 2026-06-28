@@ -8,7 +8,7 @@ Berikut adalah rincian pesanan Anda:
 - **Tanggal Pesan**: {{ \Carbon\Carbon::parse($booking->created_at)->translatedFormat('d F Y') }}
 - **Total Tagihan**: Rp {{ number_format($booking->total_price, 0, ',', '.') }}
 
-<x-mail::button :url="url('/customer/my-bookings')">
+<x-mail::button :url="route('customer.bookings.index')">
 Lihat Detail Pesanan
 </x-mail::button>
 

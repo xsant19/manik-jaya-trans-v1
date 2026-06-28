@@ -5,7 +5,7 @@ Status pesanan Anda dengan kode **{{ $booking->booking_code }}** telah diperbaru
 
 - **Status Terbaru**: {{ strtoupper(str_replace('_', ' ', $booking->booking_status)) }}
 
-<x-mail::button :url="url('/customer/my-bookings')">
+<x-mail::button :url="route('customer.bookings.index')">
 Cek Status Pemesanan
 </x-mail::button>
 

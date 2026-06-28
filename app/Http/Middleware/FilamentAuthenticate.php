@@ -15,6 +15,6 @@ class FilamentAuthenticate extends BaseAuthenticate
     protected function redirectTo($request): ?string
     {
         // Always redirect to custom login page instead of /admin/login
-        return route('home');
+        return route('login');
     }
 }
