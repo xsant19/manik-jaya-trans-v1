@@ -60,7 +60,7 @@
 
 ---
 
-<x-mail::button :url="url('/admin/{{ $bookingType }}-bookings/' . $booking->id)">
+<x-mail::button :url="url('/admin/' . $bookingType . '-bookings/' . $booking->id)">
 Kelola Pesanan di Admin Panel
 </x-mail::button>
 
