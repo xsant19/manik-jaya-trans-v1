@@ -70,9 +70,15 @@ class MidtransCallbackController extends Controller
 
             // Update booking status
             if ($payment->payable) {
-                $payment->payable->update([
+                $updateData = [
                     'payment_status' => $newStatus,
-                ]);
+                ];
+
+                if (in_array($newStatus, ['failed', 'expired', 'refunded'])) {
+                    $updateData['booking_status'] = 'canceled';
+                }
+
+                $payment->payable->update($updateData);
 
                 if ($newStatus === 'paid') {
                     try {
