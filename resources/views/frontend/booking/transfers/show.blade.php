@@ -73,16 +73,11 @@
                         <span class="text-2xl font-bold text-carbon-black">Rp {{ number_format($transferBooking->total_price, 0, ',', '.') }}</span>
                     </div>
 
-                    @if($transferBooking->payment_status === 'unpaid')
-                        <p class="text-sm text-storm-gray mb-6">Silakan lakukan pembayaran agar sopir kami dapat dijadwalkan.</p>
-                        <button
-                            id="pay-button"
-                            type="button"
-                            class="w-full flex items-center justify-center gap-2 bg-carbon-black text-canvas-white px-8 py-4 rounded-lg font-medium hover:bg-black transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-                        >
-                            <span id="pay-button-text">Bayar Sekarang</span>
-                        </button>
-                    @else
+                    @if($transferBooking->booking_status === 'canceled')
+                        <div class="p-4 bg-red-50 text-red-800 rounded-btn text-center font-medium mb-3">
+                            Pesanan Dibatalkan
+                        </div>
+                    @elseif($transferBooking->payment_status === 'paid')
                         <div class="p-4 bg-green-50 text-green-800 rounded-btn text-center font-medium mb-3">
                             ✓ Pembayaran Lunas
                         </div>
@@ -95,12 +90,33 @@
                             </svg>
                             Unduh Invoice PDF
                         </a>
+                    @elseif(in_array($transferBooking->payment_status, ['unpaid', 'pending']))
+                        <p class="text-sm text-storm-gray mb-6">Silakan lakukan pembayaran agar pesanan Anda dapat segera kami proses.</p>
+                        <button
+                            id="pay-button"
+                            type="button"
+                            class="w-full flex items-center justify-center gap-2 bg-carbon-black text-canvas-white px-8 py-4 rounded-lg font-medium hover:bg-black transition-colors disabled:opacity-60 disabled:cursor-not-allowed mb-3"
+                        >
+                            <span id="pay-button-text">Bayar Sekarang</span>
+                        </button>
+                        <form id="cancel-form-{{ $transferBooking->booking_code }}" action="{{ route('customer.bookings.cancel', ['type' => 'transfer', 'booking_code' => $transferBooking->booking_code]) }}" method="POST">
+                            @csrf
+                            <button type="button" onclick="openCancelModal('cancel-form-{{ $transferBooking->booking_code }}')" class="w-full flex items-center justify-center gap-2 bg-transparent text-carbon-black border border-soft-divider px-8 py-3 rounded-lg font-medium hover:bg-faint-gray transition-colors">
+                                Batalkan Pesanan
+                            </button>
+                        </form>
+                    @else
+                        <div class="p-4 bg-red-50 text-red-800 rounded-btn text-center font-medium mb-3">
+                            Pembayaran {{ ucfirst($transferBooking->payment_status) }}
+                        </div>
                     @endif
                 </div>
             </div>
         </div>
     </x-page-container>
 </div>
+
+<x-cancel-modal />
 @endsection
 
 @push('scripts')

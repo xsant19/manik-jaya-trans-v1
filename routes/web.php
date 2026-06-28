@@ -86,6 +86,11 @@ Route::middleware(['auth', 'role:customer'])->group(function () {
         Route::get('/my-bookings/tours/{tourBooking:booking_code}', [TourBookingController::class, 'show'])->name('tours.show');
         Route::get('/my-bookings/transfers/{transferBooking:booking_code}', [TransferBookingController::class, 'show'])->name('transfers.show');
         Route::get('/my-bookings/shuttles/{shuttleBooking:booking_code}', [ShuttleBookingController::class, 'show'])->name('shuttles.show');
+
+        // Cancel Route
+        Route::post('/my-bookings/{type}/{booking_code}/cancel', [BookingHistoryController::class, 'cancel'])
+            ->name('bookings.cancel')
+            ->where('type', 'rental|tour|transfer|shuttle');
     });
 
     // Payment Route

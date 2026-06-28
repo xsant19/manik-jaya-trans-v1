@@ -14,27 +14,30 @@ class CustomerDashboardController extends Controller
     {
         $userId = auth()->id();
 
-        // Ambil semua booking user
         $rentals = RentalBooking::where('user_id', $userId)->get()->map(function ($i) {
             $i->type_label = 'Sewa Kendaraan';
+            $i->type = 'rental';
             $i->detail_route = route('customer.rental.show', $i);
 
             return $i;
         });
         $tours = TourBooking::where('user_id', $userId)->get()->map(function ($i) {
             $i->type_label = 'Paket Wisata';
+            $i->type = 'tour';
             $i->detail_route = route('customer.tours.show', $i);
 
             return $i;
         });
         $transfers = TransferBooking::where('user_id', $userId)->get()->map(function ($i) {
             $i->type_label = 'Airport Transfer';
+            $i->type = 'transfer';
             $i->detail_route = route('customer.transfers.show', $i);
 
             return $i;
         });
         $shuttles = ShuttleBooking::where('user_id', $userId)->get()->map(function ($i) {
             $i->type_label = 'Hotel Shuttle';
+            $i->type = 'shuttle';
             $i->detail_route = route('customer.shuttles.show', $i);
 
             return $i;

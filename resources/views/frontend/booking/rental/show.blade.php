@@ -77,16 +77,11 @@
                         <span class="text-2xl font-bold text-carbon-black">Rp {{ number_format($rental->total_price, 0, ',', '.') }}</span>
                     </div>
 
-                    @if($rental->payment_status === 'unpaid')
-                        <p class="text-sm text-storm-gray mb-6">Silakan lakukan pembayaran agar pesanan Anda dapat segera kami proses.</p>
-                        <button
-                            id="pay-button"
-                            type="button"
-                            class="w-full flex items-center justify-center gap-2 bg-carbon-black text-canvas-white px-8 py-4 rounded-lg font-medium hover:bg-black transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
-                        >
-                            <span id="pay-button-text">Bayar Sekarang</span>
-                        </button>
-                    @else
+                    @if($rental->booking_status === 'canceled')
+                        <div class="p-4 bg-red-50 text-red-800 rounded-btn text-center font-medium mb-3">
+                            Pesanan Dibatalkan
+                        </div>
+                    @elseif($rental->payment_status === 'paid')
                         <div class="p-4 bg-green-50 text-green-800 rounded-btn text-center font-medium mb-3">
                             ✓ Pembayaran Lunas
                         </div>
@@ -109,19 +104,40 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                           d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"/>
                                 </svg>
-                                Unduh Voucher Perjalanan
+                                Unduh E-Voucher
                             </a>
                         @else
                             <p class="p-3 bg-yellow-50 border border-yellow-200 rounded-btn text-yellow-800 text-xs text-center">
                                 ⏳ Menunggu konfirmasi & penugasan driver dari admin. Voucher akan tersedia setelah dikonfirmasi.
                             </p>
                         @endif
+                    @elseif(in_array($rental->payment_status, ['unpaid', 'pending']))
+                        <p class="text-sm text-storm-gray mb-6">Silakan lakukan pembayaran agar pesanan Anda dapat segera kami proses.</p>
+                        <button
+                            id="pay-button"
+                            type="button"
+                            class="w-full flex items-center justify-center gap-2 bg-carbon-black text-canvas-white px-8 py-4 rounded-lg font-medium hover:bg-black transition-colors disabled:opacity-60 disabled:cursor-not-allowed mb-3"
+                        >
+                            <span id="pay-button-text">Bayar Sekarang</span>
+                        </button>
+                        <form id="cancel-form-{{ $rental->booking_code }}" action="{{ route('customer.bookings.cancel', ['type' => 'rental', 'booking_code' => $rental->booking_code]) }}" method="POST">
+                            @csrf
+                            <button type="button" onclick="openCancelModal('cancel-form-{{ $rental->booking_code }}')" class="w-full flex items-center justify-center gap-2 bg-transparent text-carbon-black border border-soft-divider px-8 py-3 rounded-lg font-medium hover:bg-faint-gray transition-colors">
+                                Batalkan Pesanan
+                            </button>
+                        </form>
+                    @else
+                        <div class="p-4 bg-red-50 text-red-800 rounded-btn text-center font-medium mb-3">
+                            Pembayaran {{ ucfirst($rental->payment_status) }}
+                        </div>
                     @endif
                 </div>
             </div>
         </div>
     </x-page-container>
 </div>
+
+<x-cancel-modal />
 @endsection
 
 @push('scripts')

@@ -40,7 +40,15 @@
                             <td class="p-4"><x-status-badge :status="$booking->booking_status" /></td>
                             <td class="p-4"><x-status-badge :status="$booking->payment_status" /></td>
                             <td class="p-4 text-center">
-                                <a href="{{ $booking->detail_route }}" class="text-carbon-black hover:underline font-medium">Detail</a>
+                                <div class="flex items-center justify-center gap-4">
+                                    <a href="{{ $booking->detail_route }}" class="text-carbon-black hover:underline font-medium">Detail</a>
+                                    @if(in_array($booking->payment_status, ['unpaid', 'pending']) && $booking->booking_status !== 'canceled')
+                                        <form id="cancel-form-{{ $booking->booking_code }}" action="{{ route('customer.bookings.cancel', ['type' => $booking->type, 'booking_code' => $booking->booking_code]) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="button" onclick="openCancelModal('cancel-form-{{ $booking->booking_code }}')" class="text-red-600 hover:underline font-medium">Batal</button>
+                                        </form>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                         @endforeach
@@ -60,7 +68,15 @@
                         <div class="text-xs text-dust-bunny mb-4">Untuk tgl: {{ \Carbon\Carbon::parse($booking->booking_date ?? $booking->start_date)->format('d M Y') }}</div>
                         <div class="flex justify-between items-center border-t border-soft-divider pt-4">
                             <div class="font-bold">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</div>
-                            <a href="{{ $booking->detail_route }}" class="text-sm font-medium text-carbon-black hover:underline">Detail &rarr;</a>
+                            <div class="flex items-center gap-4">
+                                @if(in_array($booking->payment_status, ['unpaid', 'pending']) && $booking->booking_status !== 'canceled')
+                                    <form id="cancel-form-mobile-{{ $booking->booking_code }}" action="{{ route('customer.bookings.cancel', ['type' => $booking->type, 'booking_code' => $booking->booking_code]) }}" method="POST" class="inline">
+                                        @csrf
+                                        <button type="button" onclick="openCancelModal('cancel-form-mobile-{{ $booking->booking_code }}')" class="text-red-600 hover:underline font-medium text-sm">Batal</button>
+                                    </form>
+                                @endif
+                                <a href="{{ $booking->detail_route }}" class="text-sm font-medium text-carbon-black hover:underline">Detail &rarr;</a>
+                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -68,4 +84,6 @@
         @endif
     </x-page-container>
 </div>
+
+<x-cancel-modal />
 @endsection
