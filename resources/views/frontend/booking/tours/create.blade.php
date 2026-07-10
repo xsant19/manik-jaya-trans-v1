@@ -71,6 +71,13 @@
                             <span class="text-lg" id="estimatedTotal">Rp {{ number_format($tour->price, 0, ',', '.') }}</span>
                         </div>
                     </div>
+
+                    <div class="flex items-start gap-2.5 p-4 bg-faint-gray rounded-btn text-sm text-storm-gray border border-soft-divider">
+                        <svg class="w-5 h-5 flex-shrink-0 mt-0.5 text-carbon-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span>Selesaikan pembayaran dalam <strong class="text-carbon-black">24 jam</strong> setelah pemesanan dibuat, atau pesanan akan otomatis dibatalkan.</span>
+                    </div>
                 </div>
             </div>
         </div>

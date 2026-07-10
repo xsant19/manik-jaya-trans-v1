@@ -86,7 +86,13 @@
                             Unduh Invoice PDF
                         </a>
                     @elseif(in_array($shuttleBooking->payment_status, ['unpaid', 'pending']))
-                        <p class="text-sm text-storm-gray mb-6">Silakan lakukan pembayaran agar kursi Anda di-reservasi.</p>
+                        <p class="text-sm text-storm-gray mb-4">Silakan lakukan pembayaran agar kursi Anda di-reservasi.</p>
+                        <div class="flex items-start gap-2.5 p-3 bg-yellow-50 rounded-btn text-sm text-yellow-800 mb-4">
+                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>Batas waktu pembayaran <strong>24 jam</strong> sejak pesanan dibuat.</span>
+                        </div>
                         <button
                             id="pay-button"
                             type="button"
