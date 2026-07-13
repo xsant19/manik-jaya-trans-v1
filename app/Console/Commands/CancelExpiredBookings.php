@@ -2,12 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Attributes\Description;
-use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
 
-#[Signature('app:cancel-expired-bookings')]
-#[Description('Command description')]
 class CancelExpiredBookings extends Command
 {
     /**
