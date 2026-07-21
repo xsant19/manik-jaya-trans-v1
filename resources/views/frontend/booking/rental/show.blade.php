@@ -96,7 +96,8 @@
                             Unduh Invoice PDF
                         </a>
 
-                        @if($rental->booking_status === 'approved' && $rental->driver_id !== null)
+                        {{-- E-Voucher tersedia untuk status approved, on_trip, dan completed --}}
+                        @if(in_array($rental->booking_status, ['approved', 'on_trip', 'completed']) && $rental->driver_id !== null)
                             <a href="{{ route('customer.rental.voucher', $rental->booking_code) }}"
                                target="_blank"
                                class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-green-600 text-white text-sm font-medium rounded-btn hover:bg-green-700 transition">
@@ -113,12 +114,16 @@
                         @endif
                     @elseif(in_array($rental->payment_status, ['unpaid', 'pending']))
                         <p class="text-sm text-storm-gray mb-4">Silakan lakukan pembayaran agar pesanan Anda dapat segera kami proses.</p>
-                        <div class="flex items-start gap-2.5 p-3 bg-yellow-50 rounded-btn text-sm text-yellow-800 mb-4">
-                            <svg class="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span>Batas waktu pembayaran <strong>24 jam</strong> sejak pesanan dibuat.</span>
-                        </div>
+
+                        {{-- Countdown timer hold kendaraan (30 menit) --}}
+                        @if($rental->reserved_until && $rental->payment_status === 'unpaid')
+                            <div class="p-3 bg-yellow-50 border border-yellow-200 rounded-btn text-center mb-4">
+                                <p class="text-xs font-medium text-yellow-800 mb-1">🚗 Kendaraan dipesan untuk Anda</p>
+                                <p class="text-xs text-yellow-700 mb-2">Selesaikan pembayaran sebelum:</p>
+                                <div id="hold-countdown" class="text-xl font-bold text-yellow-900">--:--</div>
+                                <p class="text-xs text-yellow-600 mt-1" id="hold-status-text">Pesanan otomatis dibatalkan jika tidak dibayar</p>
+                            </div>
+                        @endif
                         <button
                             id="pay-button"
                             type="button"
@@ -200,4 +205,53 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+
+@if($rental->reserved_until && $rental->payment_status === 'unpaid')
+<script>
+// ─── Countdown timer untuk hold kendaraan ───────────────────────────────────
+(function () {
+    var countdownEl  = document.getElementById('hold-countdown');
+    var statusTextEl = document.getElementById('hold-status-text');
+    if (!countdownEl) return;
+
+    // Parse timestamp dari server (UTC ISO 8601)
+    var reservedUntil = new Date("{{ $rental->reserved_until->toIso8601String() }}");
+
+    function updateCountdown() {
+        var now       = new Date();
+        var remaining = reservedUntil - now; // milliseconds remaining
+
+        if (remaining <= 0) {
+            // Hold sudah expired — reload halaman agar status terbaru tampil
+            countdownEl.textContent  = '00:00';
+            if (statusTextEl) {
+                statusTextEl.textContent = '⚠ Waktu habis. Pesanan akan segera dibatalkan...';
+                statusTextEl.className   = 'text-xs text-red-600 mt-1 font-medium';
+            }
+            // Reload setelah 2 detik untuk memberi waktu server memproses
+            setTimeout(function () {
+                window.location.reload();
+            }, 2000);
+            return;
+        }
+
+        var totalSeconds = Math.floor(remaining / 1000);
+        var minutes      = Math.floor(totalSeconds / 60);
+        var seconds      = totalSeconds % 60;
+
+        countdownEl.textContent = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+
+        // Warna berubah merah saat sisa < 5 menit
+        if (remaining < 5 * 60 * 1000) {
+            countdownEl.style.color = '#dc2626'; // red-600
+        }
+
+        setTimeout(updateCountdown, 1000);
+    }
+
+    updateCountdown();
+})();
+</script>
+@endif
 @endpush
+

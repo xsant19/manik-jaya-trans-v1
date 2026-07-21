@@ -59,12 +59,23 @@ class InvoiceController extends Controller
         $rental = RentalBooking::with(['user', 'vehicle', 'driver', 'payment'])->where('booking_code', $bookingCode)->firstOrFail();
 
         abort_if($rental->user_id != auth()->id(), 403);
-        abort_if($rental->payment_status !== 'paid' || $rental->booking_status !== 'approved' || ! $rental->driver_id, 403, 'Voucher belum tersedia.');
+
+        // Voucher tersedia selama payment lunas, driver sudah diassign,
+        // dan status booking adalah approved / on_trip / completed
+        $allowedStatuses = ['approved', 'on_trip', 'completed'];
+        abort_if(
+            $rental->payment_status !== 'paid'
+                || ! in_array($rental->booking_status, $allowedStatuses)
+                || ! $rental->driver_id,
+            403,
+            'Voucher belum tersedia.'
+        );
 
         $pdf = Pdf::loadView('invoice.rental-voucher', compact('rental'))->setPaper('a4');
 
         return $pdf->download('voucher-'.$rental->booking_code.'.pdf');
     }
+
 
     private function getServiceDetails($booking, string $type): array
     {

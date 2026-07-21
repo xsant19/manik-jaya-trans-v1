@@ -20,13 +20,15 @@ class BookingStockObserver
     }
 
     /**
-     * Handle booking "created" event
+     * Handle booking "created" event.
+     * Untuk RentalBooking: stok langsung dikurangi sebagai hold sementara (30 menit).
+     * Hold akan menjadi permanen jika payment berhasil, atau dikembalikan jika expired/dibatalkan.
      */
     public function created(Model $booking): void
     {
-        // For RentalBooking, stock is immediately reduced upon creation
+        // For RentalBooking, stock is immediately reduced as a temporary hold
         if ($booking instanceof \App\Models\RentalBooking) {
-            Log::info("RentalBooking {$booking->booking_code} created. Reducing stock immediately.");
+            Log::info("RentalBooking {$booking->booking_code} created. Holding stock for 30 minutes (reserved_until: {$booking->reserved_until}).");
             $this->stockService->reduceStockForBooking($booking);
         }
     }

@@ -83,18 +83,19 @@ class RentalBookingController extends Controller
         $bookingCode = $this->bookingCodeService->generate('RNT', RentalBooking::class);
 
         $rentalBooking = RentalBooking::create([
-            'user_id' => auth()->id(),
-            'vehicle_id' => $vehicle->id,
-            'driver_id' => null, // Driver will be assigned by admin
-            'booking_code' => $bookingCode,
-            'rental_type' => $validated['rental_type'],
-            'start_date' => $startDate->format('Y-m-d'),
-            'end_date' => $endDate->format('Y-m-d'),
-            'pickup_location' => $validated['pickup_location'],
-            'note' => $validated['note'] ?? null,
-            'total_price' => $totalPrice,
-            'booking_status' => 'pending',
-            'payment_status' => 'unpaid',
+            'user_id'          => auth()->id(),
+            'vehicle_id'       => $vehicle->id,
+            'driver_id'        => null, // Driver will be assigned by admin
+            'booking_code'     => $bookingCode,
+            'rental_type'      => $validated['rental_type'],
+            'start_date'       => $startDate->format('Y-m-d'),
+            'end_date'         => $endDate->format('Y-m-d'),
+            'pickup_location'  => $validated['pickup_location'],
+            'note'             => $validated['note'] ?? null,
+            'total_price'      => $totalPrice,
+            'booking_status'   => 'pending',
+            'payment_status'   => 'unpaid',
+            'reserved_until'   => now()->addMinutes(30), // Hold vehicle stock for 30 minutes
         ]);
 
         // Send email to customer

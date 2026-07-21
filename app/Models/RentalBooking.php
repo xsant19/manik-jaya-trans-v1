@@ -23,15 +23,17 @@ class RentalBooking extends Model
         'booking_status',
         'payment_status',
         'completed_at',
+        'reserved_until',
     ];
 
     protected function casts(): array
     {
         return [
-            'start_date' => 'date',
-            'end_date' => 'date',
-            'total_price' => 'decimal:2',
-            'completed_at' => 'datetime',
+            'start_date'     => 'date',
+            'end_date'       => 'date',
+            'total_price'    => 'decimal:2',
+            'completed_at'   => 'datetime',
+            'reserved_until' => 'datetime',
         ];
     }
 
@@ -53,5 +55,25 @@ class RentalBooking extends Model
     public function payment()
     {
         return $this->morphOne(Payment::class, 'payable');
+    }
+
+    /**
+     * Apakah booking masih dalam masa hold aktif (belum bayar & belum expired)?
+     */
+    public function isOnHold(): bool
+    {
+        return $this->reserved_until !== null
+            && $this->reserved_until->isFuture()
+            && $this->payment_status === 'unpaid';
+    }
+
+    /**
+     * Apakah hold sudah kadaluarsa (belum bayar & waktu hold sudah lewat)?
+     */
+    public function isHoldExpired(): bool
+    {
+        return $this->reserved_until !== null
+            && $this->reserved_until->isPast()
+            && $this->payment_status === 'unpaid';
     }
 }
