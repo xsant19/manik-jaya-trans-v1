@@ -36,8 +36,14 @@
                         <x-form-error :messages="$errors->get('note')" />
                     </div>
 
-                    <div class="border-t border-soft-divider pt-6">
-                        <x-primary-button type="submit" class="w-full">Lanjutkan & Konfirmasi Pemesanan</x-primary-button>
+                    <x-coupon-input
+                        :validate-url="route('api.coupons.validate')"
+                        :total-price="$tour->price"
+                        :old-coupon-code="old('coupon_code', '')"
+                    />
+
+                    <div class="border-t border-soft-divider pt-6 mt-6">
+                        <x-primary-button type="submit" class="w-full">Lanjutkan &amp; Konfirmasi Pemesanan</x-primary-button>
                     </div>
                 </form>
             </div>
@@ -59,16 +65,24 @@
                             <span class="text-storm-gray">Pemesanan Atas Nama</span>
                             <span class="font-medium text-right">{{ auth()->user()->name }}<br><span class="text-xs text-storm-gray">{{ auth()->user()->phone }}</span></span>
                         </li>
-                        <li class="flex justify-between pt-3 border-t border-soft-divider">
+                        <li class="flex justify-between pt-3 border-t border-soft-divider pb-6">
                             <span class="text-storm-gray">Harga per Paket</span>
-                            <span class="font-medium" id="basePrice" data-price="{{ $tour->price }}">Rp {{ number_format($tour->price, 0, ',', '.') }}</span>
+                            <span class="font-medium">Rp {{ number_format($tour->price, 0, ',', '.') }}</span>
                         </li>
                     </ul>
 
-                    <div class="p-4 bg-yellow-50 text-yellow-800 rounded-btn text-sm mb-4">
-                        <div class="flex justify-between items-center font-bold">
-                            <span>Estimasi Total:</span>
-                            <span class="text-lg" id="estimatedTotal">Rp {{ number_format($tour->price, 0, ',', '.') }}</span>
+                    <div class="space-y-3 text-sm text-carbon-black mb-6">
+                        <div class="flex justify-between items-center" id="summarySubtotalRow">
+                            <span class="text-storm-gray">Subtotal</span>
+                            <span class="font-medium" id="summarySubtotal">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between items-center text-green-600 hidden" id="summaryDiscountRow">
+                            <span>Diskon Kupon</span>
+                            <span class="font-medium" id="summaryDiscount">- Rp 0</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-3 border-t border-soft-divider mt-3">
+                            <span class="font-bold text-carbon-black">Total Akhir</span>
+                            <span class="font-bold text-xl text-carbon-black" id="summaryTotal">Rp 0</span>
                         </div>
                     </div>
 
@@ -85,21 +99,59 @@
 </div>
 
 <script>
-    function calculateTotal() {
-        const basePrice = parseInt(document.getElementById('basePrice').getAttribute('data-price'));
-        let count = parseInt(document.getElementById('participant_count').value);
-        if(isNaN(count) || count < 1) count = 1;
-        
-        const total = basePrice * count;
-        document.getElementById('estimatedTotal').innerText = 'Rp ' + total.toLocaleString('id-ID');
+    window.getCurrentTotalPrice = function() {
+        const participantCount = document.getElementById('participant_count').value || 1;
+        const pricePerPerson = {{ $tour->price }};
+        return pricePerPerson * participantCount;
+    };
+
+    let currentDiscount = 0;
+
+    window.applyDiscountToSummary = function(discount) {
+        currentDiscount = discount;
+        updateSummaryDisplay();
+    };
+
+    function updateSummaryDisplay() {
+        const subtotal = window.getCurrentTotalPrice();
+        let total = subtotal - currentDiscount;
+        if (total < 0) total = 0;
+
+        const subtotalEl = document.getElementById('summarySubtotal');
+        const totalEl = document.getElementById('summaryTotal');
+        const discountRow = document.getElementById('summaryDiscountRow');
+        const discountEl = document.getElementById('summaryDiscount');
+
+        if (subtotalEl) subtotalEl.innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(subtotal);
+        if (totalEl) totalEl.innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
+
+        if (discountRow && discountEl) {
+            if (currentDiscount > 0) {
+                discountEl.innerText = '- Rp ' + new Intl.NumberFormat('id-ID').format(currentDiscount);
+                discountRow.classList.remove('hidden');
+            } else {
+                discountRow.classList.add('hidden');
+            }
+        }
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateSummaryDisplay();
+        
+        const participantInput = document.getElementById('participant_count');
+        if (participantInput) {
+            participantInput.addEventListener('input', updateSummaryDisplay);
+        }
+    });
     
     function disableSubmitButton(form) {
         const btn = form.querySelector('button[type="submit"]');
-        if(btn) {
-            btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-            btn.innerHTML = 'Memproses...';
+        if (btn) {
+            setTimeout(() => {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.innerHTML = 'Memproses...';
+            }, 10);
         }
     }
     

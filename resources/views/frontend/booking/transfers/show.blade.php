@@ -69,8 +69,25 @@
                     <h3 class="text-lg font-bold text-carbon-black mb-4">Total Biaya</h3>
                     
                     <div class="flex justify-between items-center mb-6 pb-6 border-b border-soft-divider">
-                        <span class="text-storm-gray">Harga Rute Tetap</span>
-                        <span class="text-2xl font-bold text-carbon-black">Rp {{ number_format($transferBooking->total_price, 0, ',', '.') }}</span>
+                        @if($transferBooking->discount_amount > 0)
+                            <div class="w-full space-y-2 text-sm">
+                                <div class="flex justify-between text-storm-gray">
+                                    <span>Harga Asli</span>
+                                    <span>Rp {{ number_format($transferBooking->original_price, 0, ',', '.') }}</span>
+                                </div>
+                                <div class="flex justify-between text-green-700 font-medium">
+                                    <span>Diskon Kupon <span class="font-mono text-xs bg-faint-gray px-1.5 py-0.5 rounded border border-soft-divider">{{ $transferBooking->coupon_code }}</span></span>
+                                    <span>- Rp {{ number_format($transferBooking->discount_amount, 0, ',', '.') }}</span>
+                                </div>
+                                <div class="flex justify-between items-center pt-2 border-t border-soft-divider">
+                                    <span class="text-storm-gray font-medium">Total Harus Dibayar</span>
+                                    <span class="text-2xl font-bold text-carbon-black">Rp {{ number_format($transferBooking->total_price, 0, ',', '.') }}</span>
+                                </div>
+                            </div>
+                        @else
+                            <span class="text-storm-gray">Harga Rute Tetap</span>
+                            <span class="text-2xl font-bold text-carbon-black">Rp {{ number_format($transferBooking->total_price, 0, ',', '.') }}</span>
+                        @endif
                     </div>
 
                     @if($transferBooking->booking_status === 'canceled')

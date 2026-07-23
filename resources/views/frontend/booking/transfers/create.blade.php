@@ -50,8 +50,14 @@
                         <x-form-error :messages="$errors->get('note')" />
                     </div>
 
-                    <div class="border-t border-soft-divider pt-6">
-                        <x-primary-button type="submit" class="w-full">Lanjutkan & Konfirmasi Pemesanan</x-primary-button>
+                    <x-coupon-input
+                        :validate-url="route('api.coupons.validate')"
+                        :total-price="$transfer->price"
+                        :old-coupon-code="old('coupon_code', '')"
+                    />
+
+                    <div class="border-t border-soft-divider pt-6 mt-6">
+                        <x-primary-button type="submit" class="w-full">Lanjutkan &amp; Konfirmasi Pemesanan</x-primary-button>
                     </div>
                 </form>
             </div>
@@ -79,19 +85,27 @@
                         </div>
                     </div>
                     
-                    <ul class="space-y-3 text-sm text-carbon-black mb-6">
+                    <ul class="space-y-3 text-sm text-carbon-black mb-6 border-b border-soft-divider pb-6">
                         <li class="flex justify-between">
                             <span class="text-storm-gray">Penyewa</span>
                             <span class="font-medium text-right">{{ auth()->user()->name }}<br><span class="text-xs text-storm-gray">{{ auth()->user()->phone }}</span></span>
                         </li>
                     </ul>
 
-                    <div class="p-4 bg-yellow-50 text-yellow-800 rounded-btn text-sm mb-4">
-                        <div class="flex justify-between items-center font-bold">
-                            <span>Total Harga:</span>
-                            <span class="text-lg">Rp {{ number_format($transfer->price, 0, ',', '.') }}</span>
+                    <div class="space-y-3 text-sm text-carbon-black mb-6">
+                        <div class="flex justify-between items-center" id="summarySubtotalRow">
+                            <span class="text-storm-gray">Subtotal</span>
+                            <span class="font-medium" id="summarySubtotal">Rp 0</span>
                         </div>
-                        <div class="text-xs mt-1 font-normal opacity-80">Harga tetap per kendaraan untuk rute ini.</div>
+                        <div class="flex justify-between items-center text-green-600 hidden" id="summaryDiscountRow">
+                            <span>Diskon Kupon</span>
+                            <span class="font-medium" id="summaryDiscount">- Rp 0</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-3 border-t border-soft-divider mt-3">
+                            <span class="font-bold text-carbon-black">Total Akhir</span>
+                            <span class="font-bold text-xl text-carbon-black" id="summaryTotal">Rp 0</span>
+                        </div>
+                        <div class="text-xs mt-1 font-normal text-storm-gray opacity-80 text-right">Harga tetap per kendaraan untuk rute ini.</div>
                     </div>
 
                     <div class="flex items-start gap-2.5 p-4 bg-faint-gray rounded-btn text-sm text-storm-gray border border-soft-divider">
@@ -107,12 +121,52 @@
 </div>
 
 <script>
+    window.getCurrentTotalPrice = function() {
+        return {{ $transfer->price }};
+    };
+
+    let currentDiscount = 0;
+
+    window.applyDiscountToSummary = function(discount) {
+        currentDiscount = discount;
+        updateSummaryDisplay();
+    };
+
+    function updateSummaryDisplay() {
+        const subtotal = window.getCurrentTotalPrice();
+        let total = subtotal - currentDiscount;
+        if (total < 0) total = 0;
+
+        const subtotalEl = document.getElementById('summarySubtotal');
+        const totalEl = document.getElementById('summaryTotal');
+        const discountRow = document.getElementById('summaryDiscountRow');
+        const discountEl = document.getElementById('summaryDiscount');
+
+        if (subtotalEl) subtotalEl.innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(subtotal);
+        if (totalEl) totalEl.innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
+
+        if (discountRow && discountEl) {
+            if (currentDiscount > 0) {
+                discountEl.innerText = '- Rp ' + new Intl.NumberFormat('id-ID').format(currentDiscount);
+                discountRow.classList.remove('hidden');
+            } else {
+                discountRow.classList.add('hidden');
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateSummaryDisplay();
+    });
+
     function disableSubmitButton(form) {
         const btn = form.querySelector('button[type="submit"]');
         if(btn) {
-            btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-            btn.innerHTML = 'Memproses...';
+            setTimeout(() => {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.innerHTML = 'Memproses...';
+            }, 10);
         }
     }
 </script>

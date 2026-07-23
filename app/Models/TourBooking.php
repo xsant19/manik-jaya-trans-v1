@@ -22,14 +22,20 @@ class TourBooking extends Model
         'booking_status',
         'payment_status',
         'completed_at',
+        'coupon_id',
+        'coupon_code',
+        'discount_amount',
+        'original_price',
     ];
 
     protected function casts(): array
     {
         return [
-            'booking_date' => 'date',
-            'total_price' => 'decimal:2',
-            'completed_at' => 'datetime',
+            'booking_date'    => 'date',
+            'total_price'     => 'decimal:2',
+            'discount_amount' => 'decimal:2',
+            'original_price'  => 'decimal:2',
+            'completed_at'    => 'datetime',
         ];
     }
 
@@ -46,6 +52,11 @@ class TourBooking extends Model
     public function payment()
     {
         return $this->morphOne(Payment::class, 'payable');
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 
     public function vehicle()

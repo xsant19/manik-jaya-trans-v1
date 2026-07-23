@@ -23,10 +23,11 @@ class StoreShuttleBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'booking_date' => ['required', 'date', 'after_or_equal:today'],
+            'booking_date'    => ['required', 'date', 'after_or_equal:today'],
             'passenger_count' => ['required', 'integer', 'min:1'],
-            'pickup_time' => ['nullable', 'date_format:H:i'],
-            'note' => ['nullable', 'string', 'max:500'],
+            'pickup_time'     => ['nullable', 'date_format:H:i'],
+            'note'            => ['nullable', 'string', 'max:500'],
+            'coupon_code'     => ['nullable', 'string', 'max:50'],
         ];
     }
 }

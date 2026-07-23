@@ -8,6 +8,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\HotelShuttleController;
 use App\Http\Controllers\Frontend\TourPackageController;
 use App\Http\Controllers\Frontend\VehicleController;
+use App\Http\Controllers\Api\CouponController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -113,3 +114,8 @@ Route::post('/payments/midtrans/callback', [MidtransCallbackController::class, '
 
 // Dokumen PDF & Excel (Admin)
 require __DIR__.'/documents.php';
+
+// API — Validasi Kupon (rate limited, tidak perlu auth)
+Route::post('/api/coupons/validate', [CouponController::class, 'validate'])
+    ->middleware('throttle:30,1')
+    ->name('api.coupons.validate');

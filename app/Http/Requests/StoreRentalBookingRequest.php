@@ -24,11 +24,12 @@ class StoreRentalBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rental_type' => ['required', 'string', Rule::in(['half_day', 'full_day'])],
-            'start_date' => ['required', 'date', 'after_or_equal:today'],
-            'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
-            'pickup_location' => ['required', 'string', 'max:255'],
-            'note' => ['nullable', 'string', 'max:500'],
+            'rental_type'      => ['required', 'string', Rule::in(['half_day', 'full_day'])],
+            'start_date'       => ['required', 'date', 'after_or_equal:today'],
+            'end_date'         => ['nullable', 'date', 'after_or_equal:start_date'],
+            'pickup_location'  => ['required', 'string', 'max:255'],
+            'note'             => ['nullable', 'string', 'max:500'],
+            'coupon_code'      => ['nullable', 'string', 'max:50'],
         ];
     }
 }

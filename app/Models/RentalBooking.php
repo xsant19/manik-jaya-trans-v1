@@ -24,16 +24,22 @@ class RentalBooking extends Model
         'payment_status',
         'completed_at',
         'reserved_until',
+        'coupon_id',
+        'coupon_code',
+        'discount_amount',
+        'original_price',
     ];
 
     protected function casts(): array
     {
         return [
-            'start_date'     => 'date',
-            'end_date'       => 'date',
-            'total_price'    => 'decimal:2',
-            'completed_at'   => 'datetime',
-            'reserved_until' => 'datetime',
+            'start_date'      => 'date',
+            'end_date'        => 'date',
+            'total_price'     => 'decimal:2',
+            'discount_amount' => 'decimal:2',
+            'original_price'  => 'decimal:2',
+            'completed_at'    => 'datetime',
+            'reserved_until'  => 'datetime',
         ];
     }
 
@@ -55,6 +61,11 @@ class RentalBooking extends Model
     public function payment()
     {
         return $this->morphOne(Payment::class, 'payable');
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 
     /**

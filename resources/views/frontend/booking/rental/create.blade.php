@@ -39,7 +39,7 @@
                             <x-form-error :messages="$errors->get('end_date')" />
                         </div>
                     </div>
-                    
+
                     <div class="mb-6 flex flex-col sm:flex-row items-center gap-4">
                         <button type="button" id="btnCheckAvailability" onclick="checkAvailability()" class="px-5 py-2.5 text-sm font-semibold rounded-btn border border-carbon-black text-carbon-black bg-canvas-white hover:bg-faint-gray transition-colors">
                             Cek Ketersediaan
@@ -61,8 +61,14 @@
                         <x-form-error :messages="$errors->get('note')" />
                     </div>
 
-                    <div class="border-t border-soft-divider pt-6">
-                        <x-primary-button type="submit" id="submitBtn" class="w-full opacity-50 cursor-not-allowed" disabled>Lanjutkan & Konfirmasi Pemesanan</x-primary-button>
+                    <x-coupon-input
+                        :validate-url="route('api.coupons.validate')"
+                        :total-price="$vehicle->price_full_day"
+                        :old-coupon-code="old('coupon_code', '')"
+                    />
+
+                    <div class="border-t border-soft-divider pt-6 mt-6">
+                        <x-primary-button type="submit" id="submitBtn" class="w-full opacity-50 cursor-not-allowed" disabled>Lanjutkan &amp; Konfirmasi Pemesanan</x-primary-button>
                         <p class="text-xs text-center text-storm-gray mt-3">Silakan 'Cek Ketersediaan' terlebih dahulu untuk melanjutkan pesanan.</p>
                     </div>
                 </form>
@@ -80,15 +86,26 @@
                         </div>
                     </div>
 
-                    <ul class="space-y-3 text-sm text-carbon-black mb-6">
+                    <ul class="space-y-3 text-sm text-carbon-black mb-6 border-b border-soft-divider pb-6">
                         <li class="flex justify-between">
                             <span class="text-storm-gray">Penyewa</span>
                             <span class="font-medium text-right">{{ auth()->user()->name }}<br><span class="text-xs text-storm-gray">{{ auth()->user()->phone }}</span></span>
                         </li>
                     </ul>
 
-                    <div class="p-4 bg-yellow-50 text-yellow-800 rounded-btn text-sm mb-4">
-                        <strong>Perhatian:</strong> Total harga final akan dihitung secara otomatis oleh sistem setelah Anda menekan tombol Lanjutkan.
+                    <div class="space-y-3 text-sm text-carbon-black mb-6">
+                        <div class="flex justify-between items-center" id="summarySubtotalRow">
+                            <span class="text-storm-gray">Subtotal</span>
+                            <span class="font-medium" id="summarySubtotal">Rp 0</span>
+                        </div>
+                        <div class="flex justify-between items-center text-green-600 hidden" id="summaryDiscountRow">
+                            <span>Diskon Kupon</span>
+                            <span class="font-medium" id="summaryDiscount">- Rp 0</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-3 border-t border-soft-divider mt-3">
+                            <span class="font-bold text-carbon-black">Total Akhir</span>
+                            <span class="font-bold text-xl text-carbon-black" id="summaryTotal">Rp 0</span>
+                        </div>
                     </div>
 
                     <div class="flex items-start gap-2.5 p-4 bg-faint-gray rounded-btn text-sm text-storm-gray border border-soft-divider">
@@ -104,6 +121,78 @@
 </div>
 
 <script>
+    window.getCurrentTotalPrice = function() {
+        const rentalType = document.getElementById('rental_type').value;
+        const startDateStr = document.getElementById('start_date').value;
+        const endDateStr = document.getElementById('end_date').value;
+
+        const priceFullDay = {{ $vehicle->price_full_day }};
+        const priceHalfDay = {{ $vehicle->price_half_day }};
+
+        if (rentalType === 'half_day') {
+            return priceHalfDay;
+        }
+
+        if (startDateStr) {
+            const start = new Date(startDateStr);
+            start.setHours(0,0,0,0);
+
+            let end = start;
+            if (endDateStr) {
+                end = new Date(endDateStr);
+                end.setHours(0,0,0,0);
+            }
+
+            if (end >= start) {
+                const diffTime = Math.abs(end - start);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                return priceFullDay * diffDays;
+            }
+        }
+
+        return priceFullDay;
+    };
+
+    let currentDiscount = 0;
+
+    window.applyDiscountToSummary = function(discount) {
+        currentDiscount = discount;
+        updateSummaryDisplay();
+    };
+
+    function updateSummaryDisplay() {
+        const subtotal = window.getCurrentTotalPrice();
+        let total = subtotal - currentDiscount;
+        if (total < 0) total = 0;
+
+        const subtotalEl = document.getElementById('summarySubtotal');
+        const totalEl = document.getElementById('summaryTotal');
+        const discountRow = document.getElementById('summaryDiscountRow');
+        const discountEl = document.getElementById('summaryDiscount');
+
+        if (subtotalEl) subtotalEl.innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(subtotal);
+        if (totalEl) totalEl.innerText = 'Rp ' + new Intl.NumberFormat('id-ID').format(total);
+
+        if (discountRow && discountEl) {
+            if (currentDiscount > 0) {
+                discountEl.innerText = '- Rp ' + new Intl.NumberFormat('id-ID').format(currentDiscount);
+                discountRow.classList.remove('hidden');
+            } else {
+                discountRow.classList.add('hidden');
+            }
+        }
+    }
+
+    // Panggil saat pertama kali load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateSummaryDisplay();
+        
+        // Pasang event listener pada input yang mempengaruhi harga
+        document.getElementById('rental_type').addEventListener('change', updateSummaryDisplay);
+        document.getElementById('start_date').addEventListener('change', updateSummaryDisplay);
+        document.getElementById('end_date').addEventListener('change', updateSummaryDisplay);
+    });
+
     function toggleEndDate(val) {
         const container = document.getElementById('endDateContainer');
         const input = document.getElementById('end_date');
@@ -179,13 +268,14 @@
         // If there are old inputs (validation failed), user has to re-check
         resetAvailability();
     });
-    
+
     function disableSubmitButton(form) {
-        const btn = form.querySelector('button[type="submit"]');
-        if(btn) {
-            btn.disabled = true;
-            btn.classList.add('opacity-50', 'cursor-not-allowed');
-            btn.innerHTML = 'Memproses...';
+        const btn = document.getElementById('submitBtn');
+        if (btn) {
+            setTimeout(() => {
+                btn.disabled = true;
+                btn.innerHTML = 'Memproses...';
+            }, 10);
         }
     }
 </script>

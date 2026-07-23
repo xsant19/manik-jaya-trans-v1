@@ -9,6 +9,7 @@ use App\Mail\BookingCreatedMail;
 use App\Models\HotelShuttle;
 use App\Models\ShuttleBooking;
 use App\Services\BookingCodeService;
+use App\Services\CouponService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -16,10 +17,12 @@ use Illuminate\Support\Facades\Mail;
 class ShuttleBookingController extends Controller
 {
     protected $bookingCodeService;
+    protected $couponService;
 
-    public function __construct(BookingCodeService $bookingCodeService)
+    public function __construct(BookingCodeService $bookingCodeService, CouponService $couponService)
     {
         $this->bookingCodeService = $bookingCodeService;
+        $this->couponService = $couponService;
     }
 
     public function create(HotelShuttle $shuttle)
@@ -36,20 +39,55 @@ class ShuttleBookingController extends Controller
         $validated = $request->validated();
 
         $totalPrice = $shuttle->price * $validated['passenger_count'];
+
+        // ─── Logika Kupon Diskon ──────────────────────────────────────────────
+        $originalPrice     = (float) $totalPrice;
+        $discountAmount    = 0.0;
+        $couponId          = null;
+        $appliedCouponCode = null;
+        $coupon            = null;
+
+        if (! empty($validated['coupon_code'])) {
+            $couponResult = $this->couponService->validate(
+                $validated['coupon_code'],
+                (float) $totalPrice,
+            );
+
+            if ($couponResult['valid']) {
+                $coupon            = $couponResult['coupon'];
+                $discountAmount    = $couponResult['discount'];
+                $totalPrice        = $originalPrice - $discountAmount;
+                $couponId          = $coupon->id;
+                $appliedCouponCode = $coupon->code;
+            } else {
+                return back()->withErrors(['coupon_code' => $couponResult['message']])->withInput();
+            }
+        }
+        // ─────────────────────────────────────────────────────────────────────
+
         $bookingCode = $this->bookingCodeService->generate('SHT', ShuttleBooking::class);
 
         $shuttleBooking = ShuttleBooking::create([
-            'user_id' => auth()->id(),
+            'user_id'          => auth()->id(),
             'hotel_shuttle_id' => $shuttle->id,
-            'booking_code' => $bookingCode,
-            'booking_date' => Carbon::parse($validated['booking_date'])->format('Y-m-d'),
-            'passenger_count' => $validated['passenger_count'],
-            'pickup_time' => $validated['pickup_time'] ?? null,
-            'note' => $validated['note'] ?? null,
-            'total_price' => $totalPrice,
-            'booking_status' => 'pending',
-            'payment_status' => 'unpaid',
+            'booking_code'     => $bookingCode,
+            'booking_date'     => Carbon::parse($validated['booking_date'])->format('Y-m-d'),
+            'passenger_count'  => $validated['passenger_count'],
+            'pickup_time'      => $validated['pickup_time'] ?? null,
+            'note'             => $validated['note'] ?? null,
+            'total_price'      => $totalPrice,
+            'booking_status'   => 'pending',
+            'payment_status'   => 'unpaid',
+            'coupon_id'        => $couponId,
+            'coupon_code'      => $appliedCouponCode,
+            'discount_amount'  => $discountAmount,
+            'original_price'   => $discountAmount > 0 ? $originalPrice : null,
         ]);
+
+        // Tandai kupon sebagai terpakai SETELAH booking berhasil disimpan
+        if ($coupon) {
+            $this->couponService->apply($coupon);
+        }
 
         // Send email to customer
         try {
